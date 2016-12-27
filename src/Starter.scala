@@ -6,8 +6,8 @@ object VariablesX extends Variables[Double] {
 
 object Starter {
   def exampleDoubles() = {
-    import operators.DoubleOperators.ops
-    val p = parser.parser[Double](operators.DoubleOperators.ops)
+    import implicits.doubleHasOperators
+    val p = parser.parser[Double]
     val t = p.apply("2^-x", VariablesX)
     t.foreach { term =>
       val d = term.apply {
@@ -19,15 +19,15 @@ object Starter {
   }
 
   def exampleBooleans() = {
-    import operators.BooleanOperators.ops
+    import implicits.booleanHasOperators
     val p = parser.parser[Boolean]
     println(p("!false", Variables.emptyVariables))
   }
 
   def exampleComplex() = {
+    import implicits.spireComplexHasOperators
     import spire.implicits._
     import spire.math.Complex
-    implicit val ops:Operators[Complex[Double]] = operators.ComplexOperators.ops[Double].ops
     val p = parser.parser[Complex[Double]]
     println(p("i", Variables.emptyVariables))
   }
