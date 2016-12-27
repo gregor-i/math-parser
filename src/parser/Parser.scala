@@ -8,8 +8,6 @@ class Parser[A](implicit operators: Operators[A]) {
   private def parseTerm(_input: String)(implicit variables: Variables[A]): Option[Term] = {
     val input = _input.trim()
 
-    println("trying "+input)
-
     def parse_cons: Option[Term] = constants().find(_.name == input)
     def parse_vars: Option[Term] = variables.variables.find(_.name == input).map(_.asInstanceOf[Term])
     def parse_literal: Option[Term] = parseLiteral(input)

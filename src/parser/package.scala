@@ -1,7 +1,5 @@
-package object parser {
-  implicit val a = operators.BooleanOperators.ops
-  implicit val b = operators.DoubleOperators.ops
+import operators.Operators
 
-  val doubleParser = new Parser[Double]
-  val booleanParser = new Parser[Boolean]
+package object parser {
+  def parser[A : Operators] = new Parser[A]
 }
