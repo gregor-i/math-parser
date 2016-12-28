@@ -23,9 +23,23 @@ import spire.math.Complex
 import scala.util.Try
 
 class ComplexOperators[A : Field : Trig : NRoot : IsReal]() extends Operators[Complex[A]] {
+  ops =>
   val field: Field[A] = implicitly
 
   def fromDouble(d:Double) = Complex(field.fromDouble(d), field.zero)
+
+  object Nodes {
+    def neg(t: Term) = new ops.UnitaryNode(ops.neg, t)
+    def cos(t: Term) = new ops.UnitaryNode(ops.cos, t)
+    def sin(t: Term) = new ops.UnitaryNode(ops.sin, t)
+    def log(t: Term) = new ops.UnitaryNode(ops.log, t)
+    def times(a: Term, b:Term) = new ops.BinaryNode(ops.times, a, b)
+    def plus(a: Term, b:Term) = new ops.BinaryNode(ops.plus, a, b)
+    def minus(a: Term, b:Term) = new ops.BinaryNode(ops.minus, a, b)
+    def divided(a: Term, b:Term) = new ops.BinaryNode(ops.divided, a, b)
+    def power(a: Term, b:Term) = new ops.BinaryNode(ops.power, a, b)
+    def literal(d: Double): Term = new ops.Literal(Complex(field.fromDouble(d), field.fromDouble(0)))
+  }
 
   val neg = new UnitaryOperator("-", -_)
   val sin = new UnitaryOperator("sin", _.sin)

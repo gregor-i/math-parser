@@ -15,17 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import operators.{Operators, Variables}
+import deriving.Derive
+import operators.{ComplexOperators, DoubleOperators, Operators, Variables}
+import spire.math.Complex
 
-object VariablesX extends Variables[Double] {
-  override def variables(implicit operators: Operators[Double]): Seq[operators.Variable] = Seq(new operators.Variable("x"))
+class VariablesX[A, Ops <: Operators[A]](implicit operators: Ops) extends Variables[A, Ops] {
+  val x:Ops#Variable = new operators.Variable("x")
+  val variables: Seq[Ops#Variable] = Seq(x)
 }
 
 object Starter {
   def exampleDoubles() = {
     import implicits.doubleHasOperators
-    val p = parser.parser[Double]
-    val t = p.apply("2^-x", VariablesX)
+    val p = parser.parser[Double, Operators[Double]]
+    val t = p.apply("2^-x", new VariablesX[Double, Operators[Double]])
     t.foreach { term =>
       val d = term.apply {
         case "x" => 25
@@ -37,7 +40,7 @@ object Starter {
 
   def exampleBooleans() = {
     import implicits.booleanHasOperators
-    val p = parser.parser[Boolean]
+    val p = parser.parser[Boolean, Operators[Boolean]]
     println(p("!false", Variables.emptyVariables))
   }
 
@@ -45,8 +48,25 @@ object Starter {
     import implicits.spireComplexHasOperators
     import spire.implicits._
     import spire.math.Complex
-    val p = parser.parser[Complex[Double]]
+    val p = parser.parser[Complex[Double], ComplexOperators[Double]]
     println(p("sin(25 + 3*i)", Variables.emptyVariables))
+  }
+
+  def exampleDerive() = {
+    import implicits.spireComplexHasOperators
+    import spire.implicits._
+    import spire.math.Complex
+
+    import implicits._
+
+    type A = Complex[Double]
+    type Ops = ComplexOperators[Double]
+
+    val p = parser.parser[A, Ops]
+    var vars = new VariablesX[A, Ops]
+    val t = p("sin(x) + 23 * x", vars)
+
+    val d = Derive[A, Ops](t.get)(vars.x)
   }
 
   def main(args: Array[String]): Unit = {

@@ -17,10 +17,12 @@
 
 package operators
 
-trait Variables[A] {
-  def variables(implicit operators: Operators[A]): Seq[operators.Variable] = Seq.empty
+trait Variables[A, O <: Operators[A]] {
+  val variables: Seq[O#Variable]
 }
 
 object Variables{
-  def emptyVariables[A] = new Variables[A] {}
+  def emptyVariables[A, O <: Operators[A]] = new Variables[A, O] {
+    val variables: Seq[O#Variable] = Seq.empty
+  }
 }

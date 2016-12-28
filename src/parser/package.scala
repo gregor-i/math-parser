@@ -18,5 +18,5 @@
 import operators.Operators
 
 package object parser {
-  def parser[A : Operators] = new Parser[A]
+  def parser[A, Ops <: Operators[A]](implicit ops:Ops) = new Parser[A, Ops]
 }

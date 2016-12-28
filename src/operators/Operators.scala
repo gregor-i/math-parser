@@ -18,10 +18,13 @@
 package operators
 
 trait Operators[Skalar] {
-  class UnitaryOperator(val name: String, val apply: Skalar => Skalar)
-  class BinaryOperator (val name: String, val apply: (Skalar, Skalar) => Skalar)
+  case class UnitaryOperator(name: String, apply: Skalar => Skalar)
+  case class BinaryOperator (name: String, apply: (Skalar, Skalar) => Skalar)
 
-  type Term = PublicTerm[Skalar]
+  sealed trait Term {
+    def apply(variableValues: PartialFunction[String, Skalar]): Skalar
+    def isVariable(variableName:String): Boolean
+  }
 
   case class Variable(name:String) extends Term{
     def apply(variableValues: PartialFunction[String, Skalar]): Skalar = variableValues(name)
@@ -38,16 +41,16 @@ trait Operators[Skalar] {
     def isVariable(variableName:String): Boolean = false
   }
 
-  case class UnitaryNode(name:String, op: UnitaryOperator, para1: Term) extends Term {
+  case class UnitaryNode(op: UnitaryOperator, para1: Term) extends Term {
     def apply(variableValues: PartialFunction[String, Skalar]): Skalar = op.apply(para1.apply(variableValues))
     def isVariable(variableName:String): Boolean = para1.isVariable(variableName)
-    override def toString: String = "%s(%s)".format(name, para1)
+    override def toString: String = "%s(%s)".format(op.name, para1)
   }
 
-  case class BinaryNode(name:String, op: BinaryOperator, para1: Term, para2: Term) extends Term {
+  case class BinaryNode(op: BinaryOperator, para1: Term, para2: Term) extends Term {
     def apply(variableValues: PartialFunction[String, Skalar]): Skalar = op.apply(para1.apply(variableValues), para2.apply(variableValues))
     def isVariable(variableName:String): Boolean = para1.isVariable(variableName) || para2.isVariable(variableName)
-    override def toString: String = "%s(%s, %s)".format(name, para1, para2)
+    override def toString: String = "%s(%s, %s)".format(op.name, para1, para2)
   }
 
   def unitaryOperators: Seq[UnitaryOperator]

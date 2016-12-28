@@ -17,12 +17,12 @@
 
 package parser
 
-import operators.{PublicTerm, Variables, Operators}
+import operators.{Variables, Operators}
 
-class Parser[A](implicit operators: Operators[A]) {
+class Parser[A, Ops <: Operators[A]](implicit operators: Ops) {
   import operators._
 
-  private def parseTerm(_input: String)(implicit variables: Variables[A]): Option[Term] = {
+  private def parseTerm(_input: String)(implicit variables: Variables[A, Ops]): Option[Term] = {
     val input = _input.trim()
 
     def parse_cons: Option[Term] = constants().find(_.name == input)
@@ -35,17 +35,17 @@ class Parser[A](implicit operators: Operators[A]) {
         None
 
     def parse_op_bin_infix: Option[Term] = binaryInfixOperators
-      .map { op => parseBinaryNode(input, op.name.head, new BinaryNode(op.name, op, _, _)) }
+      .map { op => parseBinaryNode(input, op.name.head, new BinaryNode(op, _, _)) }
       .find(_.isDefined).flatten
 
     def parse_op_bin_prefix: Option[Term] = binaryOperators
       .filter(op => input.matches(s"${op.name}\\(.*\\)"))
-      .map { op => parseBinaryNode(input.substring(op.name.length + 1, input.length - 1), ',', new BinaryNode(op.name, op, _, _)) }
+      .map { op => parseBinaryNode(input.substring(op.name.length + 1, input.length - 1), ',', new BinaryNode(op, _, _)) }
       .find(_.isDefined).flatten
 
     def parse_op_uni_prefix: Option[Term] = unitaryOperators
       .filter { op => input.startsWith(op.name) }
-      .map(op => parseTerm(input.drop(op.name.length)).map(new UnitaryNode(op.name, op, _)))
+      .map(op => parseTerm(input.drop(op.name.length)).map(new UnitaryNode(op, _)))
       .find(_.isDefined).flatten
 
     if (input.nonEmpty)
@@ -61,7 +61,7 @@ class Parser[A](implicit operators: Operators[A]) {
 
 
   private def parseBinaryNode(input: String, splitter: Char, f: (Term, Term) => BinaryNode)
-                             (implicit variables: Variables[A]): Option[BinaryNode] = {
+                             (implicit variables: Variables[A, Ops]): Option[BinaryNode] = {
     def splitByRegardingParenthesis(input:String, splitter:Char): Option[(String, String)] = {
       var k = -1
       var c = 0
@@ -82,6 +82,6 @@ class Parser[A](implicit operators: Operators[A]) {
     } yield f(p1, p2)
   }
 
-  def apply(input: String, variables: Variables[A]): Option[PublicTerm[A]] =
+  def apply(input: String, variables: Variables[A, Ops]): Option[Ops#Term] =
     parseTerm(input)(variables)
 }

@@ -15,11 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import deriving.{DeriveSpireComplex}
 import operators.{BooleanOperators, ComplexOperators, DoubleOperators, Operators}
 import spire.algebra.{Field, IsReal, NRoot, Trig}
 
 object implicits {
-  implicit val doubleHasOperators:Operators[Double] = DoubleOperators
-  implicit val booleanHasOperators:Operators[Boolean] = BooleanOperators
+  implicit val doubleHasOperators = DoubleOperators
+  implicit val booleanHasOperators = BooleanOperators
   implicit def spireComplexHasOperators[A: Field : Trig : NRoot : IsReal]: ComplexOperators[A] = new ComplexOperators()
+
+  //implicit val deriveDoubles = DeriveDoubles // todo
+  implicit def deriveSpireComplex[A: Field : Trig : NRoot : IsReal] = new DeriveSpireComplex
 }
