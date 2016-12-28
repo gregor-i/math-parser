@@ -78,6 +78,8 @@ class DeriveSpireComplex[A: Field : Trig : NRoot : IsReal] extends Derive[Comple
     def power(a: Term, b:Term):Term = new ops.BinaryNode(ops.power, a, b)
     def literal(d: Double): Term = new ops.Literal(Complex(field.fromDouble(d), field.fromDouble(0)))
 
+    println("Deriving: " + term)
+
     term match {
       case `variable` => literal(1d)
       case ops.Variable(_) => literal(0d)
@@ -92,8 +94,8 @@ class DeriveSpireComplex[A: Field : Trig : NRoot : IsReal] extends Derive[Comple
           case _ => ??? // todo
         }
       case ops.BinaryNode(op, t1, t2) =>
-        lazy val abl1 = derive(t1)(variable)
-        lazy val abl2 = derive(t2)(variable)
+        val abl1 = derive(t1)(variable)
+        val abl2 = derive(t2)(variable)
         op match {
           case ops.plus => plus(abl1, abl2)
           case ops.minus => minus(abl1, abl2)

@@ -24,6 +24,30 @@ class VariablesX[A, Ops <: Operators[A]](implicit operators: Ops) extends Variab
   val variables: Seq[Ops#Variable] = Seq(x)
 }
 
+object ComplexUtil{
+  type T = Complex[Double]
+  type F = T => T
+  type Ops = ComplexOperators[Double]
+
+
+  import implicits.spireComplexHasOperators
+  import spire.implicits._
+  import spire.math.Complex
+  import implicits.deriveSpireComplex
+
+  val p = parser.parser[T, Ops]
+  var vars = new VariablesX[T, Ops]
+  val x = vars.x
+
+  def f1_and_f2(s:String):Option[(F, F)] =
+    for{
+      t1 <- p(s, vars)
+      t2 = Derive[T, Ops](t1)(x)
+      f1 = (c:T) => t1{case _ => c}
+      f2 = (c:T) => t2{case _ => c}
+    } yield (f1, f2)
+}
+
 object Starter {
   def exampleDoubles() = {
     import implicits.doubleHasOperators
@@ -52,7 +76,7 @@ object Starter {
     println(p("sin(25 + 3*i)", Variables.emptyVariables))
   }
 
-  def exampleDerive() = {
+  def exampleDerive(s:String) = {
     import implicits.spireComplexHasOperators
     import spire.implicits._
     import spire.math.Complex
@@ -63,14 +87,22 @@ object Starter {
 
     val p = parser.parser[A, Ops]
     var vars = new VariablesX[A, Ops]
-    val t = p("sin(x) + 23 * x", vars)
+    val t = p(s, vars)
 
     val d = Derive[A, Ops](t.get)(vars.x)
+    println(t -> d)
+  }
+
+  def exampleHelper(): Unit = {
+    val erg = ComplexUtil.f1_and_f2("x^3+5")
+    println(erg)
   }
 
   def main(args: Array[String]): Unit = {
     exampleDoubles()
     exampleBooleans()
     exampleComplex()
+    exampleDerive("5")
+    exampleHelper()
   }
 }
