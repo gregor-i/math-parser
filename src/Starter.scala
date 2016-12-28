@@ -56,8 +56,7 @@ object Starter {
     import implicits.spireComplexHasOperators
     import spire.implicits._
     import spire.math.Complex
-
-    import implicits._
+    import implicits.deriveSpireComplex
 
     type A = Complex[Double]
     type Ops = ComplexOperators[Double]
