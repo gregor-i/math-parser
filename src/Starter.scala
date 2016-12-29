@@ -29,20 +29,19 @@ object ComplexUtil{
   type F = T => T
   type Ops = ComplexOperators[Double]
 
-
   import implicits.spireComplexHasOperators
   import spire.implicits._
-  import spire.math.Complex
-  import implicits.deriveSpireComplex
 
-  val p = parser.parser[T, Ops]
+  val ops = implicitly[Ops with Derive[T]]
+
+  val p = parser.parser[T, Ops](ops)
   var vars = new VariablesX[T, Ops]
   val x = vars.x
 
   def f1_and_f2(s:String):Option[(F, F)] =
     for{
       t1 <- p(s, vars)
-      t2 = Derive[T, Ops](t1)(x)
+      t2 = ops.derive(t1.asInstanceOf[ops.Term])(x.asInstanceOf[ops.Variable])
       f1 = (c:T) => t1{case _ => c}
       f2 = (c:T) => t2{case _ => c}
     } yield (f1, f2)
@@ -80,7 +79,6 @@ object Starter {
     import implicits.spireComplexHasOperators
     import spire.implicits._
     import spire.math.Complex
-    import implicits.deriveSpireComplex
 
     type A = Complex[Double]
     type Ops = ComplexOperators[Double]
@@ -89,12 +87,14 @@ object Starter {
     var vars = new VariablesX[A, Ops]
     val t = p(s, vars)
 
-    val d = Derive[A, Ops](t.get)(vars.x)
+    val ops = implicitly[Operators[A] with Derive[A]]
+
+    val d = ops.derive(t.get.asInstanceOf[ops.Term])(vars.x.asInstanceOf[ops.Variable])
     println(t -> d)
   }
 
   def exampleHelper(): Unit = {
-    val erg = ComplexUtil.f1_and_f2("x^3+5")
+    val erg = ComplexUtil.f1_and_f2("x*x*x+5")
     println(erg)
   }
 
