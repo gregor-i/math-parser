@@ -85,8 +85,6 @@ class ComplexOperators[A : Field : Trig : NRoot : IsReal]() extends Operators[Co
   override def derive(term: Term)(variable: Variable): Term = {
     import Nodes._
 
-    println("deriving "+term)
-
     term match {
       case `variable` => literal(1d)
       case Variable(_) => literal(0d)
