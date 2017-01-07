@@ -15,8 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import operators.Operators
-
-package object parser {
-  def parser[A, Ops <: Operators[A]](implicit ops:Ops) = new Parser[A, Ops]
+package object mathParser {
+  type Variable = Symbol
+  type VariableSet = Set[Variable]
 }

@@ -15,14 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package operators
+package mathParser
 
-trait Variables[A, Ops <: Operators[A]] {
-  val variables: Seq[Ops#Variable]
-}
+import mathParser.AbstractSyntaxTree.Node
 
-object Variables{
-  def emptyVariables[A, Ops <: Operators[A]] = new Variables[A, Ops] {
-    val variables: Seq[Ops#Variable] = Seq.empty
-  }
+trait Derive[Lang <: Language] {
+  def apply(term: Node[Lang])(variable: Variable): Node[Lang]
 }

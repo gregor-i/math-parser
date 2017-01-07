@@ -15,94 +15,79 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import deriving.Derive
-import operators.{ComplexOperators, DoubleOperators, Operators, Variables}
-import spire.math.Complex
-
-class VariablesX[A, Ops <: Operators[A]](implicit operators: Ops) extends Variables[A, Ops] {
-  val x:Ops#Variable = new operators.Variable("x")
-  val variables: Seq[Ops#Variable] = Seq(x)
-}
-
-object ComplexUtil{
-  type T = Complex[Double]
-  type F = T => T
-  type Ops = ComplexOperators[Double]
-
-  import implicits.spireComplexHasOperators
-  import spire.implicits._
-
-  val ops = implicitly[Ops with Derive[T]]
-
-  val p = parser.parser[T, Ops](ops)
-  var vars = new VariablesX[T, Ops]
-  val x = vars.x
-
-  def f1_and_f2(s:String):Option[(F, F)] =
-    for{
-      t1 <- p(s, vars)
-      t2 = ops.derive(t1.asInstanceOf[ops.Term])(x.asInstanceOf[ops.Variable])
-      f1 = (c:T) => t1{case _ => c}
-      f2 = (c:T) => t2{case _ => c}
-    } yield (f1, f2)
-}
+import mathParser.complex.ComplexDerive
+import mathParser.{Evaluate, Parser}
+import mathParser.double.{DoubleDerive, DoubleLanguage}
 
 object Starter {
   def exampleDoubles() = {
-    import implicits.doubleHasOperators
-    val p = parser.parser[Double, Operators[Double]]
-    val t = p.apply("2^-x", new VariablesX[Double, Operators[Double]])
-    t.foreach { term =>
-      val d = term.apply {
-        case "x" => 25
+    println("exampleDoubles")
+    import mathParser.implicits.doubleParseLiterals
+
+    val lang = DoubleLanguage
+    val xVariable = Set('x)
+    val parser = Parser(lang, xVariable)
+    val t = parser("2^-x+e")
+    val e = t.map{ term =>
+      Evaluate(term){
+        case 'x => 25
       }
-      println(d)
+    }
+    println(t -> e)
+  }
+
+  def exampleDoublesDerive() = {
+    println("exampleDoublesDerive")
+    import mathParser.implicits.doubleParseLiterals
+
+    val lang = DoubleLanguage
+    val xVariable = Set('x)
+    val parser = Parser(lang, xVariable)
+    val t = parser("2^-x")
+    t.fold{
+      println("input could not be parsed")
+    }{ term =>
+         println(DoubleDerive(term)('x))
     }
     println(t)
   }
 
   def exampleBooleans() = {
-    import implicits.booleanHasOperators
-    val p = parser.parser[Boolean, Operators[Boolean]]
-    println(p("!false", Variables.emptyVariables))
+    println("exampleBooleans")
+    import mathParser.implicits.booleanParseLiterals
+    val lang = mathParser.boolean.BooleanLanguage
+    val parser = Parser(lang, Set.empty)
+    println(parser("!false"))
   }
 
   def exampleComplex() = {
-    import implicits.spireComplexHasOperators
-    import spire.implicits._
-    import spire.math.Complex
-    val p = parser.parser[Complex[Double], ComplexOperators[Double]]
-    println(p("sin(25 + 3*i)", Variables.emptyVariables))
+    println("exampleComplex")
+    import mathParser.implicits.complexParseLiterals
+    val lang = mathParser.complex.ComplexLanguage
+    val parser = Parser(lang, Set.empty)
+    println(parser("sin(25 + 3*i)"))
   }
 
   def exampleDerive(s:String) = {
-    import implicits.spireComplexHasOperators
-    import spire.implicits._
-    import spire.math.Complex
+    println("exampleDerive")
+    import mathParser.implicits.complexParseLiterals
 
-    type A = Complex[Double]
-    type Ops = ComplexOperators[Double]
+    val lang = mathParser.complex.ComplexLanguage
+    val parser = Parser(lang, Set('x))
 
-    val p = parser.parser[A, Ops]
-    var vars = new VariablesX[A, Ops]
-    val t = p(s, vars)
+    val t = parser(s)
 
-    val ops = implicitly[Operators[A] with Derive[A]]
+    val d = t.map(t => ComplexDerive(t)('x))
 
-    val d = ops.derive(t.get.asInstanceOf[ops.Term])(vars.x.asInstanceOf[ops.Variable])
     println(t -> d)
   }
 
-  def exampleHelper(): Unit = {
-    val erg = ComplexUtil.f1_and_f2("x*x*x+5")
-    println(erg)
-  }
 
   def main(args: Array[String]): Unit = {
     exampleDoubles()
+    exampleDoublesDerive()
     exampleBooleans()
     exampleComplex()
-    exampleDerive("5")
-    exampleHelper()
+    exampleDerive("5*x")
   }
 }

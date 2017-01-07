@@ -15,12 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import operators.{BooleanOperators, ComplexOperators, DoubleOperators}
-import spire.algebra.{Field, IsReal, NRoot, Trig}
+package mathParser.boolean
 
-object implicits {
-  implicit val doubleHasOperators = DoubleOperators
-  implicit val booleanHasOperators = BooleanOperators
-  implicit def spireComplexHasOperators[A: Field : Trig : NRoot : IsReal]: ComplexOperators[A] = new ComplexOperators()
+import mathParser.ParseLiterals
 
+object BooleanParseLiterals  extends ParseLiterals[Boolean]{
+  override def tryToParse(s: String): Option[Boolean] = s match{
+    case "true" | "TRUE" | "1"  => Some(true)
+    case "false" | "FALSE" | "0" => Some(true)
+    case _ => None
+  }
 }

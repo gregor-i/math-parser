@@ -24,3 +24,5 @@ def specs2AndScalaCheck = Seq(
 // projects
 name := "mathParser"
 commonSettings
+spire
+specs2AndScalaCheck
