@@ -27,4 +27,10 @@ trait Language {
   def binaryOperators: Seq[BinaryOperator]
   def binaryInfixOperators: Seq[BinaryOperator]
   def constants(): Seq[Constant]
+  
+  sealed trait Node
+  case class Constant(value:Skalar) extends Node
+  case class UnitaryNode(op:UnitaryOperator, child:Node) extends Node
+  case class BinaryNode(op:BinaryOperator, childLeft:Node, childRight:Node) extends Node
+  case class Variable(name: Symbol) extends Node
 }
