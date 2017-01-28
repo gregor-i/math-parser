@@ -15,6 +15,9 @@ def spire = Seq(
   libraryDependencies += "org.spire-math" %% "spire" % "0.13.0"
 )
 
+def javaRuntimeCompiler =
+  libraryDependencies += "net.openhft" % "compiler" % "2.3.0"
+
 def specs2AndScalaCheck = Seq(
   "org.scalacheck" %% "scalacheck" % "1.13.4",
   "org.specs2" %% "specs2-core" % "3.8.6",
@@ -26,3 +29,4 @@ name := "mathParser"
 commonSettings
 spire
 specs2AndScalaCheck
+javaRuntimeCompiler
