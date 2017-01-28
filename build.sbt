@@ -7,7 +7,7 @@ def commonSettings = Seq(
   scalaVersion := "2.12.0",
   scalaSource in Compile := baseDirectory.value / "src",
   scalaSource in Test := baseDirectory.value / "test",
-  headers := Map("scala" -> GPLv3("2016", "Gregor Ihmor")),
+  headers := Map("scala" -> GPLv3("2017", "Gregor Ihmor")),
   scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
 ) ++ specs2AndScalaCheck ++ spire
 

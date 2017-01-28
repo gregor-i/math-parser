@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  Gregor Ihmor
+ * Copyright (C) 2017  Gregor Ihmor
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ object ComplexDerive extends Derive[ComplexLanguage.type] with ComplexSyntaxSuga
       case Variable(_) | Constant(_) => constant(0d)
       case UnitaryNode(Neg, child) => neg(derive(child))
       case UnitaryNode(Sin, child) => times(derive(child), cos(child))
+      case UnitaryNode(Cos, child) => neg(times(derive(child), sin(child)))
       case UnitaryNode(Atan, child) => divided(derive(child), plus(constant(1d), times(child, child)))
       case in@UnitaryNode(Exp, child) => times(in, derive(child))
         // todo: there are functions missing.
