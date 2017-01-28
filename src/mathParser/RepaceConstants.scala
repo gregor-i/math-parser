@@ -30,7 +30,7 @@ object RepaceConstants {
 
     def replace(node: Node[Lang]): Node[Lang] =
       if (mayBeConstant(node))
-        Constant(Evaluate(node)(null))
+        Constant(Evaluate(node)(PartialFunction.empty))
       else node match {
         case u@UnitaryNode(_, child)      => u.copy(child = replace(child))
         case b@BinaryNode(_, left, right) => b.copy(childLeft = replace(left), childRight = replace(right))
