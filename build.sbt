@@ -18,6 +18,9 @@ def spire = Seq(
 def javaRuntimeCompiler =
   libraryDependencies += "net.openhft" % "compiler" % "2.3.0"
 
+def scalaCompiler =
+  libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value
+
 def specs2AndScalaCheck = Seq(
   "org.scalacheck" %% "scalacheck" % "1.13.4",
   "org.specs2" %% "specs2-core" % "3.8.6",
@@ -30,3 +33,4 @@ commonSettings
 spire
 specs2AndScalaCheck
 javaRuntimeCompiler
+scalaCompiler

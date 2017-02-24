@@ -27,32 +27,32 @@ import scala.util.Try
 
 object CompileToNative {
 
+  private def functionString(node: Node[DoubleLanguage.type]): String = node match {
+    case Constant(v) => v.toString
+    case UnitaryNode(double.Neg, child) => s"-(${functionString(child)})"
+    case UnitaryNode(double.Sin, child) => s"Math.sin(${functionString(child)})"
+    case UnitaryNode(double.Cos, child) => s"Math.cos(${functionString(child)})"
+    case UnitaryNode(double.Tan, child) => s"Math.tan(${functionString(child)})"
+    case UnitaryNode(double.Asin, child) => s"Math.asin(${functionString(child)})"
+    case UnitaryNode(double.Acos, child) => s"Math.acos(${functionString(child)})"
+    case UnitaryNode(double.Atan, child) => s"Math.atan(${functionString(child)})"
+    case UnitaryNode(double.Sinh, child) => s"Math.sinh(${functionString(child)})"
+    case UnitaryNode(double.Cosh, child) => s"Math.cosh(${functionString(child)})"
+    case UnitaryNode(double.Tanh, child) => s"Math.tanh(${functionString(child)})"
+    case UnitaryNode(double.Exp, child) => s"Math.exp(${functionString(child)})"
+    case UnitaryNode(double.Log, child) => s"Math.log(${functionString(child)})"
+
+    case BinaryNode(double.Plus, left, right) => s"((${functionString(left)})+(${functionString(right)}))"
+    case BinaryNode(double.Minus, left, right) => s"((${functionString(left)})-(${functionString(right)}))"
+    case BinaryNode(double.Times, left, right) => s"((${functionString(left)})*(${functionString(right)}))"
+    case BinaryNode(double.Divided, left, right) => s"((${functionString(left)})/(${functionString(right)}))"
+    case BinaryNode(double.Power, left, right) => s"Math.pow(${functionString(left)}, ${functionString(right)})"
+
+    case Variable(name) => name.name
+  }
+
   def function1(node: Node[DoubleLanguage.type], v1: Variable): Try[Function1[Double, Double]] =
     Try {
-      def functionString(node:Node[DoubleLanguage.type]): String =  node match {
-        case Constant(v) => v.toString
-        case UnitaryNode(double.Neg, child) => s"-(${functionString(child)})"
-        case UnitaryNode(double.Sin, child) => s"Math.sin(${functionString(child)})"
-        case UnitaryNode(double.Cos, child) => s"Math.cos(${functionString(child)})"
-        case UnitaryNode(double.Tan, child) => s"Math.tan(${functionString(child)})"
-        case UnitaryNode(double.Asin, child) => s"Math.asin(${functionString(child)})"
-        case UnitaryNode(double.Acos, child) => s"Math.acos(${functionString(child)})"
-        case UnitaryNode(double.Atan, child) => s"Math.atan(${functionString(child)})"
-        case UnitaryNode(double.Sinh, child) => s"Math.sinh(${functionString(child)})"
-        case UnitaryNode(double.Cosh, child) => s"Math.cosh(${functionString(child)})"
-        case UnitaryNode(double.Tanh, child) => s"Math.tanh(${functionString(child)})"
-        case UnitaryNode(double.Exp, child) => s"Math.exp(${functionString(child)})"
-        case UnitaryNode(double.Log, child) => s"Math.log(${functionString(child)})"
-
-        case BinaryNode(double.Plus, left, right) => s"((${functionString(left)})+(${functionString(right)}))"
-        case BinaryNode(double.Minus, left, right) => s"((${functionString(left)})-(${functionString(right)}))"
-        case BinaryNode(double.Times, left, right) => s"((${functionString(left)})*(${functionString(right)}))"
-        case BinaryNode(double.Divided, left, right) => s"((${functionString(left)})/(${functionString(right)}))"
-        case BinaryNode(double.Power, left, right) => s"Math.pow(${functionString(left)}, ${functionString(right)})"
-
-        case Variable(name) => name.name
-      }
-
       val randomHash = new Random().nextInt().toString.replace('-', '0')
       val className = s"mathParser.compiledAtRuntime.Class$randomHash"
 
@@ -76,4 +76,19 @@ object CompileToNative {
       d => javaFunction(d)
     }
 
+  def function1ByReflect(node: Node[DoubleLanguage.type], v1: Variable): Try[Function1[Double, Double]] =
+    Try {
+      import reflect.runtime.currentMirror
+      import tools.reflect.ToolBox
+      val toolbox = currentMirror.mkToolBox()
+      val code =
+          s"""
+
+             |new Function1[Double, Double]{
+             |  def apply(${v1.name}:Double) = ${functionString(node)}
+             |}
+      """.stripMargin
+
+      toolbox.compile(toolbox.parse(code))().asInstanceOf[Double => Double]
+    }
 }

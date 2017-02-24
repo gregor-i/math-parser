@@ -54,7 +54,7 @@ class CompileToNativeSpec extends Specification with ScalaCheck {
   )
 
 
-  "CompileToNative" >> {
+  "'Compile to Native' with java for the double language with parameter 'x'" >> {
     forAll(someFunctions) {
       function =>
         val variable = 'x
@@ -63,6 +63,25 @@ class CompileToNativeSpec extends Specification with ScalaCheck {
         val term = parser(function).get
         val f = CompileToNative.function1(term, variable).get
 
+        forAll {
+          x: Double =>
+            val left = f(x)
+            val right = Evaluate(term)({ case 'x => x })
+            (left == right) || (left != left && right != right)
+        }
+    }
+  }
+
+  "'Compile to Native' with scala for the double language with paramter 'x'" >> {
+    forAll(someFunctions) {
+      function =>
+        val variable = 'x
+        val parser = new Parser[DoubleLanguage.type](DoubleLanguage, Set(variable))
+
+        val term = parser(function).get
+        val tf = CompileToNative.function1ByReflect(term, variable)
+
+        val f = tf.get
         forAll {
           x: Double =>
             val left = f(x)
