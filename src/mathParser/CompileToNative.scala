@@ -27,19 +27,6 @@ import scala.util.Try
 
 object CompileToNative {
 
-  def example(): Try[Runnable] = Try {
-    val className = "mypackage.MyClass"
-    val javaCode =
-      """package mypackage;
-      |public class MyClass implements Runnable {
-      |    public void run() {
-      |        System.out.println("Hello World");
-      |    }
-      |}""".stripMargin
-    val aClass = CompilerUtils.CACHED_COMPILER.loadFromJava(className, javaCode)
-    aClass.newInstance().asInstanceOf[Runnable]
-  }
-
   def function1(node: Node[DoubleLanguage.type], v1: Variable): Try[Function1[Double, Double]] =
     Try {
       def functionString(node:Node[DoubleLanguage.type]): String =  node match {
@@ -65,8 +52,6 @@ object CompileToNative {
 
         case Variable(name) => name.name
       }
-
-//                    println(functionString(node))
 
       val randomHash = new Random().nextInt().toString.replace('-', '0')
       val className = s"mathParser.compiledAtRuntime.Class$randomHash"
