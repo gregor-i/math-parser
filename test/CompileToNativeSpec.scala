@@ -1,15 +1,19 @@
 package mathParser
 
-import mathParser.double.DoubleLanguage
+import mathParser.complex.{ComplexCompile, ComplexLanguage}
+import mathParser.double.{DoubleCompile, DoubleLanguage}
 import org.specs2.mutable.Specification
 import mathParser.implicits._
 import org.scalacheck.Gen
 import org.specs2.ScalaCheck
 import org.scalacheck.Prop.forAll
+import spire.math.Complex
+
+import scala.util.Failure
 
 class CompileToNativeSpec extends Specification with ScalaCheck {
-
-  val someFunctions = Gen.oneOf(
+  private val variable = 'x
+  private val someFunctions = Gen.oneOf(
     "x^(3+10)",
     "x^(3+10) -1",
     "x^(10) -1",
@@ -53,16 +57,19 @@ class CompileToNativeSpec extends Specification with ScalaCheck {
     "35*x^9-180*x^7+3798*x^5-420*x^3+315+x"
   )
 
+  private val doubleTrees = {
+    val parser = new Parser[DoubleLanguage.type](DoubleLanguage, Set(variable))
+    someFunctions.map(parser(_).get)
+  }
+  private val complexTrees = {
+    val parser = new Parser[ComplexLanguage.type](ComplexLanguage, Set(variable))
+    someFunctions.map(parser(_).get)
+  }
 
-  "'Compile to Native' with java for the double language with parameter 'x'" >> {
-    forAll(someFunctions) {
-      function =>
-        val variable = 'x
-        val parser = new Parser[DoubleLanguage.type](DoubleLanguage, Set(variable))
-
-        val term = parser(function).get
-        val f = CompileToNative.function1(term, variable).get
-
+  "'Compile to Native' for the double language with paramter 'x'" >> {
+    forAll(doubleTrees) {
+      term =>
+        val f = DoubleCompile(term)(variable).get
         forAll {
           x: Double =>
             val left = f(x)
@@ -72,18 +79,13 @@ class CompileToNativeSpec extends Specification with ScalaCheck {
     }
   }
 
-  "'Compile to Native' with scala for the double language with paramter 'x'" >> {
-    forAll(someFunctions) {
-      function =>
-        val variable = 'x
-        val parser = new Parser[DoubleLanguage.type](DoubleLanguage, Set(variable))
-
-        val term = parser(function).get
-        val tf = CompileToNative.function1ByReflect(term, variable)
-
-        val f = tf.get
+  "'Compile to Native' for the complex language with paramter 'x'" >> {
+    forAll(complexTrees) {
+      term =>
+        val f = ComplexCompile(term)(variable).get
         forAll {
-          x: Double =>
+          (real:Double, imag:Double) =>
+            val x = Complex(real, imag)
             val left = f(x)
             val right = Evaluate(term)({ case 'x => x })
             (left == right) || (left != left && right != right)

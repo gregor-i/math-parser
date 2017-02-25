@@ -11,15 +11,9 @@ def commonSettings = Seq(
   scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
 ) ++ specs2AndScalaCheck ++ spire
 
-def spire = Seq(
-  libraryDependencies += "org.spire-math" %% "spire" % "0.13.0"
-)
+def spire = libraryDependencies += "org.spire-math" %% "spire" % "0.13.0"
 
-def javaRuntimeCompiler =
-  libraryDependencies += "net.openhft" % "compiler" % "2.3.0"
-
-def scalaCompiler =
-  libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value
+def scalaCompiler = libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value
 
 def specs2AndScalaCheck = Seq(
   "org.scalacheck" %% "scalacheck" % "1.13.4",
@@ -32,5 +26,4 @@ name := "mathParser"
 commonSettings
 spire
 specs2AndScalaCheck
-javaRuntimeCompiler
 scalaCompiler
