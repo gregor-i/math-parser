@@ -55,7 +55,7 @@ object ComplexCompile extends Compile[ComplexLanguage.type] {
       import tools.reflect.ToolBox
       val toolbox = currentMirror.mkToolBox()
       val code =
-        s"""import spire.implicits._
+        s"""import spire.implicits.DoubleAlgebra
            |import spire.math.Complex
            |
            |new Function1[Complex[Double], Complex[Double]]{
