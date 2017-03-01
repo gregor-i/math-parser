@@ -19,12 +19,25 @@ package mathParser.complex
 
 import mathParser.AbstractSyntaxTree._
 import mathParser.{Compile, Variable}
-import spire.math.Complex
 
-import scala.annotation.tailrec
 import scala.util.Try
 
+object ReflectionObjects {
+  val mirror = scala.reflect.runtime.currentMirror
+  val universe = mirror.universe
+  val toolbox = tools.reflect.ToolBox(mirror).mkToolBox()
+  type Expr[T] = universe.Expr[T]
+}
+
 object ComplexCompile extends Compile[ComplexLanguage.type] {
+  import ReflectionObjects._
+  import universe.reify
+
+  import scala.tools.reflect.Eval
+
+  type C = ComplexLanguage.Skalar
+  
+  @deprecated("use scalaExpr instead.", "now")
   def scalaCode(node: Node[ComplexLanguage.type]): String = node match {
     case Constant(v) => s"Complex[Double](${v.real}, ${v.imag})"
     case UnitaryNode(Neg, child) => s"-(${scalaCode(child)})"
@@ -49,20 +62,40 @@ object ComplexCompile extends Compile[ComplexLanguage.type] {
     case Variable(name) => name.name
   }
 
-  override def apply(node: Node[ComplexLanguage.type])(v1: Variable): Try[Complex[Double] => Complex[Double]] =
-    Try {
-      import reflect.runtime.currentMirror
-      import tools.reflect.ToolBox
-      val toolbox = currentMirror.mkToolBox()
-      val code =
-        s"""import spire.implicits.DoubleAlgebra
-           |import spire.math.Complex
-           |
-           |new Function1[Complex[Double], Complex[Double]]{
-           |  def apply(${v1.name}:Complex[Double]):Complex[Double] = ${scalaCode(node)}
-           |}
-      """.stripMargin
+  def scalaExpr(node: Node[ComplexLanguage.type],
+                variables: Map[Symbol, Expr[C]]): Expr[C] = {
+    def recursion(node: Node[ComplexLanguage.type]): Expr[C] =
+      node match {
+        case Constant(v) => reify(v)
 
-      toolbox.compile(toolbox.parse(code))().asInstanceOf[Complex[Double] => Complex[Double]]
+        case UnitaryNode(op, child) =>
+          val r = recursion(child)
+          reify(op.apply(r.splice))
+
+        case BinaryNode(op, left, right) =>
+          val l = recursion(left)
+          val r = recursion(right)
+          reify(op.apply(l.splice, r.splice))
+
+        case Variable(name) => variables(name)
+      }
+
+    recursion(node)
+  }
+
+  def apply(node: Node[ComplexLanguage.type]): Try[C] =
+    Try {
+      scalaExpr(node, Map()).eval
+    }
+
+  override def apply(node: Node[ComplexLanguage.type], v1Symbol: Variable): Try[C => C] =
+    Try {
+      (v1: C) => scalaExpr(node, Map(v1Symbol -> reify(v1))).eval
+    }
+
+  def apply(node: Node[ComplexLanguage.type], v1Symbol: Variable, v2Symbol:Variable): Try[(C, C) => C] =
+    Try {
+      (v1: C, v2: C) =>
+        scalaExpr(node, Map(v1Symbol -> reify(v1), v2Symbol -> reify(v2))).eval
     }
 }

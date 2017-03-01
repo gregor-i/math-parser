@@ -2,14 +2,12 @@ package mathParser
 
 import mathParser.complex.{ComplexCompile, ComplexLanguage}
 import mathParser.double.{DoubleCompile, DoubleLanguage}
-import org.specs2.mutable.Specification
 import mathParser.implicits._
 import org.scalacheck.Gen
-import org.specs2.ScalaCheck
 import org.scalacheck.Prop.forAll
+import org.specs2.ScalaCheck
+import org.specs2.mutable.Specification
 import spire.math.Complex
-
-import scala.util.Failure
 
 class CompileToNativeSpec extends Specification with ScalaCheck {
   private val variable = 'x
@@ -69,7 +67,7 @@ class CompileToNativeSpec extends Specification with ScalaCheck {
   "'Compile to Native' for the double language with paramter 'x'" >> {
     forAll(doubleTrees) {
       term =>
-        val f = DoubleCompile(term)(variable).get
+        val f = DoubleCompile(term, variable).get
         forAll {
           x: Double =>
             val left = f(x)
@@ -82,7 +80,7 @@ class CompileToNativeSpec extends Specification with ScalaCheck {
   "'Compile to Native' for the complex language with paramter 'x'" >> {
     forAll(complexTrees) {
       term =>
-        val f = ComplexCompile(term)(variable).get
+        val f = ComplexCompile(term, variable).get
         forAll {
           (real:Double, imag:Double) =>
             val x = Complex(real, imag)

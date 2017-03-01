@@ -23,7 +23,7 @@ import mathParser.{Compile, Variable}
 import scala.util.Try
 
 object DoubleCompile extends Compile[DoubleLanguage.type] {
-  override def apply(node: Node[DoubleLanguage.type])(v1: Variable): Try[Double => Double] =
+  override def apply(node: Node[DoubleLanguage.type], v1: Variable): Try[Double => Double] =
     Try {
       def functionString(node: Node[DoubleLanguage.type]): String = node match {
         case Constant(v) => v.toString

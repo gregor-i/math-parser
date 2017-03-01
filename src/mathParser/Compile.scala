@@ -22,5 +22,5 @@ import mathParser.AbstractSyntaxTree.Node
 import scala.util.Try
 
 trait Compile[Lang <: Language] {
-  def apply(term: Node[Lang])(variable: Variable): Try[Lang#Skalar => Lang#Skalar]
+  def apply(term: Node[Lang], variable: Variable): Try[Lang#Skalar => Lang#Skalar]
 }
