@@ -22,21 +22,15 @@ import mathParser.{Compile, Variable}
 
 import scala.util.Try
 
-object ReflectionObjects {
-  val mirror = scala.reflect.runtime.currentMirror
-  val universe = mirror.universe
-  val toolbox = tools.reflect.ToolBox(mirror).mkToolBox()
-  type Expr[T] = universe.Expr[T]
-}
-
 object ComplexCompile extends Compile[ComplexLanguage.type] {
-  import ReflectionObjects._
+
+  import mathParser.ReflectionObjects._
   import universe.reify
 
   import scala.tools.reflect.Eval
 
   type C = ComplexLanguage.Skalar
-  
+
   @deprecated("use scalaExpr instead.", "now")
   def scalaCode(node: Node[ComplexLanguage.type]): String = node match {
     case Constant(v) => s"Complex[Double](${v.real}, ${v.imag})"
@@ -83,19 +77,18 @@ object ComplexCompile extends Compile[ComplexLanguage.type] {
     recursion(node)
   }
 
+  def function1(node:Node[ComplexLanguage.type], v1Symbol:Variable): Expr[C => C] =
+    reify((v1: C) => scalaExpr(node, Map(v1Symbol -> reify(v1))).splice)
+
+  def function2(node:Node[ComplexLanguage.type], v1Symbol:Variable, v2Symbol:Variable): Expr[(C, C) => C] =
+    reify((v1: C, v2:C) => scalaExpr(node, Map(v1Symbol -> reify(v1), v2Symbol -> reify(v2))).splice)
+
   def apply(node: Node[ComplexLanguage.type]): Try[C] =
-    Try {
-      scalaExpr(node, Map()).eval
-    }
+    Try(scalaExpr(node, Map()).eval)
 
   override def apply(node: Node[ComplexLanguage.type], v1Symbol: Variable): Try[C => C] =
-    Try {
-      (v1: C) => scalaExpr(node, Map(v1Symbol -> reify(v1))).eval
-    }
+    Try(function1(node, v1Symbol).eval)
 
-  def apply(node: Node[ComplexLanguage.type], v1Symbol: Variable, v2Symbol:Variable): Try[(C, C) => C] =
-    Try {
-      (v1: C, v2: C) =>
-        scalaExpr(node, Map(v1Symbol -> reify(v1), v2Symbol -> reify(v2))).eval
-    }
+  def apply(node: Node[ComplexLanguage.type], v1Symbol: Variable, v2Symbol: Variable): Try[(C, C) => C] =
+    Try(function2(node, v1Symbol, v2Symbol).eval)
 }
