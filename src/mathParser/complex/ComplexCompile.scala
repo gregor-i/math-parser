@@ -54,7 +54,7 @@ object ComplexCompile extends Compile[Lang] {
     case Variable(name) => name.name
   }
 
-  def scalaExpr(node: Node[Lang],
+  @inline final def scalaExpr(node: Node[Lang],
                 variables: Map[Symbol, Expr[C]]): Expr[C] = {
     def recursion(node: Node[Lang]): Expr[C] =
       node match {
@@ -76,10 +76,10 @@ object ComplexCompile extends Compile[Lang] {
   }
 
   def function1(node:Node[Lang], v1Symbol:Variable): Expr[C => C] =
-    reify((v1: C) => scalaExpr(node, Map(v1Symbol -> reify(v1))).splice)
+    reify((v1: C) => scalaExpr(node, Map(v1Symbol -> reify(v1))).eval)
 
   def function2(node:Node[Lang], v1Symbol:Variable, v2Symbol:Variable): Expr[(C, C) => C] =
-    reify((v1: C, v2:C) => scalaExpr(node, Map(v1Symbol -> reify(v1), v2Symbol -> reify(v2))).splice)
+    reify((v1: C, v2:C) => scalaExpr(node, Map(v1Symbol -> reify(v1), v2Symbol -> reify(v2))).eval)
 
   def apply(node: Node[Lang]): Try[C] =
     Try(scalaExpr(node, Map()).eval)
