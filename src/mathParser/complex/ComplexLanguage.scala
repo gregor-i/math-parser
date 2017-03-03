@@ -22,7 +22,7 @@ import mathParser.{Constant, Language}
 import spire.math.Complex
 
 object ComplexLanguage extends Language{
-  override type Skalar = Complex[Double]
+  override type Skalar = C
   override type Constant = ComplexConstant
   override type UnitaryOperator = ComplexUnitaryOperator
   override type BinaryOperator = ComplexBinaryOperator
@@ -39,12 +39,12 @@ object ComplexLanguage extends Language{
 trait ComplexSyntaxSugar {
   import mathParser.AbstractSyntaxTree
 
-  type Node = AbstractSyntaxTree.Node[ComplexLanguage.type]
-  type UnitaryNode = AbstractSyntaxTree.UnitaryNode[ComplexLanguage.type]
-  def UnitaryNode(op:ComplexLanguage.UnitaryOperator, t:Node) = AbstractSyntaxTree.UnitaryNode[ComplexLanguage.type](op, t)
-  type BinaryNode = AbstractSyntaxTree.BinaryNode[ComplexLanguage.type]
-  def BinaryNode(op:ComplexLanguage.BinaryOperator, t1:Node, t2:Node) = AbstractSyntaxTree.BinaryNode[ComplexLanguage.type](op, t1, t2)
-  type Constant = AbstractSyntaxTree.Constant[ComplexLanguage.type]
+  type Node = AbstractSyntaxTree.Node[Lang]
+  type UnitaryNode = AbstractSyntaxTree.UnitaryNode[Lang]
+  def UnitaryNode(op:ComplexLanguage.UnitaryOperator, t:Node) = AbstractSyntaxTree.UnitaryNode[Lang](op, t)
+  type BinaryNode = AbstractSyntaxTree.BinaryNode[Lang]
+  def BinaryNode(op:ComplexLanguage.BinaryOperator, t1:Node, t2:Node) = AbstractSyntaxTree.BinaryNode[Lang](op, t1, t2)
+  type Constant = AbstractSyntaxTree.Constant[Lang]
 
   def neg(t:Node): Node = UnitaryNode(Neg, t)
   def sin(t:Node): Node = UnitaryNode(Sin, t)
@@ -65,5 +65,5 @@ trait ComplexSyntaxSugar {
   def divided(t1:Node, t2:Node) = BinaryNode(Divided, t1, t2)
   def power(t1:Node, t2:Node) = BinaryNode(Power, t1, t2)
 
-  def constant(v:ComplexLanguage.Skalar) = AbstractSyntaxTree.Constant[ComplexLanguage.type](v)
+  def constant(v:ComplexLanguage.Skalar) = AbstractSyntaxTree.Constant[Lang](v)
 }

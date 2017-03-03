@@ -20,9 +20,9 @@ package mathParser.complex
 import mathParser.AbstractSyntaxTree._
 import mathParser.{AbstractSyntaxTree, Derive}
 
-object ComplexDerive extends Derive[ComplexLanguage.type] with ComplexSyntaxSugar {
-  override def apply(term: AbstractSyntaxTree.Node[ComplexLanguage.type])
-                    (variable: mathParser.Variable): AbstractSyntaxTree.Node[ComplexLanguage.type] = {
+object ComplexDerive extends Derive[Lang] with ComplexSyntaxSugar {
+  override def apply(term: AbstractSyntaxTree.Node[Lang])
+                    (variable: mathParser.Variable): AbstractSyntaxTree.Node[Lang] = {
     def derive(term: Node): Node = term match {
       case Variable(name) if name == variable => constant(1d)
       case Variable(_) | Constant(_) => constant(0d)

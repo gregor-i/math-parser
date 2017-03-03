@@ -15,12 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package mathParser.complex
+package mathParser
 
-import mathParser.ParseLiterals
-import mathParser.double.DoubleParseLiterals
 import spire.math.Complex
 
-object ComplexParseLiterals extends ParseLiterals[C]{
-  def tryToParse(s:String): Option[C] = DoubleParseLiterals.tryToParse(s).map(Complex(_, 0))
+package object complex {
+  type C = Complex[Double]
+  type Lang = ComplexLanguage.type
 }

@@ -22,17 +22,15 @@ import mathParser.{Compile, Variable}
 
 import scala.util.Try
 
-object ComplexCompile extends Compile[ComplexLanguage.type] {
+object ComplexCompile extends Compile[Lang] {
 
   import mathParser.ReflectionObjects._
   import universe.reify
 
   import scala.tools.reflect.Eval
 
-  type C = ComplexLanguage.Skalar
-
   @deprecated("use scalaExpr instead.", "now")
-  def scalaCode(node: Node[ComplexLanguage.type]): String = node match {
+  def scalaCode(node: Node[Lang]): String = node match {
     case Constant(v) => s"Complex[Double](${v.real}, ${v.imag})"
     case UnitaryNode(Neg, child) => s"-(${scalaCode(child)})"
     case UnitaryNode(Sin, child) => s"(${scalaCode(child)}).sin"
@@ -56,9 +54,9 @@ object ComplexCompile extends Compile[ComplexLanguage.type] {
     case Variable(name) => name.name
   }
 
-  def scalaExpr(node: Node[ComplexLanguage.type],
+  def scalaExpr(node: Node[Lang],
                 variables: Map[Symbol, Expr[C]]): Expr[C] = {
-    def recursion(node: Node[ComplexLanguage.type]): Expr[C] =
+    def recursion(node: Node[Lang]): Expr[C] =
       node match {
         case Constant(v) => reify(v)
 
@@ -77,18 +75,18 @@ object ComplexCompile extends Compile[ComplexLanguage.type] {
     recursion(node)
   }
 
-  def function1(node:Node[ComplexLanguage.type], v1Symbol:Variable): Expr[C => C] =
+  def function1(node:Node[Lang], v1Symbol:Variable): Expr[C => C] =
     reify((v1: C) => scalaExpr(node, Map(v1Symbol -> reify(v1))).splice)
 
-  def function2(node:Node[ComplexLanguage.type], v1Symbol:Variable, v2Symbol:Variable): Expr[(C, C) => C] =
+  def function2(node:Node[Lang], v1Symbol:Variable, v2Symbol:Variable): Expr[(C, C) => C] =
     reify((v1: C, v2:C) => scalaExpr(node, Map(v1Symbol -> reify(v1), v2Symbol -> reify(v2))).splice)
 
-  def apply(node: Node[ComplexLanguage.type]): Try[C] =
+  def apply(node: Node[Lang]): Try[C] =
     Try(scalaExpr(node, Map()).eval)
 
-  override def apply(node: Node[ComplexLanguage.type], v1Symbol: Variable): Try[C => C] =
+  override def apply(node: Node[Lang], v1Symbol: Variable): Try[C => C] =
     Try(function1(node, v1Symbol).eval)
 
-  def apply(node: Node[ComplexLanguage.type], v1Symbol: Variable, v2Symbol: Variable): Try[(C, C) => C] =
+  def apply(node: Node[Lang], v1Symbol: Variable, v2Symbol: Variable): Try[(C, C) => C] =
     Try(function2(node, v1Symbol, v2Symbol).eval)
 }
