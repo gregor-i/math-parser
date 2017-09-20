@@ -1,7 +1,6 @@
 package mathParser
 
-trait Language {
-  type Skalar
+trait Language[Skalar] {
   type Constant <: mathParser.Constant[Skalar]
   type UnitaryOperator <: mathParser.UnitaryOperator[Skalar]
   type BinaryOperator <: mathParser.BinaryOperator[Skalar]

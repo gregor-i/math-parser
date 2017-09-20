@@ -6,8 +6,7 @@ import spire.math.Complex
 
 import scala.util.Try
 
-object ComplexLanguage extends Language{
-  override type Skalar = C
+object ComplexLanguage extends Language[C]{
   override type Constant = ComplexConstant
   override type UnitaryOperator = ComplexUnitaryOperator
   override type BinaryOperator = ComplexBinaryOperator
@@ -20,7 +19,7 @@ object ComplexLanguage extends Language{
 
   override def constants(): Seq[Constant] = Seq(e, pi, i)
 
-  val literalParser = new LiteralParser[this.type]{
+  val literalParser = new LiteralParser[C]{
     def tryToParse(s:String): Option[C] = Try(s.toDouble).toOption.map(Complex(_, 0))
   }
 }
@@ -28,12 +27,12 @@ object ComplexLanguage extends Language{
 trait ComplexSyntaxSugar {
   import mathParser.AbstractSyntaxTree
 
-  type Node = AbstractSyntaxTree.Node[Lang]
-  type UnitaryNode = AbstractSyntaxTree.UnitaryNode[Lang]
-  def UnitaryNode(op:ComplexLanguage.UnitaryOperator, t:Node) = AbstractSyntaxTree.UnitaryNode[Lang](op, t)
-  type BinaryNode = AbstractSyntaxTree.BinaryNode[Lang]
-  def BinaryNode(op:ComplexLanguage.BinaryOperator, t1:Node, t2:Node) = AbstractSyntaxTree.BinaryNode[Lang](op, t1, t2)
-  type Constant = AbstractSyntaxTree.Constant[Lang]
+  type Node = AbstractSyntaxTree.Node[C, Lang]
+  type UnitaryNode = AbstractSyntaxTree.UnitaryNode[C, Lang]
+  def UnitaryNode(op:ComplexLanguage.UnitaryOperator, t:Node) = AbstractSyntaxTree.UnitaryNode[C, Lang](op, t)
+  type BinaryNode = AbstractSyntaxTree.BinaryNode[C, Lang]
+  def BinaryNode(op:ComplexLanguage.BinaryOperator, t1:Node, t2:Node) = AbstractSyntaxTree.BinaryNode[C, Lang](op, t1, t2)
+  type Constant = AbstractSyntaxTree.Constant[C, Lang]
 
   def neg(t:Node): Node = UnitaryNode(Neg, t)
   def sin(t:Node): Node = UnitaryNode(Sin, t)
@@ -54,5 +53,5 @@ trait ComplexSyntaxSugar {
   def divided(t1:Node, t2:Node) = BinaryNode(Divided, t1, t2)
   def power(t1:Node, t2:Node) = BinaryNode(Power, t1, t2)
 
-  def constant(v:ComplexLanguage.Skalar) = AbstractSyntaxTree.Constant[Lang](v)
+  def constant(v:C) = AbstractSyntaxTree.Constant[C, Lang](v)
 }

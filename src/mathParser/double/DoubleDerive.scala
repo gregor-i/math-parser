@@ -21,9 +21,9 @@ import mathParser.AbstractSyntaxTree
 import mathParser.AbstractSyntaxTree._
 import mathParser.{Derive, Variable}
 
-object DoubleDerive extends Derive[DoubleLanguage.type] with DoubleSyntaxSugar {
-  override def apply(term: AbstractSyntaxTree.Node[DoubleLanguage.type])
-                    (variable: mathParser.Variable): AbstractSyntaxTree.Node[DoubleLanguage.type] = {
+object DoubleDerive extends Derive[Double, DoubleLanguage.type] with DoubleSyntaxSugar {
+  override def apply(term: AbstractSyntaxTree.Node[Double, DoubleLanguage.type])
+                    (variable: mathParser.Variable): AbstractSyntaxTree.Node[Double, DoubleLanguage.type] = {
     def derive(term: Node): Node = term match {
       case Variable(name) if name == variable => constant(1d)
       case Variable(_) | Constant(_) => constant(0d)

@@ -3,15 +3,15 @@ package mathParser
 import mathParser.AbstractSyntaxTree._
 
 object ReplaceConstants {
-  def apply[Lang <: Language](node: Node[Lang]): Node[Lang] = {
-    def mayBeConstant(node: Node[Lang]): Boolean = node match {
+  def apply[S, Lang <: Language[S]](node: Node[S, Lang]): Node[S, Lang] = {
+    def mayBeConstant(node: Node[S, Lang]): Boolean = node match {
       case Variable(name)             => false
       case UnitaryNode(_, child)      => mayBeConstant(child)
       case BinaryNode(_, left, right) => mayBeConstant(left) && mayBeConstant(right)
       case _                          => true
     }
 
-    def replace(node: Node[Lang]): Node[Lang] =
+    def replace(node: Node[S, Lang]): Node[S, Lang] =
       if (mayBeConstant(node))
         Constant(Evaluate(node)(PartialFunction.empty))
       else node match {

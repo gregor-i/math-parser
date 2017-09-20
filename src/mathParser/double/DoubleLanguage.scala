@@ -21,8 +21,7 @@ import mathParser.{Language, LiteralParser}
 
 import scala.util.Try
 
-object DoubleLanguage extends Language{
-  override type Skalar = Double
+object DoubleLanguage extends Language[Double]{
   override type Constant = DoubleConstant
   override type UnitaryOperator = DoubleUnitaryOperator
   override type BinaryOperator = DoubleBinaryOperator
@@ -35,7 +34,7 @@ object DoubleLanguage extends Language{
 
   override def constants(): Seq[Constant] = Seq(e, pi)
 
-  val literalParser = new LiteralParser[this.type]{
+  val literalParser = new LiteralParser[Double]{
     def tryToParse(s:String): Option[Double] = Try(s.toDouble).toOption
   }
 }
@@ -43,12 +42,12 @@ object DoubleLanguage extends Language{
 trait DoubleSyntaxSugar {
   import mathParser.AbstractSyntaxTree
 
-  type Node = AbstractSyntaxTree.Node[DoubleLanguage.type]
-  type UnitaryNode = AbstractSyntaxTree.UnitaryNode[DoubleLanguage.type]
-  def UnitaryNode(op:DoubleLanguage.UnitaryOperator, t:Node) = AbstractSyntaxTree.UnitaryNode[DoubleLanguage.type](op, t)
-  type BinaryNode = AbstractSyntaxTree.BinaryNode[DoubleLanguage.type]
-  def BinaryNode(op:DoubleLanguage.BinaryOperator, t1:Node, t2:Node) = AbstractSyntaxTree.BinaryNode[DoubleLanguage.type](op, t1, t2)
-  type Constant = AbstractSyntaxTree.Constant[DoubleLanguage.type]
+  type Node = AbstractSyntaxTree.Node[Double, DoubleLanguage.type]
+  type UnitaryNode = AbstractSyntaxTree.UnitaryNode[Double, DoubleLanguage.type]
+  def UnitaryNode(op:DoubleLanguage.UnitaryOperator, t:Node) = AbstractSyntaxTree.UnitaryNode[Double, DoubleLanguage.type](op, t)
+  type BinaryNode = AbstractSyntaxTree.BinaryNode[Double, DoubleLanguage.type]
+  def BinaryNode(op:DoubleLanguage.BinaryOperator, t1:Node, t2:Node) = AbstractSyntaxTree.BinaryNode[Double, DoubleLanguage.type](op, t1, t2)
+  type Constant = AbstractSyntaxTree.Constant[Double, DoubleLanguage.type]
 
   def neg(t:Node): Node = UnitaryNode(Neg, t)
   def sin(t:Node): Node = UnitaryNode(Sin, t)
@@ -69,5 +68,5 @@ trait DoubleSyntaxSugar {
   def divided(t1:Node, t2:Node) = BinaryNode(Divided, t1, t2)
   def power(t1:Node, t2:Node) = BinaryNode(Power, t1, t2)
 
-  def constant(v:DoubleLanguage.Skalar) = AbstractSyntaxTree.Constant[DoubleLanguage.type](v)
+  def constant(v:Double) = AbstractSyntaxTree.Constant[Double, DoubleLanguage.type](v)
 }

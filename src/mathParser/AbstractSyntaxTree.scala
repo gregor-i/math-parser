@@ -1,26 +1,9 @@
-/*
- * Copyright (C) 2017  Gregor Ihmor
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package mathParser
 
 object AbstractSyntaxTree {
-  sealed trait Node[Lang <: Language]
-  case class Constant[Lang <: Language](value:Lang#Skalar) extends Node[Lang]
-  case class UnitaryNode[Lang <: Language](op:Lang#UnitaryOperator, child:Node[Lang]) extends Node[Lang]
-  case class BinaryNode[Lang <: Language](op:Lang#BinaryOperator, childLeft:Node[Lang], childRight:Node[Lang]) extends Node[Lang]
-  case class Variable[Lang <: Language](name: Symbol) extends Node[Lang]
+  sealed trait Node[S, Lang <: Language[S]]
+  case class Constant[S, Lang <: Language[S]](value:S) extends Node[S, Lang]
+  case class UnitaryNode[S, Lang <: Language[S]](op:UnitaryOperator[S], child:Node[S, Lang]) extends Node[S, Lang]
+  case class BinaryNode[S, Lang <: Language[S]](op:BinaryOperator[S], childLeft:Node[S, Lang], childRight:Node[S, Lang]) extends Node[S, Lang]
+  case class Variable[S, Lang <: Language[S]](name: Symbol) extends Node[S, Lang]
 }

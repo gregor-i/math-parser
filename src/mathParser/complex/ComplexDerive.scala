@@ -1,28 +1,11 @@
-/*
- * Copyright (C) 2017  Gregor Ihmor
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package mathParser.complex
 
 import mathParser.AbstractSyntaxTree._
 import mathParser.{AbstractSyntaxTree, Derive}
 
-object ComplexDerive extends Derive[Lang] with ComplexSyntaxSugar {
-  override def apply(term: AbstractSyntaxTree.Node[Lang])
-                    (variable: mathParser.Variable): AbstractSyntaxTree.Node[Lang] = {
+object ComplexDerive extends Derive[C, Lang] with ComplexSyntaxSugar {
+  override def apply(term: AbstractSyntaxTree.Node[C, Lang])
+                    (variable: mathParser.Variable): AbstractSyntaxTree.Node[C, Lang] = {
     def derive(term: Node): Node = term match {
       case Variable(name) if name == variable => constant(1d)
       case Variable(_) | Constant(_) => constant(0d)

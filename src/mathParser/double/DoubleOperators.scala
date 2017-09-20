@@ -33,7 +33,7 @@ case object Tanh extends DoubleUnitaryOperator('tanh, Math.tanh)
 case object Exp extends DoubleUnitaryOperator('exp, Math.exp)
 case object Log extends DoubleUnitaryOperator('log, Math.log)
 
-sealed abstract class DoubleBinaryOperator(val name:Symbol, val apply:((Double, Double)=> Double)) extends BinaryOperator[Double]
+sealed abstract class DoubleBinaryOperator(val name:Symbol, val apply:((Double, Double) => Double)) extends BinaryOperator[Double]
 case object Plus extends DoubleBinaryOperator('+, _ + _)
 case object Minus extends DoubleBinaryOperator('-, _ - _)
 case object Times extends DoubleBinaryOperator('*, _ * _)

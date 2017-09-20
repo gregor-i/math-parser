@@ -3,8 +3,8 @@ package mathParser.complex
 import mathParser.AbstractSyntaxTree._
 import mathParser.{Compile, Variable}
 
-object ComplexCompile extends Compile[Lang] {
-  def scalaCode(node: Node[Lang]): String = node match {
+object ComplexCompile extends Compile[C, Lang] {
+  def scalaCode(node: Node[C, Lang]): String = node match {
     case Constant(v) => s"Complex[Double](${v.real}, ${v.imag})"
     case UnitaryNode(Neg, child) => s"-(${scalaCode(child)})"
     case UnitaryNode(Sin, child) => s"(${scalaCode(child)}).sin"
@@ -28,7 +28,7 @@ object ComplexCompile extends Compile[Lang] {
     case Variable(name) => name.name
   }
 
-  override def apply(v1: Variable)(term: Node[Lang]): Option[C => C] =
+  override def apply(v1: Variable)(term: Node[C, Lang]): Option[C => C] =
     compileAndCast[C => C](
       s"""import spire.implicits._
          |import spire.math.Complex
@@ -40,7 +40,7 @@ object ComplexCompile extends Compile[Lang] {
       """.stripMargin
     ).toOption
 
-  override def apply(v1: Variable, v2: Variable)(term: Node[Lang]): Option[(C, C) => C] =
+  override def apply(v1: Variable, v2: Variable)(term: Node[C, Lang]): Option[(C, C) => C] =
     compileAndCast[(C, C) => C](
       s"""import spire.implicits._
          |import spire.math.Complex

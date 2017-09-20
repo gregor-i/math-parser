@@ -22,8 +22,8 @@ import mathParser.{Compile, Variable}
 
 import scala.util.Try
 
-object DoubleCompile extends Compile[DoubleLanguage.type] {
-  private def functionString(node: Node[DoubleLanguage.type]): String = node match {
+object DoubleCompile extends Compile[Double, DoubleLanguage.type] {
+  private def functionString(node: Node[Double, _]): String = node match {
     case Constant(v) => v.toString
     case UnitaryNode(Neg, child) => s"-(${functionString(child)})"
     case UnitaryNode(Sin, child) => s"Math.sin(${functionString(child)})"
@@ -49,7 +49,7 @@ object DoubleCompile extends Compile[DoubleLanguage.type] {
 
 
   def apply(v1: Variable)
-           (node: Node[DoubleLanguage.type]): Option[Double => Double] =
+           (node: Node[Double, DoubleLanguage.type]): Option[Double => Double] =
     compileAndCast[Double => Double](
       s"""
          |new Function1[Double, Double]{
@@ -59,7 +59,7 @@ object DoubleCompile extends Compile[DoubleLanguage.type] {
       .toOption
 
   def apply(v1:Variable, v2:Variable)
-           (node: Node[DoubleLanguage.type]): Option[(Double, Double) => Double] =
+           (node: Node[Double, DoubleLanguage.type]): Option[(Double, Double) => Double] =
     compileAndCast[(Double, Double) => Double](
       s"""
          |new Function2[Double, Double, Double]{

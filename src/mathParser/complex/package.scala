@@ -8,4 +8,5 @@ package object complex {
   val Lang = ComplexLanguage
   val Derive = ComplexDerive
   val Compile = ComplexCompile
+  val Parser = new Parser[C, Lang](Lang, Lang.literalParser)
 }
