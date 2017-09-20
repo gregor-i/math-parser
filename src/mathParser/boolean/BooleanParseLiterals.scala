@@ -17,9 +17,9 @@
 
 package mathParser.boolean
 
-import mathParser.ParseLiterals
+import mathParser.LiteralParser
 
-object BooleanParseLiterals  extends ParseLiterals[Boolean]{
+object BooleanParseLiterals  extends LiteralParser[BooleanLanguage.type]{
   override def tryToParse(s: String): Option[Boolean] = s match{
     case "true" | "TRUE" | "1"  => Some(true)
     case "false" | "FALSE" | "0" => Some(true)

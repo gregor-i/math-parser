@@ -22,5 +22,19 @@ import mathParser.AbstractSyntaxTree.Node
 import scala.util.Try
 
 trait Compile[Lang <: Language] {
-  def apply(term: Node[Lang], variable: Variable): Try[Lang#Skalar => Lang#Skalar]
+  def apply(v1: Variable)
+           (term: Node[Lang]): Option[Lang#Skalar => Lang#Skalar]
+
+  def apply(v1: Variable, v2: Variable)
+           (term: Node[Lang]): Option[(Lang#Skalar, Lang#Skalar) => Lang#Skalar]
+
+
+  private[mathParser] def compileAndCast[A](scalaCode:String):Try[A] =
+    Try{
+      import reflect.runtime.currentMirror
+      import tools.reflect.ToolBox
+      currentMirror.mkToolBox()
+        .eval(currentMirror.mkToolBox().parse(scalaCode))
+        .asInstanceOf[A]
+    }
 }

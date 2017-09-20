@@ -17,9 +17,6 @@
 
 package mathParser
 
-object ReflectionObjects {
-  val mirror = scala.reflect.runtime.currentMirror
-  val universe = mirror.universe
-  val toolbox = tools.reflect.ToolBox(mirror).mkToolBox()
-  type Expr[T] = universe.Expr[T]
+trait LiteralParser[Lang <: Language] {
+  def tryToParse(s:String): Option[Lang#Skalar]
 }

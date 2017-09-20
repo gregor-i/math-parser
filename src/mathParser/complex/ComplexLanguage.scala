@@ -1,25 +1,10 @@
-/*
- * Copyright (C) 2017  Gregor Ihmor
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 
 package mathParser.complex
 
-import mathParser.double.DoubleLanguage.Skalar
-import mathParser.{Constant, Language}
+import mathParser.{Language, LiteralParser}
 import spire.math.Complex
+
+import scala.util.Try
 
 object ComplexLanguage extends Language{
   override type Skalar = C
@@ -34,6 +19,10 @@ object ComplexLanguage extends Language{
   override def binaryInfixOperators: Seq[BinaryOperator] = Seq(Plus, Minus, Times, Divided, Power)
 
   override def constants(): Seq[Constant] = Seq(e, pi, i)
+
+  val literalParser = new LiteralParser[this.type]{
+    def tryToParse(s:String): Option[C] = Try(s.toDouble).toOption.map(Complex(_, 0))
+  }
 }
 
 trait ComplexSyntaxSugar {

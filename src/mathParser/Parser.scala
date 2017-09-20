@@ -31,7 +31,7 @@ object Parser {
   private def collectSomes[A]:PartialFunction[Option[A], A] = { case Some(x) => x }
 }
 
-case class Parser[Lang <: Language](lang:Lang, variables:VariableSet)(implicit literalParser: ParseLiterals[Lang#Skalar]) {
+case class Parser[Lang <: Language](lang:Lang, variables:VariableSet, literalParser: LiteralParser[Lang]) {
   import Parser._
 
 

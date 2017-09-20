@@ -2,8 +2,7 @@ package mathParser
 
 import mathParser.complex.{ComplexCompile, ComplexLanguage}
 import mathParser.double.{DoubleCompile, DoubleLanguage}
-import mathParser.implicits._
-import org.scalacheck.Gen
+import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Prop.forAll
 import org.specs2.ScalaCheck
 import org.specs2.mutable.Specification
@@ -56,37 +55,39 @@ class CompileToNativeSpec extends Specification with ScalaCheck {
   )
 
   private val doubleTrees = {
-    val parser = new Parser[DoubleLanguage.type](DoubleLanguage, Set(variable))
+    val parser = new Parser[DoubleLanguage.type](DoubleLanguage, Set(variable), DoubleLanguage.literalParser)
     someFunctions.map(parser(_).get)
   }
   private val complexTrees = {
-    val parser = new Parser[ComplexLanguage.type](ComplexLanguage, Set(variable))
+    val parser = new Parser[ComplexLanguage.type](ComplexLanguage, Set(variable), ComplexLanguage.literalParser)
     someFunctions.map(parser(_).get)
   }
 
-  "'Compile to Native' for the double language with paramter 'x'" >> {
+  private val genComplex: Gen[Complex[Double]] = for {
+    imag <- Arbitrary.arbDouble
+    real <- Arbitrary.arbDouble
+  } yield Complex(imag, real)
+
+  implicit class DoubleEquality(left: Double) {
+    def ===(right: Double): Boolean = (left == right) || (left != left && right != right)
+  }
+
+  "'Compile to Native' for the double language with parameter 'x'" >> {
     forAll(doubleTrees) {
       term =>
-        val f = DoubleCompile(term, variable).get
+        val f = DoubleCompile(variable)(term).get
         forAll {
-          x: Double =>
-            val left = f(x)
-            val right = Evaluate(term)({ case 'x => x })
-            (left == right) || (left != left && right != right)
+          x: Double => f(x) === Evaluate(term)({ case 'x => x })
         }
     }
   }
 
-  "'Compile to Native' for the complex language with paramter 'x'" >> {
+  "'Compile to Native' for the complex language with parameter 'x'" >> {
     forAll(complexTrees) {
       term =>
-        val f = ComplexCompile(term, variable).get
-        forAll {
-          (real:Double, imag:Double) =>
-            val x = Complex(real, imag)
-            val left = f(x)
-            val right = Evaluate(term)({ case 'x => x })
-            (left == right) || (left != left && right != right)
+        val f = ComplexCompile(variable)(term).get
+        forAll(genComplex) {
+          x => f(x) === Evaluate(term)({ case 'x => x })
         }
     }
   }

@@ -17,8 +17,9 @@
 
 package mathParser.double
 
-import mathParser.double.DoubleLanguage.Skalar
-import mathParser.{Constant, Language}
+import mathParser.{Language, LiteralParser}
+
+import scala.util.Try
 
 object DoubleLanguage extends Language{
   override type Skalar = Double
@@ -33,6 +34,10 @@ object DoubleLanguage extends Language{
   override def binaryInfixOperators: Seq[BinaryOperator] = Seq(Plus, Minus, Times, Divided, Power)
 
   override def constants(): Seq[Constant] = Seq(e, pi)
+
+  val literalParser = new LiteralParser[this.type]{
+    def tryToParse(s:String): Option[Double] = Try(s.toDouble).toOption
+  }
 }
 
 trait DoubleSyntaxSugar {
