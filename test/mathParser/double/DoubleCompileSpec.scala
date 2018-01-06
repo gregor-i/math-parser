@@ -13,7 +13,7 @@ class DoubleCompileSpec  extends Specification with ScalaCheck with TestUtils {
       term =>
         val f = DoubleCompile('x)(term).get
         forAll {
-          x: Double => f(x) === Evaluate(term)({ case 'x => x })
+          x: Double => f(x) ==== Evaluate(term)({ case 'x => x })
         }
     }
   }

@@ -1,6 +1,6 @@
 package mathParser
 
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.{Arbitrary, Gen, Prop}
 import spire.math.Complex
 
 trait TestUtils {
@@ -10,10 +10,10 @@ trait TestUtils {
   } yield Complex(imag, real)
 
   implicit class DoubleEquality(left: Double) {
-    def ===(right: Double): Boolean = (left == right) || (left != left && right != right)
+    def ====(right: Double): Boolean = (left == right) || (left != left && right != right)
   }
 
   implicit class ComplexDoubleEquality(left: Complex[Double]) {
-    def ===(right: Complex[Double]): Boolean = (left.imag === right.imag) && (left.real === right.real)
+    def ====(right: Complex[Double]): Boolean = (left.imag ==== right.imag) && (left.real ==== right.real)
   }
 }

@@ -12,7 +12,7 @@ class ComplexCompileSpec extends Specification with ScalaCheck with TestUtils {
       term =>
         val f = ComplexCompile('x)(term).get
         forAll(genComplex) {
-          x => f(x) === Evaluate(term)({ case 'x => x })
+          x => f(x) ==== Evaluate(term)({ case 'x => x })
         }
     }
   }
