@@ -1,30 +1,12 @@
-/*
- * Copyright (C) 2017  Gregor Ihmor
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package mathParser.double
 
-import mathParser.AbstractSyntaxTree._
-import mathParser.{Compile, Variable}
+import mathParser.slices.{AbstractSyntaxTree, Compile, FreeVariables}
 
-import scala.util.Try
+trait DoubleCompile extends Compile {
+  _: AbstractSyntaxTree with DoubleOperators with FreeVariables =>
 
-object DoubleCompile extends Compile[Double, DoubleLanguage.type] {
-  private def functionString(node: Node[Double, _]): String = node match {
-    case Constant(v) => v.toString
+  private def functionString(node: Node): String = node match {
+    case ConstantNode(v) => v.toString
     case UnitaryNode(Neg, child) => s"-(${functionString(child)})"
     case UnitaryNode(Sin, child) => s"Math.sin(${functionString(child)})"
     case UnitaryNode(Cos, child) => s"Math.cos(${functionString(child)})"
@@ -48,23 +30,25 @@ object DoubleCompile extends Compile[Double, DoubleLanguage.type] {
   }
 
 
-  def apply(v1: Variable)
-           (node: Node[Double, DoubleLanguage.type]): Option[Double => Double] =
+  def compile1(node: Node): Option[Double => Double] = {
+    preconditions1()
     compileAndCast[Double => Double](
       s"""
          |new Function1[Double, Double]{
-         |  def apply(${v1.name}:Double):Double = ${functionString(node)}
+         |  def apply(${freeVariables(0).name}:Double):Double = ${functionString(node)}
          |}
          |""".stripMargin)
       .toOption
+  }
 
-  def apply(v1:Variable, v2:Variable)
-           (node: Node[Double, DoubleLanguage.type]): Option[(Double, Double) => Double] =
+  def compile2(node: Node): Option[(Double, Double) => Double] = {
+    preconditions2()
     compileAndCast[(Double, Double) => Double](
       s"""
          |new Function2[Double, Double, Double]{
-         |  def apply(${v1.name}:Double, ${v2.name}:Double):Double = ${functionString(node)}
+         |  def apply(${freeVariables(0).name}:Double, ${freeVariables(1).name}:Double):Double = ${functionString(node)}
          |}
          |""".stripMargin)
       .toOption
+  }
 }

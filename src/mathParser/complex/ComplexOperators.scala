@@ -1,8 +1,22 @@
 package mathParser.complex
 
-import mathParser.{BinaryOperator, Constant, UnitaryOperator}
+import mathParser.slices.{BinaryOperator, Constant, LanguageOperators, UnitaryOperator}
 import spire.implicits._
 import spire.math.Complex
+
+trait ComplexOperators extends LanguageOperators{
+  type Skalar = C
+  type Constant = ComplexConstant
+  type UnitaryOperator = ComplexUnitaryOperator
+  type BinaryOperator = ComplexBinaryOperator
+
+  def unitaryOperators: Seq[UnitaryOperator] = Seq(Neg, Sin, Cos, Tan, Asin, Acos, Atan, Sinh, Cosh, Tanh, Exp, Log)
+  def binaryOperators: Seq[BinaryOperator] = Seq.empty
+  def binaryInfixOperators: Seq[BinaryOperator] = Seq(Plus, Minus, Times, Divided, Power)
+  def constants(): Seq[Constant] = Seq(e, pi, i)
+}
+
+
 
 sealed abstract class ComplexUnitaryOperator(val name:Symbol, val apply:(C => C)) extends UnitaryOperator[C]
 case object Neg extends ComplexUnitaryOperator('-, -_)

@@ -3,7 +3,7 @@ package mathParser
 import org.scalacheck.Gen
 
 object SomeFunctions {
-  val someFunctions = Gen.oneOf(
+  val someFunctions: Gen[String] = Gen.oneOf(
     "x^(3+10)",
     "x^(3+10) -1",
     "x^(10) -1",
@@ -46,9 +46,4 @@ object SomeFunctions {
     "35*x^9-180*x^7+378*x^5-420*x^3+315*x",
     "35*x^9-180*x^7+3798*x^5-420*x^3+315+x"
   )
-
-
-  val doubleTrees = someFunctions.map(mathParser.double.Parser(_)(Set('x)).get)
-
-  val complexTrees = someFunctions.map(mathParser.complex.Parser(_)(Set('x)).get)
 }

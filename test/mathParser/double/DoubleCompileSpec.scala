@@ -1,19 +1,22 @@
 package mathParser
 package double
 
-import mathParser.SomeFunctions.doubleTrees
+import mathParser.SomeFunctions.someFunctions
 import org.scalacheck.Prop._
 import org.specs2.ScalaCheck
 import org.specs2.mutable.Specification
 
 
 class DoubleCompileSpec  extends Specification with ScalaCheck with TestUtils {
+  val lang = MathParser.doubleLanguage('x)
+
   "'Compile to Native' for the double language with parameter 'x'" >> {
-    forAll(doubleTrees) {
+    forAll(someFunctions) {
       term =>
-        val f = DoubleCompile('x)(term).get
+        val ast = lang.parse(term).get
+        val compiled = lang.compile1(ast).get
         forAll {
-          x: Double => f(x) ==== Evaluate(term)({ case 'x => x })
+          x: Double => compiled(x) ==== lang.evaluate(ast)({ case 'x => x })
         }
     }
   }

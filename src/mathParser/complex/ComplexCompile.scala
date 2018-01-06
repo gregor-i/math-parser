@@ -1,11 +1,12 @@
 package mathParser.complex
 
-import mathParser.AbstractSyntaxTree._
-import mathParser.{Compile, Variable}
+import mathParser.slices.{AbstractSyntaxTree, Compile, FreeVariables}
 
-object ComplexCompile extends Compile[C, Lang] {
-  def scalaCode(node: Node[C, Lang]): String = node match {
-    case Constant(v) => s"Complex[Double](${v.real}, ${v.imag})"
+trait ComplexCompile extends Compile {
+  _ : AbstractSyntaxTree with ComplexOperators with FreeVariables =>
+
+  private def scalaCode(node: Node): String = node match {
+    case ConstantNode(v) => s"Complex[Double](${v.real}, ${v.imag})"
     case UnitaryNode(Neg, child) => s"-(${scalaCode(child)})"
     case UnitaryNode(Sin, child) => s"(${scalaCode(child)}).sin"
     case UnitaryNode(Cos, child) => s"(${scalaCode(child)}).cos"
@@ -28,27 +29,31 @@ object ComplexCompile extends Compile[C, Lang] {
     case Variable(name) => name.name
   }
 
-  override def apply(v1: Variable)(term: Node[C, Lang]): Option[C => C] =
+  override def compile1(term: Node): Option[C => C] = {
+    preconditions1()
     compileAndCast[C => C](
       s"""import spire.implicits._
          |import spire.math.Complex
          |
          |new Function1[Complex[Double], Complex[Double]]{
-         |  def apply(${v1.name}:Complex[Double]): Complex[Double] = ${scalaCode(term)}
+         |  def apply(${freeVariables(0).name}:Complex[Double]): Complex[Double] = ${scalaCode(term)}
          |}
          |
       """.stripMargin
     ).toOption
+  }
 
-  override def apply(v1: Variable, v2: Variable)(term: Node[C, Lang]): Option[(C, C) => C] =
+  override def compile2(term: Node): Option[(C, C) => C] = {
+    preconditions2()
     compileAndCast[(C, C) => C](
       s"""import spire.implicits._
          |import spire.math.Complex
          |
          |new Function2[Complex[Double], Complex[Double], Complex[Double]]{
-         |  def apply(${v1.name}:Complex[Double], ${v2.name}:Complex[Double]): Complex[Double] = ${scalaCode(term)}
+         |  def apply(${freeVariables(0).name}:Complex[Double], ${freeVariables(1).name}:Complex[Double]): Complex[Double] = ${scalaCode(term)}
          |}
          |
       """.stripMargin
     ).toOption
+  }
 }

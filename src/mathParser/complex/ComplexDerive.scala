@@ -1,20 +1,21 @@
 package mathParser.complex
 
-import mathParser.AbstractSyntaxTree._
-import mathParser.{AbstractSyntaxTree, Derive}
+import mathParser.slices.{AbstractSyntaxTree, Derive}
 
-object ComplexDerive extends Derive[C, Lang] with ComplexSyntaxSugar {
-  override def apply(term: AbstractSyntaxTree.Node[C, Lang])
-                    (variable: mathParser.Variable): AbstractSyntaxTree.Node[C, Lang] = {
+trait ComplexDerive extends Derive {
+  _: ComplexSyntaxSugar with ComplexOperators with AbstractSyntaxTree =>
+
+  def derive(term: Node)
+            (variable: Symbol): Node = {
     def derive(term: Node): Node = term match {
       case Variable(name) if name == variable => constant(1d)
-      case Variable(_) | Constant(_) => constant(0d)
+      case Variable(_) | ConstantNode(_) => constant(0d)
       case UnitaryNode(Neg, child) => neg(derive(child))
       case UnitaryNode(Sin, child) => times(derive(child), cos(child))
       case UnitaryNode(Cos, child) => neg(times(derive(child), sin(child)))
       case UnitaryNode(Atan, child) => divided(derive(child), plus(constant(1d), times(child, child)))
       case in@UnitaryNode(Exp, child) => times(in, derive(child))
-        // todo: there are functions missing.
+      // todo: there are functions missing.
       case BinaryNode(Plus, t1, t2) => plus(derive(t1), derive(t2))
       case BinaryNode(Minus, t1, t2) => minus(derive(t1), derive(t2))
       case BinaryNode(Times, t1, t2) => plus(times(derive(t1), t2), times(derive(t2), t1))

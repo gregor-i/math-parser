@@ -1,23 +1,18 @@
-/*
- * Copyright (C) 2017  Gregor Ihmor
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package mathParser.double
 
-import mathParser.{BinaryOperator, Constant, UnitaryOperator}
+import mathParser.slices.{BinaryOperator, Constant, LanguageOperators, UnitaryOperator}
+
+trait DoubleOperators extends LanguageOperators {
+  type Skalar = Double
+  type Constant = DoubleConstant
+  type UnitaryOperator = DoubleUnitaryOperator
+  type BinaryOperator = DoubleBinaryOperator
+
+  def unitaryOperators: Seq[UnitaryOperator] = Seq(Neg, Sin, Cos, Tan, Asin, Acos, Atan, Sinh, Cosh, Tanh, Exp, Log)
+  def binaryOperators: Seq[BinaryOperator] = Seq.empty
+  def binaryInfixOperators: Seq[BinaryOperator] = Seq(Plus, Minus, Times, Divided, Power)
+  def constants(): Seq[Constant] = Seq(e, pi)
+}
 
 sealed abstract class DoubleUnitaryOperator(val name:Symbol, val apply:(Double => Double)) extends UnitaryOperator[Double]
 case object Neg extends DoubleUnitaryOperator('-, -_)

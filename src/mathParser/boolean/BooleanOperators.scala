@@ -1,6 +1,19 @@
 package mathParser.boolean
 
-import mathParser.{BinaryOperator, Constant, UnitaryOperator}
+import mathParser.slices.{BinaryOperator, Constant, LanguageOperators, UnitaryOperator}
+
+trait BooleanOperators extends LanguageOperators{
+  type Skalar = Boolean
+  type Constant = BooleanConstant
+  type UnitaryOperator = BooleanUnitaryOperator
+  type BinaryOperator = BooleanBinaryOperator
+
+  def unitaryOperators: Seq[UnitaryOperator] = Seq(Not)
+  def binaryOperators: Seq[BinaryOperator] = Seq.empty
+  def binaryInfixOperators: Seq[BinaryOperator] = Seq(And, Or, Equals, Unequals)
+  def constants(): Seq[Constant] = Seq(`true`, `false`)
+}
+
 
 sealed abstract class BooleanUnitaryOperator(val name:Symbol, val apply:(Boolean => Boolean)) extends UnitaryOperator[Boolean]
 case object Not extends BooleanUnitaryOperator('!, !_)
