@@ -11,4 +11,8 @@ object Dependancies {
     "org.specs2" %% "specs2-core" % "3.8.6",
     "org.specs2" %% "specs2-scalacheck" % "3.8.6")
     .map(libraryDependencies += _ % Test)
+
+  def scalaChart = libraryDependencies += "com.github.wookietreiber" %% "scala-chart" %  "0.5.1"
+
+  def scopt = libraryDependencies += "com.github.scopt" %% "scopt" % "3.7.0"
 }

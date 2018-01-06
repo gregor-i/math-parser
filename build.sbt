@@ -15,4 +15,6 @@ val examples = project.in(file("examples"))
   .settings(
     name := "mathParser-examples",
     version := "0.0.1",
-    FolderStructure.folderStructre)
+    FolderStructure.folderStructre,
+    Dependancies.scalaChart,
+    Dependancies.scopt)
