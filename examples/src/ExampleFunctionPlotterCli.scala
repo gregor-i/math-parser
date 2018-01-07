@@ -1,12 +1,15 @@
 import java.io.File
 
 import mathParser.MathParser
+import org.jfree.chart.ChartPanel
 
 import scalax.chart.api._
 
 case class Config(term: String = null,
                   out: File = new File("chart.png"),
-                  title: String = "")
+                  width: Int = ChartPanel.DEFAULT_WIDTH,
+                  height: Int = ChartPanel.DEFAULT_HEIGHT,
+                  derive: Boolean = false)
 
 object ConfigParser extends scopt.OptionParser[Config]("scopt") {
   opt[File]('o', "out")
@@ -14,13 +17,25 @@ object ConfigParser extends scopt.OptionParser[Config]("scopt") {
     .valueName("<file>")
     .action((x, c) => c.copy(out = x))
 
-  opt[String]('t', "title")
+  opt[Boolean]('d', "derive")
     .optional()
-    .valueName("<title>")
-    .action((x, c) => c.copy(title = x))
+    .valueName("<boolean>")
+    .action((x, c) => c.copy(derive = x))
+
+  opt[Int]('w', "width")
+    .optional()
+    .valueName("<width in px>")
+    .action((x, c) => c.copy(width = x))
+
+  opt[Int]('h', "height")
+    .optional()
+    .valueName("<height in px>")
+    .action((x, c) => c.copy(height = x))
 
   arg[String]("term")
     .required()
+    .validate(term => MathParser.doubleLanguage('x).parse(term)
+      .toRight("Could not parse term").map(_ => ()))
     .action((x, c) => c.copy(term = x))
 }
 
@@ -28,22 +43,31 @@ object ConfigParser extends scopt.OptionParser[Config]("scopt") {
 object Main {
 
   def execute(config: Config): Unit = {
-    val p1 = new XYSeries(config.title, false, true)
-
     val lang = MathParser.doubleLanguage('x)
-    val f = lang.compile1(lang.parse(config.term).get).get
+    val parsed = lang.parse(config.term).get
+    val f = lang.compile1(parsed).get
+    val `f'` = lang.compile1(lang.derive(parsed)('x)).get
 
-    val graph = for (x <- -10d to 10d by 0.1)
-      yield (x, f(x))
+    val p1 = new XYSeries(s"f(x)": Comparable[_], false, true)
+    val p2 = new XYSeries("f'(x)": Comparable[_], false, true)
+    val ps = new XYSeriesCollection()
+    ps.addSeries(p1)
+    if (config.derive)
+      ps.addSeries(p2)
 
-    val chart = XYLineChart(graph)
-    chart.title = config.title
-    chart.saveAsPNG(config.out.getAbsolutePath)
+    for (x <- -10d to 10d by 0.1) {
+      p1.add(x, f(x))
+      p2.add(x, `f'`(x))
+    }
+
+
+    val chart = XYLineChart(ps)
+    chart.title = s"f(x) = ${config.term}"
+    chart.saveAsPNG(config.out.getAbsolutePath, (config.width, config.height))
   }
 
   def main(args: Array[String]): Unit = {
     val parsedConfig = ConfigParser.parse(args, Config())
-    println(parsedConfig)
     parsedConfig.foreach(execute)
   }
 }
