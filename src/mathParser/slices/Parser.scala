@@ -7,7 +7,7 @@ trait Parser{
     @inline def ===(st: String): Boolean = sy.name == st
   }
 
-  def literalParser: LiteralParser[Skalar]
+  def literalParser: LiteralParser[S]
 
   def parse(input: String): Option[Node] = {
 

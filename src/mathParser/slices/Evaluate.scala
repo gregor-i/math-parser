@@ -6,9 +6,9 @@ trait Evaluate {
   _: LanguageOperators with AbstractSyntaxTree =>
   
   private[mathParser] def evaluate(node: Node)
-                               (variableAssignment: PartialFunction[Symbol, Skalar]): Skalar = {
+                               (variableAssignment: PartialFunction[Symbol, S]): S = {
 
-    def eval(node: Node): Skalar = node match {
+    def eval(node: Node): S = node match {
       case ConstantNode(value)  => value
       case un : UnitaryNode => un.op.apply(eval(un.child))
       case bn : BinaryNode  => bn.op.apply(eval(bn.childLeft), eval(bn.childRight))

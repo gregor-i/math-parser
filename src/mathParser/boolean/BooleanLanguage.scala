@@ -10,5 +10,5 @@ class BooleanLanguage(val freeVariables: Seq[Symbol])
     with ReplaceConstants
     with FreeVariables
     with Parser {
-  val literalParser: LiteralParser[Skalar] = new NoLiterals
+  val literalParser: LiteralParser[S] = new NoLiterals
 }

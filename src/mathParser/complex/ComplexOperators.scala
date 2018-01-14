@@ -5,7 +5,7 @@ import spire.implicits._
 import spire.math.Complex
 
 trait ComplexOperators extends LanguageOperators{
-  type Skalar = C
+  type S = C
   type Constant = ComplexConstant
   type UnitaryOperator = ComplexUnitaryOperator
   type BinaryOperator = ComplexBinaryOperator

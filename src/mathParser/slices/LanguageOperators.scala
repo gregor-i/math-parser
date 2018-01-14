@@ -3,10 +3,10 @@ package mathParser.slices
 import mathParser.slices
 
 trait LanguageOperators {
-  type Skalar
-  type Constant <: slices.Constant[Skalar]
-  type UnitaryOperator <: slices.UnitaryOperator[Skalar]
-  type BinaryOperator <: slices.BinaryOperator[Skalar]
+  type S
+  type Constant <: slices.Constant[S]
+  type UnitaryOperator <: slices.UnitaryOperator[S]
+  type BinaryOperator <: slices.BinaryOperator[S]
 
   def unitaryOperators: Seq[UnitaryOperator]
   def binaryOperators: Seq[BinaryOperator]
@@ -19,18 +19,18 @@ trait Named {
   val name: Symbol
 }
 
-trait Constant[Skalar] extends Named {
-  val apply: Skalar
+trait Constant[S] extends Named {
+  val apply: S
 }
 
-trait UnitaryOperator[Skalar] extends Named {
-  val apply: Skalar => Skalar
+trait UnitaryOperator[S] extends Named {
+  val apply: S => S
 }
 
-trait BinaryOperator[Skalar] extends Named {
-  val apply: (Skalar, Skalar) => Skalar
+trait BinaryOperator[S] extends Named {
+  val apply: (S, S) => S
 }
 
-trait Literal[Skalar] {
-  val apply: Skalar
+trait Literal[S] {
+  val apply: S
 }

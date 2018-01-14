@@ -3,7 +3,7 @@ package mathParser.double
 import mathParser.slices.{BinaryOperator, Constant, LanguageOperators, UnitaryOperator}
 
 trait DoubleOperators extends LanguageOperators {
-  type Skalar = Double
+  type S = Double
   type Constant = DoubleConstant
   type UnitaryOperator = DoubleUnitaryOperator
   type BinaryOperator = DoubleBinaryOperator

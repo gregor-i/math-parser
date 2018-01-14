@@ -3,7 +3,7 @@ package mathParser.boolean
 import mathParser.slices.{BinaryOperator, Constant, LanguageOperators, UnitaryOperator}
 
 trait BooleanOperators extends LanguageOperators{
-  type Skalar = Boolean
+  type S = Boolean
   type Constant = BooleanConstant
   type UnitaryOperator = BooleanUnitaryOperator
   type BinaryOperator = BooleanBinaryOperator
