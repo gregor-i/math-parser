@@ -4,12 +4,12 @@ trait ReplaceConstants {
   _: AbstractSyntaxTree with Evaluate =>
 
   def replaceConstants(node: Node): Node = {
-    def isConstant(node: Node): Boolean = node match {
-      case Variable(name)             => false
-      case UnitaryNode(_, child)      => isConstant(child)
-      case BinaryNode(_, left, right) => isConstant(left) && isConstant(right)
-      case _                          => true
-    }
+    def isConstant(node: Node): Boolean =
+      node.fold[Boolean](
+        _ => false,
+        (_, child) => child,
+        (_, left, right) => left && right,
+        _ => true)
 
     def replace(node: Node): Node =
       if (isConstant(node))

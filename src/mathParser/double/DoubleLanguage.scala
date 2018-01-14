@@ -1,6 +1,5 @@
 package mathParser.double
 
-import mathParser._
 import mathParser.slices._
 
 class DoubleLanguage(val freeVariables: Seq[Symbol],

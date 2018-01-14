@@ -5,29 +5,29 @@ import mathParser.slices.{AbstractSyntaxTree, Compile, FreeVariables}
 trait DoubleCompile extends Compile {
   _: AbstractSyntaxTree with DoubleOperators with FreeVariables =>
 
-  private def functionString(node: Node): String = node match {
-    case ConstantNode(v) => v.toString
-    case UnitaryNode(Neg, child) => s"-(${functionString(child)})"
-    case UnitaryNode(Sin, child) => s"Math.sin(${functionString(child)})"
-    case UnitaryNode(Cos, child) => s"Math.cos(${functionString(child)})"
-    case UnitaryNode(Tan, child) => s"Math.tan(${functionString(child)})"
-    case UnitaryNode(Asin, child) => s"Math.asin(${functionString(child)})"
-    case UnitaryNode(Acos, child) => s"Math.acos(${functionString(child)})"
-    case UnitaryNode(Atan, child) => s"Math.atan(${functionString(child)})"
-    case UnitaryNode(Sinh, child) => s"Math.sinh(${functionString(child)})"
-    case UnitaryNode(Cosh, child) => s"Math.cosh(${functionString(child)})"
-    case UnitaryNode(Tanh, child) => s"Math.tanh(${functionString(child)})"
-    case UnitaryNode(Exp, child) => s"Math.exp(${functionString(child)})"
-    case UnitaryNode(Log, child) => s"Math.log(${functionString(child)})"
-
-    case BinaryNode(Plus, left, right) => s"((${functionString(left)}) + (${functionString(right)}))"
-    case BinaryNode(Minus, left, right) => s"((${functionString(left)}) - (${functionString(right)}))"
-    case BinaryNode(Times, left, right) => s"((${functionString(left)}) * (${functionString(right)}))"
-    case BinaryNode(Divided, left, right) => s"((${functionString(left)}) / (${functionString(right)}))"
-    case BinaryNode(Power, left, right) => s"Math.pow(${functionString(left)}, ${functionString(right)})"
-
-    case Variable(name) => name.name
-  }
+  private def functionString(node: Node): String = node.fold[String](
+    _.toString,
+    {
+      case (Neg, child) => s"-($child)"
+      case (Sin, child) => s"Math.sin($child)"
+      case (Cos, child) => s"Math.cos($child)"
+      case (Tan, child) => s"Math.tan($child)"
+      case (Asin, child) => s"Math.asin($child)"
+      case (Acos, child) => s"Math.acos($child)"
+      case (Atan, child) => s"Math.atan($child)"
+      case (Sinh, child) => s"Math.sinh($child)"
+      case (Cosh, child) => s"Math.cosh($child)"
+      case (Tanh, child) => s"Math.tanh($child)"
+      case (Exp, child) => s"Math.exp($child)"
+      case (Log, child) => s"Math.log($child)"
+    }, {
+      case (Plus, left, right) => s"(($left) + ($right))"
+      case (Minus, left, right) => s"(($left) - ($right))"
+      case (Times, left, right) => s"(($left) * ($right))"
+      case (Divided, left, right) => s"(($left) / ($right))"
+      case (Power, left, right) => s"Math.pow($left, $right)"
+    },
+    _.name)
 
 
   def compile1(node: Node): Option[Double => Double] = {
