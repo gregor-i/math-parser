@@ -23,7 +23,7 @@ trait DoubleSyntaxSugar {
     def -(t2:Node) = BinaryNode(Minus, t1, t2)
     def *(t2:Node) = BinaryNode(Times, t1, t2)
     def /(t2:Node) = BinaryNode(Divided, t1, t2)
-    def **(t2:Node) = BinaryNode(Power, t1, t2)
+    def ^(t2:Node) = BinaryNode(Power, t1, t2)
   }
 
   def zero = ConstantNode(0d)

@@ -13,7 +13,7 @@ case class Config(term: String = null,
                   height: Int = ChartPanel.DEFAULT_HEIGHT,
                   derive: Boolean = false)
 
-object ConfigParser extends scopt.OptionParser[explainTree.Config]("scopt") {
+object ConfigParser extends scopt.OptionParser[Config]("scopt") {
   opt[File]('o', "out")
     .optional()
     .valueName("<file>")
@@ -44,7 +44,7 @@ object ConfigParser extends scopt.OptionParser[explainTree.Config]("scopt") {
 
 object Main {
 
-  def execute(config: explainTree.Config): Unit = {
+  def execute(config: Config): Unit = {
     val lang = MathParser.doubleLanguage('x)
     val parsed = lang.parse(config.term).get
     val f = lang.compile1(parsed).get
@@ -69,7 +69,7 @@ object Main {
   }
 
   def main(args: Array[String]): Unit = {
-    val parsedConfig = ConfigParser.parse(args, explainTree.Config())
+    val parsedConfig = ConfigParser.parse(args, Config())
     parsedConfig.foreach(execute)
   }
 }

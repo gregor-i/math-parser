@@ -51,14 +51,12 @@ trait Parser{
       .headOption
 
     def binaryPrefixOperation(input: String): Option[Node] = binaryOperators
-      .filter(op => input.matches(s"${op.name}\\(.*\\)"))
+      .find(op => input.matches(s"${op.name}\\(.*\\)"))
       .flatMap(op => binaryNode(input.substring(op.name.name.length + 1, input.length - 1), ',', BinaryNode(op, _, _)))
-      .headOption
 
     def unitaryPrefixOperation(input: String): Option[Node] = unitaryOperators
-      .filter(op => input.startsWith(op.name.name))
-      .flatMap(op => term(input.drop(op.name.name.length)).map(UnitaryNode(op, _)))
-      .headOption
+      .find(op => input.startsWith(op.name.name))
+      .flatMap(op => parenthesis(input.stripPrefix(op.name.name)).map(UnitaryNode(op, _)))
 
     def term(_input: String): Option[Node] = {
       val input = _input.trim()
