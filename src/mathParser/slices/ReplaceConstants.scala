@@ -6,10 +6,10 @@ trait ReplaceConstants {
   def replaceConstants(node: Node): Node = {
     def isConstant(node: Node): Boolean =
       node.fold[Boolean](
-        _ => false,
+        _ => true,
         (_, child) => child,
         (_, left, right) => left && right,
-        _ => true)
+        _ => false)
 
     def replace(node: Node): Node =
       if (isConstant(node))
