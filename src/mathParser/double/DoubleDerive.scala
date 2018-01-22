@@ -25,7 +25,7 @@ trait DoubleDerive extends Derive {
         case Log => derive(f) / f
       }
       case BinaryNode(op: BinaryOperator, f, g) => op match {
-        case Plus => derive(f) * derive(g)
+        case Plus => derive(f) + derive(g)
         case Minus => derive(f) - derive(g)
         case Times => (derive(f) * g) + (derive(g) * f)
         case Divided => ((f * derive(g)) - (g * derive(f))) / (g * g)

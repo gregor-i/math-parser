@@ -8,6 +8,6 @@ class ReplaceConstantsSpec extends Specification {
   import lang._
 
   "replace constants" >> {
-    replaceConstants(parse("sin(0)+x").get) == parse("0+x").get
+    replaceConstants(parse("sin(0)+x").get) === zero + Variable('x)
   }
 }
