@@ -13,3 +13,4 @@ class ComplexLanguage(val freeVariables: Seq[Symbol],
     with ComplexSyntaxSugar
     with ComplexCompile
     with Evaluate
+    with ComplexDerive
