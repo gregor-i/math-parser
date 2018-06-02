@@ -41,7 +41,12 @@ class ParserSpec extends Specification {
     parse("sin(x") === None
     parse("sin(x)+x") === Some(sin(x) + x)
     parse("sin(x)+") === None
-    parse("sin (x)") === None
+    parse("sin (x)") === Some(sin(x))
+    parse("sin (x)+x") === Some(sin(x) + x)
+  }
+
+  "parse prefix nagative operator" >> {
+    parse("-x") === Some(neg(x))
   }
 
 }

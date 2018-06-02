@@ -14,23 +14,21 @@ trait LanguageOperators {
   def constants(): Seq[Constant]
 }
 
-
-trait Named {
-  val name: Symbol
-}
-
-trait Constant[S] extends Named {
-  val apply: S
-}
-
-trait UnitaryOperator[S] extends Named {
-  val apply: S => S
-}
-
-trait BinaryOperator[S] extends Named {
-  val apply: (S, S) => S
+trait Constant[S] {
+  val symbol: Symbol
+  val value: S
 }
 
 trait Literal[S] {
-  val apply: S
+  val value: S
+}
+
+trait UnitaryOperator[S] {
+  val symbol: Symbol
+  val apply: S => S
+}
+
+trait BinaryOperator[S] {
+  val symbol: Symbol
+  val apply: (S, S) => S
 }
