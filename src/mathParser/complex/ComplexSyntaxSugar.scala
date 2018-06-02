@@ -1,6 +1,7 @@
 package mathParser.complex
 
 import mathParser.slices.AbstractSyntaxTree
+import spire.math.Complex
 
 trait ComplexSyntaxSugar {
   _: AbstractSyntaxTree with ComplexOperators =>
@@ -18,11 +19,15 @@ trait ComplexSyntaxSugar {
   def exp(t:Node): Node = UnitaryNode(Exp, t)
   def log(t:Node): Node = UnitaryNode(Log, t)
 
-  def plus(t1:Node, t2:Node) = BinaryNode(Plus, t1, t2)
-  def minus(t1:Node, t2:Node) = BinaryNode(Minus, t1, t2)
-  def times(t1:Node, t2:Node) = BinaryNode(Times, t1, t2)
-  def divided(t1:Node, t2:Node) = BinaryNode(Divided, t1, t2)
-  def power(t1:Node, t2:Node) = BinaryNode(Power, t1, t2)
+  implicit class EnrichNode(t1:Node){
+    def +(t2:Node) = BinaryNode(Plus, t1, t2)
+    def -(t2:Node) = BinaryNode(Minus, t1, t2)
+    def *(t2:Node) = BinaryNode(Times, t1, t2)
+    def /(t2:Node) = BinaryNode(Divided, t1, t2)
+    def ^(t2:Node) = BinaryNode(Power, t1, t2)
+  }
 
-  def constant(v:C) = ConstantNode(v)
+  def zero = ConstantNode(Complex(0d, 0d))
+  def one = ConstantNode(Complex(1d, 0d))
+  def two = ConstantNode(Complex(2d, 0d))
 }
