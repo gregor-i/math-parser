@@ -18,6 +18,8 @@ trait DoubleSyntaxSugar {
   def exp(t:Node): Node = UnitaryNode(Exp, t)
   def log(t:Node): Node = UnitaryNode(Log, t)
 
+  def sqrt(t:Node): Node = BinaryNode(Power, t, ConstantNode(0.5))
+
   implicit class EnrichNode(t1:Node){
     def +(t2:Node) = BinaryNode(Plus, t1, t2)
     def -(t2:Node) = BinaryNode(Minus, t1, t2)

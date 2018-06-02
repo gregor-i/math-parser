@@ -43,4 +43,5 @@ class ParserSpec extends Specification {
     parse("sin(x)+") === None
     parse("sin (x)") === None
   }
+
 }
