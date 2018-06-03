@@ -1,23 +1,22 @@
 version in ThisBuild := "1.0"
 organization in ThisBuild := "com.github.gregor-i"
-
 scalaVersion in ThisBuild := "2.12.6"
-scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
 
 val `math-parser` = project.in(file("."))
   .settings(
-    name := "math-parser",
-    FolderStructure.folderStructre,
-    Dependancies.spire,
-    Dependancies.specs2AndScalaCheck,
-    Dependancies.scalaCompiler,
-    BintrayRelease.settings
+      name := "math-parser",
+      FolderStructure.settings,
+      BintrayRelease.settings,
+      Dependancies.spire,
+      Dependancies.specs2AndScalaCheck,
+      Dependancies.scalaCompiler
   )
 
 val `examples` = project.in(file("examples"))
   .dependsOn(`math-parser`)
   .settings(
-    name := "mathParser-examples",
-    FolderStructure.folderStructre,
+    name := "math-parser-examples",
+    FolderStructure.settings,
     Dependancies.scalaChart,
-    Dependancies.scopt)
+    Dependancies.scopt
+  )

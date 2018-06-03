@@ -1,6 +1,5 @@
 package mathParser.boolean
 
-import mathParser._
 import mathParser.slices._
 
 class BooleanLanguage(val freeVariables: Seq[Symbol])
@@ -10,5 +9,5 @@ class BooleanLanguage(val freeVariables: Seq[Symbol])
     with ReplaceConstants
     with FreeVariables
     with Parser {
-  val literalParser: LiteralParser[S] = new NoLiterals
+  val literalParser: LiteralParser[S] = NoLiterals
 }

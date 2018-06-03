@@ -37,7 +37,7 @@ case object Plus extends ComplexBinaryOperator('+, _ + _)
 case object Minus extends ComplexBinaryOperator('-, _ - _)
 case object Times extends ComplexBinaryOperator('*, _ * _)
 case object Divided extends ComplexBinaryOperator('/, _ / _)
-case object Power extends ComplexBinaryOperator('^, _ ** _)
+case object Power extends ComplexBinaryOperator('^, _ pow _)
 
 abstract class ComplexConstant(val symbol:Symbol, val value: C) extends Constant[C]
 case object e extends ComplexConstant('e, Complex(Math.E, 0))

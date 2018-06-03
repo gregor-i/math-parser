@@ -4,7 +4,7 @@
 
 `mathParser` is a small Library created for a single purpose: 
 It parses strings into abstract syntax trees (AST) of math-like languages. 
-There are some example languages already defined, but the library is designed to be extended to suite your needs.
+There are some predefined example languages, but the library is intended to be extended by your language to suite your needs.
 
 ### Features
 
@@ -22,9 +22,9 @@ For the predefined languages it is possible to use the scala compiler at runtime
 ### Getting started
 
 To use the library extend your sbt build with:
-```sbt
-resolvers += Resolver.url("gregor-i @ bintray", url("https://dl.bintray.com/gregor-i/releases/"))(Resolver.ivyStylePatterns)
-libraryDependencies += "math-parser" %% "math-parser" % "1.0"
+```
+resolvers += Resolver.bintrayRepo("gregor-i", "maven")
+addSbtPlugin("com.github.gregor-i" % "sbt-embedded-postgres" % "1.2.0")
 ```
 
 Be aware that this project has the scala compiler and spire as runtime dependencies.

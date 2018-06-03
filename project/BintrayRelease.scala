@@ -4,8 +4,7 @@ import sbt.url
 
 object BintrayRelease {
   def settings = Seq(
-    publishMavenStyle := false,
-    bintrayRepository := "releases",
+    bintrayRepository := "maven",
     licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
   )
 }

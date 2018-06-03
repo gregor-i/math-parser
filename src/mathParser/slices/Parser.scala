@@ -1,6 +1,6 @@
 package mathParser.slices
 
-trait Parser{
+trait Parser {
   _: AbstractSyntaxTree with LanguageOperators with FreeVariables =>
 
   def literalParser: LiteralParser[S]
@@ -50,8 +50,12 @@ trait Parser{
       .flatMap(op => binaryNode(input.substring(op.symbol.name.length + 1, input.length - 1), ',', BinaryNode(op, _, _)))
 
     def unitaryPrefixOperation(input: String): Option[Node] = unitaryOperators
-      .find(op => input.startsWith(op.symbol.name))
+      .find {
+        case op if !op.symbol.name.exists(_.isLetterOrDigit) => input.startsWith(op.symbol.name)
+        case op => input.startsWith(op.symbol.name + "(") || input.startsWith(op.symbol.name + " ")
+      }
       .flatMap(op => parse(input.stripPrefix(op.symbol.name)).map(UnitaryNode(op, _)))
+      .headOption
 
     val trimmedInput = input.trim()
     constant(trimmedInput) orElse

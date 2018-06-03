@@ -4,9 +4,10 @@ import mathParser.MathParser
 import org.specs2.mutable.Specification
 
 class ParserSpec extends Specification {
-  val lang = MathParser.doubleLanguage('x)
+  val lang = MathParser.doubleLanguage('x, 'h)
 
   val x = lang.Variable('x)
+  val h = lang.Variable('h)
 
   import lang._
 
@@ -47,6 +48,16 @@ class ParserSpec extends Specification {
 
   "parse prefix nagative operator" >> {
     parse("-x") === Some(neg(x))
+    parse("sinx") === None
+    parse("sinh") === None
+    parse("sinh(x)") === Some(sinh(x))
+    parse("sinh x") === Some(sinh(x))
+    parse("sinh x + 2") === Some(sinh(x) + ConstantNode(2))
   }
 
+  "parse complex situations correctly" >> {
+    parse("(x-1)^4*x^4") === parse("((x-1)^4) * (x^4)")
+    parse("x^-x") === parse("x^(-x)")
+    parse("sin(x)*sin(5*x)") === parse("(sin(x))*(sin(5*x))")
+  }
 }
