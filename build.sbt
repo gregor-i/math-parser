@@ -7,9 +7,9 @@ val `math-parser` = project.in(file("."))
       name := "math-parser",
       FolderStructure.settings,
       BintrayRelease.settings,
-      Dependancies.spire,
-      Dependancies.specs2AndScalaCheck,
-      Dependancies.scalaCompiler
+      Dependencies.spire,
+      Dependencies.specs2AndScalaCheck,
+      Dependencies.scalaCompiler
   )
 
 val `examples` = project.in(file("examples"))
@@ -17,6 +17,6 @@ val `examples` = project.in(file("examples"))
   .settings(
     name := "math-parser-examples",
     FolderStructure.settings,
-    Dependancies.scalaChart,
-    Dependancies.scopt
+    Dependencies.scalaChart,
+    Dependencies.scopt
   )
