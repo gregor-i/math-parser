@@ -45,8 +45,8 @@ For the predefined languages it is possible to use the scala compiler at runtime
 
 To use the library extend your sbt build with:
 ```sbt
-resolvers += Resolver.bintrayRepo("gregor-i", "maven")
-addSbtPlugin("com.github.gregor-i" % "sbt-embedded-postgres" % "1.2.0")
+resolvers += Resolver.bintrayRepo("gregor-i", "maven"),
+libraryDependencies += "com.github.gregor-i" %% "math-parser" % "1.0"
 ```
 
 Be aware that this project has the scala compiler and spire as runtime dependencies.
