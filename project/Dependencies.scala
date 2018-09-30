@@ -6,13 +6,12 @@ object Dependencies {
 
   def scalaCompiler = libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value
 
-  def specs2AndScalaCheck = Seq(
-    "org.scalacheck" %% "scalacheck" % "1.14.0",
-    "org.specs2" %% "specs2-core" % "4.3.4",
-    "org.specs2" %% "specs2-scalacheck" % "4.3.4")
-    .map(libraryDependencies += _ % Test)
+  def scalaTestAndScalaCheck = Seq(
+    "org.scalatest" %% "scalatest" % "3.0.5",
+    "org.scalacheck" %% "scalacheck" % "1.14.0"
+  ).map(libraryDependencies += _ % Test)
 
-  def scalaChart = libraryDependencies += "com.github.wookietreiber" %% "scala-chart" %  "0.5.1"
+  def scalaChart = libraryDependencies += "com.github.wookietreiber" %% "scala-chart" % "0.5.1"
 
   def scopt = libraryDependencies += "com.github.scopt" %% "scopt" % "3.7.0"
 }

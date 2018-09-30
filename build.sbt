@@ -8,7 +8,7 @@ val `math-parser` = project.in(file("."))
       FolderStructure.settings,
       BintrayRelease.settings,
       Dependencies.spire,
-      Dependencies.specs2AndScalaCheck,
+      Dependencies.scalaTestAndScalaCheck,
       Dependencies.scalaCompiler
   )
 
