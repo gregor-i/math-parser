@@ -6,7 +6,6 @@ class BooleanLanguage(val freeVariables: Seq[Symbol])
   extends BooleanOperators
     with AbstractSyntaxTree
     with Evaluate
-    with ReplaceConstants
     with FreeVariables
     with Parser {
   val literalParser: LiteralParser[S] = NoLiterals

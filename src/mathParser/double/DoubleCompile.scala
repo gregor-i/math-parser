@@ -21,10 +21,10 @@ trait DoubleCompile extends Compile {
       case (Exp, child) => s"Math.exp($child)"
       case (Log, child) => s"Math.log($child)"
     }, {
-      case (Plus, left, right) => s"(($left) + ($right))"
-      case (Minus, left, right) => s"(($left) - ($right))"
-      case (Times, left, right) => s"(($left) * ($right))"
-      case (Divided, left, right) => s"(($left) / ($right))"
+      case (Plus, left, right) => s"($left + $right)"
+      case (Minus, left, right) => s"($left - $right)"
+      case (Times, left, right) => s"($left * $right)"
+      case (Divided, left, right) => s"($left / $right)"
       case (Power, left, right) => s"Math.pow($left, $right)"
     },
     _.name)

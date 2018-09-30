@@ -12,4 +12,4 @@ class DoubleLanguage(val freeVariables: Seq[Symbol],
     with DoubleDerive
     with DoubleCompile
     with Evaluate
-    with ReplaceConstants
+    with DoubleOptimize
