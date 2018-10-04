@@ -1,6 +1,6 @@
 version in ThisBuild := "1.0-SNAPSHOT"
 organization in ThisBuild := "com.github.gregor-i"
-scalaVersion in ThisBuild := "2.12.6"
+scalaVersion in ThisBuild := "2.12.7"
 
 val `math-parser` = project.in(file("."))
   .settings(
