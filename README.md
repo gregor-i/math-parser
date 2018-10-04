@@ -46,7 +46,7 @@ For the predefined languages it is possible to use the scala compiler at runtime
 To use the library extend your sbt build with:
 ```sbt
 resolvers += Resolver.bintrayRepo("gregor-i", "maven"),
-libraryDependencies += "com.github.gregor-i" %% "math-parser" % "1.0"
+libraryDependencies += "com.github.gregor-i" %% "math-parser" % "1.1"
 ```
 
 Be aware that this project has the scala compiler and spire as runtime dependencies.
