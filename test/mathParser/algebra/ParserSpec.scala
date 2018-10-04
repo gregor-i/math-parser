@@ -1,4 +1,4 @@
-package mathParser.double
+package mathParser.algebra
 
 import mathParser.MathParser
 import org.scalatest.{FunSuite, Matchers}

@@ -1,9 +1,9 @@
-package mathParser.double
+package mathParser.algebra
 
 import org.scalatest.{FunSuite, Matchers}
 
-class DoubleDeriveSpec extends FunSuite with Matchers {
-  val lang = mathParser.MathParser.doubleLanguage('x)
+class DeriveSpec extends FunSuite with Matchers {
+  val lang = mathParser.MathParser.realLanguage('x)
 
   import lang._
 

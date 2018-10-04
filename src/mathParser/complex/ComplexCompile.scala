@@ -1,9 +1,11 @@
 package mathParser.complex
 
+import mathParser.algebra.SpireOperators
 import mathParser.slices.{AbstractSyntaxTree, Compile, FreeVariables}
+import spire.math.Complex
 
 trait ComplexCompile extends Compile {
-  _ : AbstractSyntaxTree with ComplexOperators with FreeVariables =>
+  _ : AbstractSyntaxTree with SpireOperators[Complex[Double]] with FreeVariables =>
 
   private def scalaCode(node: Node): String = node match {
     case ConstantNode(v) => s"Complex[Double](${v.real}, ${v.imag})"

@@ -1,15 +1,8 @@
 package mathParser.double
 
-import mathParser.slices._
+import spire.implicits._
+import mathParser.algebra.SpireLanguage
 
-class DoubleLanguage(val freeVariables: Seq[Symbol],
-                     val literalParser: LiteralParser[Double] = DoubleLiteralParser)
-  extends DoubleOperators
-    with AbstractSyntaxTree
-    with DoubleSyntaxSugar
-    with FreeVariables
-    with Parser
-    with DoubleDerive
+class DoubleLanguage(freeVariables: Seq[Symbol])
+  extends SpireLanguage[Double](freeVariables)
     with DoubleCompile
-    with Evaluate
-    with DoubleOptimize

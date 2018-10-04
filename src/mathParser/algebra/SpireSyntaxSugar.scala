@@ -1,9 +1,9 @@
-package mathParser.double
+package mathParser.algebra
 
 import mathParser.slices.AbstractSyntaxTree
 
-trait DoubleSyntaxSugar {
-  _ : DoubleOperators with AbstractSyntaxTree =>
+trait SpireSyntaxSugar[A] {
+  _ : SpireOperators[A] with SpireAlgebra[A] with AbstractSyntaxTree =>
 
   def neg(t:Node): Node = UnitaryNode(Neg, t)
   def sin(t:Node): Node = UnitaryNode(Sin, t)
@@ -18,7 +18,7 @@ trait DoubleSyntaxSugar {
   def exp(t:Node): Node = UnitaryNode(Exp, t)
   def log(t:Node): Node = UnitaryNode(Log, t)
 
-  def sqrt(t:Node): Node = BinaryNode(Power, t, ConstantNode(0.5))
+  def sqrt(t:Node): Node = BinaryNode(Power, t, ConstantNode(field.fromDouble(0.5)))
 
   implicit class EnrichNode(t1:Node){
     def +(t2:Node) = BinaryNode(Plus, t1, t2)
@@ -28,7 +28,7 @@ trait DoubleSyntaxSugar {
     def ^(t2:Node) = BinaryNode(Power, t1, t2)
   }
 
-  def zero = ConstantNode(0d)
-  def one = ConstantNode(1d)
-  def two = ConstantNode(2d)
+  def zero = ConstantNode(field.zero)
+  def one = ConstantNode(field.one)
+  def two = ConstantNode(field.fromInt(2))
 }

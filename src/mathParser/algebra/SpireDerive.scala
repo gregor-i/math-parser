@@ -1,9 +1,9 @@
-package mathParser.double
+package mathParser.algebra
 
 import mathParser.slices.{AbstractSyntaxTree, Derive}
 
-trait DoubleDerive extends Derive {
-  _: AbstractSyntaxTree with DoubleOperators with DoubleSyntaxSugar =>
+trait SpireDerive[A] extends Derive {
+  _: AbstractSyntaxTree with SpireOperators[A] with SpireSyntaxSugar[A] =>
 
   override def derive(term: Node)
                      (variable: Symbol): Node = {

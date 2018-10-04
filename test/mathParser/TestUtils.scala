@@ -1,6 +1,6 @@
 package mathParser
 
-import org.scalacheck.{Arbitrary, Gen, Prop}
+import org.scalacheck.{Arbitrary, Gen}
 import spire.math.Complex
 
 trait TestUtils {

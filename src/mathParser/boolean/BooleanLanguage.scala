@@ -8,5 +8,5 @@ class BooleanLanguage(val freeVariables: Seq[Symbol])
     with Evaluate
     with FreeVariables
     with Parser {
-  val literalParser: LiteralParser[S] = NoLiterals
+  val literalParser: LiteralParser[Boolean] = NoLiterals
 }

@@ -1,12 +1,12 @@
-package mathParser.double
+package mathParser.algebra
 
 import mathParser.{SomeFunctions, TestUtils}
+import org.scalacheck.Gen
 import org.scalacheck.Prop._
-import org.scalacheck.{Gen, Shrink}
 import org.scalatest.prop.Checkers
 import org.scalatest.{FunSuite, Matchers}
 
-class DoubleOptimizationSpec extends FunSuite with Matchers with Checkers with TestUtils {
+class OptimizationSpec extends FunSuite with Matchers with Checkers with TestUtils {
 
   val lang = mathParser.MathParser.doubleLanguage('x)
 
@@ -39,12 +39,22 @@ class DoubleOptimizationSpec extends FunSuite with Matchers with Checkers with T
   }
 
   test("replace constants") {
-    optimize(one + one) shouldBe ConstantNode(2d)
-    optimize(one + exp(zero)) shouldBe ConstantNode(2d)
+    optimize(one + one) shouldBe two
+    optimize(one + exp(zero)) shouldBe two
+  }
+
+  test("x - x = 0") {
+    optimize(x - x) shouldBe zero
+    optimize((x * two) - (x * two)) shouldBe zero
+  }
+
+  test("x / x = 1") {
+    optimize(x / x) shouldBe one
+    optimize((x + one) / (x + one)) shouldBe one
   }
 
   test("combined example") {
-    optimize((one * zero) + x) shouldBe x
+    optimize((sin(x) * zero) + x + neg(x)) shouldBe zero
   }
 
   test("all examples stay the same after optimization") {

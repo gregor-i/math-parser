@@ -1,16 +1,9 @@
-
 package mathParser.complex
 
-import mathParser._
-import mathParser.slices._
+import mathParser.algebra.SpireLanguage
+import spire.implicits._
+import spire.math.Complex
 
-class ComplexLanguage(val freeVariables: Seq[Symbol],
-                      val literalParser: LiteralParser[C] = ComplexLiteralParser)
-  extends ComplexOperators
-    with AbstractSyntaxTree
-    with FreeVariables
-    with Parser
-    with ComplexSyntaxSugar
+class ComplexLanguage(freeVariables: Seq[Symbol])
+  extends SpireLanguage[Complex[Double]](freeVariables)
     with ComplexCompile
-    with Evaluate
-    with ComplexDerive

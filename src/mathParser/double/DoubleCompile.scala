@@ -1,9 +1,10 @@
 package mathParser.double
 
+import mathParser.algebra.SpireOperators
 import mathParser.slices.{AbstractSyntaxTree, Compile, FreeVariables}
 
 trait DoubleCompile extends Compile {
-  _: AbstractSyntaxTree with DoubleOperators with FreeVariables =>
+  _: AbstractSyntaxTree with SpireOperators[Double] with FreeVariables =>
 
   private def functionString(node: Node): String = node.fold[String](
     _.toString,

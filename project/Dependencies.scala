@@ -2,7 +2,7 @@ import sbt._
 import Keys._
 
 object Dependencies {
-  def spire = libraryDependencies += "org.spire-math" %% "spire" % "0.13.0"
+  def spire = libraryDependencies += "org.typelevel" %% "spire" % "0.14.1"
 
   def scalaCompiler = libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value
 
