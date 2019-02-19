@@ -6,4 +6,9 @@ import spire.math.Complex
 
 class ComplexLanguage(freeVariables: Seq[Symbol])
   extends SpireLanguage[Complex[Double]](freeVariables)
-    with ComplexCompile
+    with ComplexCompile {
+
+  case object i extends SpireConstant('i, Complex(0d, 1d))
+
+  override def constants(): Seq[SpireConstant] = Seq(e, pi, i)
+}
