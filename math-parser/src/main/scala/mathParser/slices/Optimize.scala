@@ -1,5 +1,7 @@
 package mathParser.slices
 
+import scala.annotation.tailrec
+
 trait Optimize {
   _: AbstractSyntaxTree with LanguageOperators =>
 
@@ -22,7 +24,8 @@ trait Optimize {
   }
 
 
-  def optimize(term: Node): Node = {
+  @tailrec
+  final def optimize(term: Node): Node = {
     val optimized = term.fold[Node](
       ifConstant = ConstantNode.apply,
       ifUnitary = (op, child) => applyRules(UnitaryNode(op, child)),

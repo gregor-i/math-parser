@@ -1,10 +1,10 @@
-package mathParser.algebra
+package mathParser
+package double
 
-import mathParser.MathParser
 import org.scalatest.{FunSuite, Matchers}
 
-class ParserSpec extends FunSuite with Matchers {
-  val lang = MathParser.doubleLanguage('x, 'h)
+class DoubleParseSpec extends FunSuite with Matchers {
+  val lang = MathParser.complexLanguage('x, 'h)
 
   val x = lang.Variable('x)
   val h = lang.Variable('h)

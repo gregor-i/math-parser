@@ -5,4 +5,3 @@ import mathParser.algebra.SpireLanguage
 
 class DoubleLanguage(freeVariables: Seq[Symbol])
   extends SpireLanguage[Double](freeVariables)
-    with DoubleCompile

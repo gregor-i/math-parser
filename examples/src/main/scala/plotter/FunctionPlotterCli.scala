@@ -3,6 +3,7 @@ package plotter
 import java.io.File
 
 import mathParser.MathParser
+import mathParser.double.DoubleCompile
 import org.jfree.chart.ChartPanel
 import scalax.chart.api._
 
@@ -40,8 +41,8 @@ object Main {
     ConfigParser.parse(args, Config()).foreach{ config =>
       val lang = MathParser.doubleLanguage('x)
       val parsed = lang.parse(config.term).get
-      val f = lang.compile1(parsed).get
-      val `f'` = lang.compile1(lang.derive(parsed)('x)).get
+      val f = DoubleCompile.compile1(lang)(parsed).get
+      val `f'` = DoubleCompile.compile1(lang)(lang.derive(parsed)('x)).get
 
       val p1 = new XYSeries(s"f(x)": Comparable[_], false, true)
       val p2 = new XYSeries(s"f'(x)": Comparable[_], false, true)

@@ -1,22 +1,29 @@
-version in ThisBuild := "1.2"
+import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
+
+version in ThisBuild := "1.3"
 organization in ThisBuild := "com.github.gregor-i"
-scalaVersion in ThisBuild := "2.12.7"
+scalaVersion in ThisBuild := "2.12.8"
 
-val `math-parser` = project.in(file("."))
-  .settings(
-      name := "math-parser",
-      FolderStructure.settings,
-      BintrayRelease.settings,
-      Dependencies.spire,
-      Dependencies.scalaTestAndScalaCheck,
-      Dependencies.scalaCompiler
-  )
+val `math-parser` =
+  crossProject(JSPlatform, JVMPlatform)
+    .crossType(CrossType.Pure)
+    .settings(BintrayRelease.settings)
+    .settings(
+      libraryDependencies ++= Seq(
+        "org.typelevel" %%% "spire" % "0.16.0",
+        "org.scalatest" %%% "scalatest" % "3.0.7" % Test,
+        "org.scalacheck" %%% "scalacheck" % "1.14.0" % Test,
+      )
+    )
 
-val `examples` = project.in(file("examples"))
-  .dependsOn(`math-parser`)
+val `math-parser-compile-jvm` = project
+  .dependsOn(`math-parser`.jvm % "compile -> compile; test -> test")
+  .settings(libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value)
+  .settings(BintrayRelease.settings)
+
+val `examples` = project
+  .dependsOn(`math-parser`.jvm, `math-parser-compile-jvm`)
   .settings(
-    name := "math-parser-examples",
-    FolderStructure.settings,
-    Dependencies.scalaChart,
-    Dependencies.scopt
+    libraryDependencies += "com.github.wookietreiber" %% "scala-chart" % "0.5.1",
+    libraryDependencies += "com.github.scopt" %% "scopt" % "3.7.0",
   )

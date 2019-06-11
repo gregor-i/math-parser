@@ -13,7 +13,7 @@ class ComplexCompileSpec extends FunSuite with Checkers with TestUtils {
     check(forAll(someFunctions) {
       term =>
         val ast = lang.parse(term).get
-        val compiled = lang.compile1(ast).get
+        val compiled = ComplexCompile.compile1(lang)(ast).get
         forAll(genComplex) {
           x => compiled(x) ==== lang.evaluate(ast)({ case 'x => x })
         }
