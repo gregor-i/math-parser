@@ -1,6 +1,6 @@
-package mathParser.slices
+package mathParser
 
-trait LiteralParser[+S] {
+trait LiteralParser[S] {
   def tryToParse(s: String): Option[S]
 }
 

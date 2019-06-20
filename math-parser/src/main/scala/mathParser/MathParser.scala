@@ -1,16 +1,21 @@
 package mathParser
 
-import spire.algebra.{Field, NRoot, Trig}
 import mathParser.algebra.SpireLanguage
-import mathParser.boolean.BooleanLanguage
-import mathParser.complex.ComplexLanguage
-import mathParser.double.DoubleLanguage
+import mathParser.boolean.{BooleanBinaryOperator, BooleanLanguage, BooleanUnitaryOperator}
+import spire.implicits._
+import spire.math.{Complex, Real}
 
 object MathParser {
-  def doubleLanguage(variables: Symbol*) = new DoubleLanguage(freeVariables = variables)
-  def complexLanguage(variables: Symbol*) = new ComplexLanguage(freeVariables = variables)
-  def booleanLanguage(variables: Symbol*) = new BooleanLanguage(freeVariables = variables)
-  def realLanguage(variables: Symbol*) = new SpireLanguage[spire.math.Real](freeVariables = variables)
+  val doubleLanguage: SpireLanguage[Double, Nothing] =
+    SpireLanguage[Double]
 
-  def spireLang[A : Field : Trig: NRoot](variables: Symbol*) = new SpireLanguage[A](freeVariables = variables)
+  val complexLanguage: SpireLanguage[Complex[Double], Nothing] =
+    SpireLanguage[Complex[Double]]
+      .addConstant('i, Complex.i[Double])
+
+  val realLanguage: SpireLanguage[Real, Nothing] =
+    SpireLanguage[Real]
+
+  val booleanLanguage: Language[BooleanUnitaryOperator, BooleanBinaryOperator, Boolean, Nothing] =
+    BooleanLanguage()
 }

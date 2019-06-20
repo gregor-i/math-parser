@@ -1,6 +1,6 @@
 import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
-version in ThisBuild := "1.3"
+version in ThisBuild := "1.4"
 organization in ThisBuild := "com.github.gregor-i"
 scalaVersion in ThisBuild := "2.12.8"
 

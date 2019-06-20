@@ -14,16 +14,26 @@ There are some predefined example languages, but the library is intended to be e
 // your input, any string represesenting a function:
 val string = "2*x*x + 1"
 
-val language = mathParser.MathParser.doubleLanguage('x)
-val parsed = language.parse(string)
+import mathParser.implicits._
 
-language.evaluate(parsed.get){
-    case 'x => 5
-} // == 2*5*5 + 1 == 51
+// define your language:
+object X
+val language = mathParser.MathParser.doubleLanguage
+  .withVariables(List('x -> X))
 
-val derived = language.derive(parsed.get)('x) // d/dx (2*x*x + 1) == 4*x
+// parsing: string => Option[AST]
+// .get only to demonstrate.
+val parsed = language.parse(string).get
+
+// evaluating:
+language.evaluate(parsed){
+  case X => 5 // assign values to your variables
+} // == 5*5*2 + 1 == 51
+
+// deriving:
+val derived = language.derive(parsed)(X) // d/dx (2*x*x + 1) == 4*x
 language.evaluate(derived){
-    case 'x => 5
+  case X => 5
 } // == 4*5 == 20
 ```
 
@@ -45,14 +55,14 @@ For the predefined languages it is possible to use the scala compiler at runtime
 To use the library extend your sbt build with:
 ```sbt
 resolvers += Resolver.bintrayRepo("gregor-i", "maven"),
-libraryDependencies += "com.github.gregor-i" %% "math-parser" % "1.2"
+libraryDependencies += "com.github.gregor-i" %% "math-parser" % {current-version}
 ```
 
 If you want to use runtime compilation (only availible on the jvm), use the following library dependency.
 Be aware that this has the scala compiler as runtime dependencies.
 ```sbt
 resolvers += Resolver.bintrayRepo("gregor-i", "maven"),
-libraryDependencies += "com.github.gregor-i" %% "math-parser-compile-jvm" % "1.2"
+libraryDependencies += "com.github.gregor-i" %% "math-parser-compile-jvm" % {current-version}
 ```
 
 ### Examples and Usage
@@ -61,6 +71,10 @@ To get started take a look into the `examples` folder.
 
 
 ### Changelog
+#### 1.4:
+- reworked the whole library. It no longer uses the cake pattern, but instead uses typeclasses.
+- It now easier to construct a language and to work with it. No more path dependant typing.
+
 #### 1.3:
 - Cross compilation for scala-js
 - runtime compilation has been extracted from `math-parser` and moved into its own module `math-parser-compile-jvm`.

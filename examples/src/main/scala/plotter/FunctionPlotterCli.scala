@@ -3,9 +3,11 @@ package plotter
 import java.io.File
 
 import mathParser.MathParser
-import mathParser.double.DoubleCompile
 import org.jfree.chart.ChartPanel
 import scalax.chart.api._
+
+import mathParser.implicits._
+import mathParser.algebra.compile.SpireCompiler.compilerDouble1
 
 case class Config(term: String = null,
                   out: File = new File("chart.png"),
@@ -30,19 +32,22 @@ object ConfigParser extends scopt.OptionParser[Config]("function plotter cli") {
 
   arg[String]("term")
     .required()
-    .validate(term => MathParser.doubleLanguage('x).parse(term)
+    .validate(term => Main.lang.parse(term)
       .toRight("Could not parse term").map(_ => ()))
     .action((x, c) => c.copy(term = x))
 }
 
+object X
 
 object Main {
+  val lang = MathParser.doubleLanguage
+    .withVariables(List('x -> X))
+
   def main(args: Array[String]): Unit = {
     ConfigParser.parse(args, Config()).foreach{ config =>
-      val lang = MathParser.doubleLanguage('x)
       val parsed = lang.parse(config.term).get
-      val f = DoubleCompile.compile1(lang)(parsed).get
-      val `f'` = DoubleCompile.compile1(lang)(lang.derive(parsed)('x)).get
+      val f = lang.compile[Double => Double](parsed).get
+      val `f'` = lang.compile[Double => Double](lang.derive(parsed)(X)).get
 
       val p1 = new XYSeries(s"f(x)": Comparable[_], false, true)
       val p2 = new XYSeries(s"f'(x)": Comparable[_], false, true)

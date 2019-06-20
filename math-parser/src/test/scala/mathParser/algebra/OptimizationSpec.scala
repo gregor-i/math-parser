@@ -1,70 +1,54 @@
 package mathParser.algebra
 
-import mathParser.{SomeFunctions, TestUtils}
-import org.scalacheck.Gen
-import org.scalacheck.Prop._
+import mathParser.implicits._
+import mathParser.{LiteralParser, MathParser, TestUtils}
 import org.scalatest.prop.Checkers
 import org.scalatest.{FunSuite, Matchers}
+import spire.algebra.{Field, NRoot, Trig}
+
 
 class OptimizationSpec extends FunSuite with Matchers with Checkers with TestUtils {
 
-  val lang = mathParser.MathParser.doubleLanguage('x)
+  case object X
 
-  import lang._
+  testLanguage(MathParser.doubleLanguage, "double language")
+  testLanguage(MathParser.realLanguage, "real language")
+  testLanguage(MathParser.complexLanguage, "complex language")
 
-  val x = Variable('x)
+  def testLanguage[A: Field : Trig : NRoot : LiteralParser](_lang: SpireLanguage[A, Nothing], langName: String) = {
+    val lang = _lang.withVariables[X.type](List('x -> X))
 
-  test("neg(neg(x)) == x") {
-    optimize(neg(neg(x))) shouldBe x
-    optimize(neg(neg(neg(x)))) shouldBe neg(x)
-  }
+    val identities = Seq(
+      "--x" -> "x",
+      "---x" -> "-x",
+      "x + 0" -> "x",
+      "0 + x" -> "x",
+      "x * 1" -> "x",
+      "1 * x" -> "x",
+      "x * 0" -> "0",
+      "0 * x" -> "0",
+      "x ^ 1" -> "x",
+      "x ^ 0" -> "1",
+      "0 ^ x" -> "0",
+      "1 ^ x" -> "1",
+      "log(exp(x))" -> "x",
+      "1 + 1" -> "2",
+      "1 + exp(0)" -> "2",
+      "x - x" -> "0",
+      "2*x - 2*x" -> "0",
+      "x / x" -> "1",
+      "(x+1) / (x+1)" -> "1",
+      "sin(x) * 0 + x + -x" -> "0"
+    )
 
-  test("x + 0 == x and 0 + x == x") {
-    optimize(zero + x) shouldBe x
-    optimize(x + zero) shouldBe x
-  }
-
-  test("x * 1 == x and 1 * x == x") {
-    optimize(one * x) shouldBe x
-    optimize(x * one) shouldBe x
-  }
-
-  test("x * 0 == 0 and 0 * x == x") {
-    optimize(zero * x) shouldBe zero
-    optimize(x * zero) shouldBe zero
-  }
-
-  test("log(exp(x)) == x") {
-    optimize(log(exp(x))) shouldBe x
-  }
-
-  test("replace constants") {
-    optimize(one + one) shouldBe two
-    optimize(one + exp(zero)) shouldBe two
-  }
-
-  test("x - x = 0") {
-    optimize(x - x) shouldBe zero
-    optimize((x * two) - (x * two)) shouldBe zero
-  }
-
-  test("x / x = 1") {
-    optimize(x / x) shouldBe one
-    optimize((x + one) / (x + one)) shouldBe one
-  }
-
-  test("combined example") {
-    optimize((sin(x) * zero) + x + neg(x)) shouldBe zero
-  }
-
-  test("all examples stay the same after optimization") {
-    check(forAll(SomeFunctions.someFunctions) { f =>
-      val parsed = parse(f).get
-      val optimized = optimize(parsed)
-      forAll(Gen.choose(-1000d, 1000d)) {
-        x: Double =>
-          evaluate(parsed) { case 'x => x } ==== evaluate(optimized) { case 'x => x }
+    for (id <- identities)
+      test(s"$langName: ${id._1} == ${id._2}") {
+        val left = lang.parse(id._1)
+        val right = lang.parse(id._2)
+        if (left.isEmpty || right.isEmpty)
+          cancel("parsing failed")
+        lang.optimize(left.get) shouldBe right.get
       }
-    })
+
   }
 }
