@@ -11,7 +11,7 @@ object MathParser {
 
   val complexLanguage: SpireLanguage[Complex[Double], Nothing] =
     SpireLanguage[Complex[Double]]
-      .addConstant('i, Complex.i[Double])
+      .addConstant("i", Complex.i[Double])
 
   val realLanguage: SpireLanguage[Real, Nothing] =
     SpireLanguage[Real]

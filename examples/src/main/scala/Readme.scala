@@ -7,7 +7,7 @@ object Readme extends App {
   // define your language:
   object X
   val language = mathParser.MathParser.doubleLanguage
-    .withVariables(List('x -> X))
+    .withVariables(List("x" -> X))
 
   // parsing: string => Option[AST]
   // .get only to demonstrate.

@@ -4,7 +4,7 @@ import java.io.File
 
 import mathParser.MathParser
 import org.jfree.chart.ChartPanel
-import scalax.chart.api._
+import de.sciss.chart.api._
 
 import mathParser.implicits._
 import mathParser.algebra.compile.SpireCompiler.compilerDouble1
@@ -41,10 +41,10 @@ object X
 
 object Main {
   val lang = MathParser.doubleLanguage
-    .withVariables(List('x -> X))
+    .withVariables(List("x" -> X))
 
   def main(args: Array[String]): Unit = {
-    ConfigParser.parse(args, Config()).foreach{ config =>
+    ConfigParser.parse(args, Config()).foreach { config =>
       val parsed = lang.parse(config.term).get
       val f = lang.compile[Double => Double](parsed).get
       val `f'` = lang.compile[Double => Double](lang.derive(parsed)(X)).get
@@ -55,7 +55,7 @@ object Main {
       ps.addSeries(p1)
       ps.addSeries(p2)
 
-      for (x <- -10d to 10d by 0.1) {
+      for (x <- Range(-100, 100).map(_ * 0.1)) {
         p1.add(x, f(x))
         p2.add(x, `f'`(x))
       }

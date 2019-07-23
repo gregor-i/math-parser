@@ -1,9 +1,7 @@
 package mathParser
 
-import org.scalacheck.Gen
-
 object SomeFunctions {
-  val someFunctions: Gen[String] = Gen.oneOf(
+  val someFunctions: Seq[String] = Seq(
     "x^(3+10)",
     "x^(3+10) -1",
     "x^10 -1",
@@ -13,7 +11,6 @@ object SomeFunctions {
     "x^2 +x^(2) +1",
     "x^(-x) +1",
     "x*x*x - 5",
-    "x*x*x+5",
     "x^3-x^2+x-1",
     "sin(x) + x^3+1",
     "cos(x)+1",

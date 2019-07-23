@@ -5,10 +5,10 @@ import mathParser.{Evaluate, Language}
 object BooleanLanguage {
   def apply(): Language[BooleanUnitaryOperator, BooleanBinaryOperator, Boolean, Nothing] =
     Language[BooleanUnitaryOperator, BooleanBinaryOperator, Boolean, Nothing](
-      unitaryOperators = List(Not).map(op => (op.symbol, op)),
+      unitaryOperators = List(Not).map(op => (op.name, op)),
       binaryPrefixOperators = List.empty,
-      binaryInfixOperators = List(And, Or, Equals, Unequals).map(op => (op.symbol, op)),
-      constants = List('true -> true, 'false -> false),
+      binaryInfixOperators = List(And, Or, Equals, Unequals).map(op => (op.name, op)),
+      constants = List("true" -> true, "false" -> false),
       variables = List.empty
     )
 

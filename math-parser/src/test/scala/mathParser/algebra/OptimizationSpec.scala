@@ -1,13 +1,12 @@
 package mathParser.algebra
 
 import mathParser.implicits._
-import mathParser.{LiteralParser, MathParser, TestUtils}
-import org.scalatest.prop.Checkers
+import mathParser.{LiteralParser, MathParser}
 import org.scalatest.{FunSuite, Matchers}
 import spire.algebra.{Field, NRoot, Trig}
 
 
-class OptimizationSpec extends FunSuite with Matchers with Checkers with TestUtils {
+class OptimizationSpec extends FunSuite with Matchers {
 
   case object X
 
@@ -16,7 +15,7 @@ class OptimizationSpec extends FunSuite with Matchers with Checkers with TestUti
   testLanguage(MathParser.complexLanguage, "complex language")
 
   def testLanguage[A: Field : Trig : NRoot : LiteralParser](_lang: SpireLanguage[A, Nothing], langName: String) = {
-    val lang = _lang.withVariables[X.type](List('x -> X))
+    val lang = _lang.withVariables[X.type](List("x" -> X))
 
     val identities = Seq(
       "--x" -> "x",

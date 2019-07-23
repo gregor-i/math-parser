@@ -19,7 +19,7 @@ import mathParser.implicits._
 // define your language:
 object X
 val language = mathParser.MathParser.doubleLanguage
-  .withVariables(List('x -> X))
+  .withVariables(List("x" -> X))
 
 // parsing: string => Option[AST]
 // .get only to demonstrate.
@@ -71,6 +71,10 @@ To get started take a look into the `examples` folder.
 
 
 ### Changelog
+#### 1.5:
+- upgrade to scala 2.13
+- replaced Symbols with String
+
 #### 1.4:
 - reworked the whole library. It no longer uses the cake pattern, but instead uses typeclasses.
 - It now easier to construct a language and to work with it. No more path dependant typing.

@@ -14,7 +14,7 @@ class DeriveSpec extends FunSuite with Matchers {
   testTemplate(MathParser.complexLanguage, "complex language")
 
   def testTemplate[A: Field: Trig: NRoot](_lang: SpireLanguage[A, Nothing], langName: String) = {
-    val lang = _lang.withVariables[X.type](List('x -> X))
+    val lang = _lang.withVariables[X.type](List("x" -> X))
 
     import lang.{derive, parse}
 

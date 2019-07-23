@@ -11,11 +11,11 @@ object SpireLanguage {
 
   def apply[A: Field : NRoot : Trig]: SpireLanguage[A, Nothing] =
     Language.emptyLanguage
-        .withConstants[A](List('e -> Trig[A].e, 'pi -> Trig[A].pi))
+        .withConstants[A](List("e" -> Trig[A].e, "pi" -> Trig[A].pi))
         .withBinaryOperators[SpireBinaryOperator](
           prefix = List.empty,
-          infix = List(Plus, Minus, Times, Divided, Power).map(op => (op.symbol, op)))
-        .withUnitaryOperators(List(Neg, Sin, Cos, Tan, Asin, Acos, Atan, Sinh, Cosh, Tanh, Exp, Log).map(op => (op.symbol, op)))
+          infix = List(Plus, Minus, Times, Divided, Power).map(op => (op.name, op)))
+        .withUnitaryOperators(List(Neg, Sin, Cos, Tan, Asin, Acos, Atan, Sinh, Cosh, Tanh, Exp, Log).map(op => (op.name, op)))
 
   def spireLiteralParser[A: Field]: LiteralParser[A] = s => Try(Field[A].fromDouble(s.toDouble)).toOption
 
@@ -58,9 +58,9 @@ object SpireLanguage {
           case BinaryNode(Times, left, ConstantNode(1d)) => left
           case BinaryNode(Times, ConstantNode(1d), right) => right
           case BinaryNode(Power, left, ConstantNode(1d)) => left
-          case BinaryNode(Power, left, ConstantNode(0d)) => one[A, V]
-          case BinaryNode(Power, ConstantNode(1d), right) => one[A, V]
-          case BinaryNode(Power, ConstantNode(0d), right) => zero[A, V]
+          case BinaryNode(Power, _, ConstantNode(0d)) => one[A, V]
+          case BinaryNode(Power, ConstantNode(1d), _) => one[A, V]
+          case BinaryNode(Power, ConstantNode(0d), _) => zero[A, V]
           case UnitaryNode(Log, UnitaryNode(Exp, child)) => child
           case BinaryNode(Plus, left, UnitaryNode(Neg, child)) => left - child
           case BinaryNode(Minus, left, UnitaryNode(Neg, child)) => left + child

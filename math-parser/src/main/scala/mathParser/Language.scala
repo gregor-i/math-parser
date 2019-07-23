@@ -2,40 +2,40 @@ package mathParser
 
 import scala.util.Try
 
-case class Language[UO, BO, S, V](unitaryOperators: List[(Symbol, UO)],
-                                  binaryPrefixOperators: List[(Symbol, BO)],
-                                  binaryInfixOperators: List[(Symbol, BO)],
-                                  constants: List[(Symbol, S)],
-                                  variables: List[(Symbol, V)]
+case class Language[UO, BO, S, V](unitaryOperators: List[(String, UO)],
+                                  binaryPrefixOperators: List[(String, BO)],
+                                  binaryInfixOperators: List[(String, BO)],
+                                  constants: List[(String, S)],
+                                  variables: List[(String, V)]
                                  ) {
   require(declaredNames.distinct == declaredNames)
 
-  def declaredNames: List[Symbol] = constants.map(_._1) ++ variables.map(_._1) ++ unitaryOperators.map(_._1) ++ binaryPrefixOperators.map(_._1)
+  def declaredNames: List[String] = constants.map(_._1) ++ variables.map(_._1) ++ unitaryOperators.map(_._1) ++ binaryPrefixOperators.map(_._1)
 
-  def withUnitaryOperators[UO2](ops: List[(Symbol, UO2)]): Language[UO2, BO, S, V] =
+  def withUnitaryOperators[UO2](ops: List[(String, UO2)]): Language[UO2, BO, S, V] =
     copy(unitaryOperators = ops)
 
-  def withBinaryOperators[BO2](prefix: List[(Symbol, BO2)], infix: List[(Symbol, BO2)]): Language[UO, BO2, S, V] =
+  def withBinaryOperators[BO2](prefix: List[(String, BO2)], infix: List[(String, BO2)]): Language[UO, BO2, S, V] =
     copy(binaryPrefixOperators = prefix, binaryInfixOperators = infix)
 
-  def withConstants[S2](constants: List[(Symbol, S2)]): Language[UO, BO, S2, V] =
+  def withConstants[S2](constants: List[(String, S2)]): Language[UO, BO, S2, V] =
     copy(constants = constants)
 
-  def addConstant(name: Symbol, value: S): Language[UO, BO, S, V] =
+  def addConstant(name: String, value: S): Language[UO, BO, S, V] =
     copy(constants = (name -> value) :: constants)
 
-  def withVariables[V2](variables: List[(Symbol, V2)]): Language[UO, BO, S, V2] =
+  def withVariables[V2](variables: List[(String, V2)]): Language[UO, BO, S, V2] =
     copy(variables = variables)
 
 
 
-  def withUnitaryOperator[UO2 >: UO](name: Symbol, op: UO2): Language[UO2, BO, S, V] =
+  def withUnitaryOperator[UO2 >: UO](name: String, op: UO2): Language[UO2, BO, S, V] =
     copy(unitaryOperators = (name -> op) :: unitaryOperators)
 
-  def withBinaryInfixOperator[BO2 >: BO](name: Symbol, op: BO2): Language[UO, BO2, S, V] =
+  def withBinaryInfixOperator[BO2 >: BO](name: String, op: BO2): Language[UO, BO2, S, V] =
     copy(binaryInfixOperators = (name -> op) :: binaryInfixOperators)
 
-  def withBinaryPrefixOperator[BO2 >: BO](name: Symbol, op: BO2): Language[UO, BO2, S, V] =
+  def withBinaryPrefixOperator[BO2 >: BO](name: String, op: BO2): Language[UO, BO2, S, V] =
     copy(binaryPrefixOperators = (name -> op) :: binaryPrefixOperators)
 
 

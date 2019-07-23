@@ -15,10 +15,10 @@ class ParseSpec extends FunSuite with Matchers {
   case object X extends V
 
   def vList = List(
-    'a -> A,
-    'b -> B,
-    'c -> C,
-    'x -> X)
+    "a" -> A,
+    "b" -> B,
+    "c" -> C,
+    "x" -> X)
 
   testTemplate(MathParser.doubleLanguage.withVariables[V](vList), "double language")
   testTemplate(MathParser.realLanguage.withVariables[V](vList), "real language")
@@ -27,7 +27,7 @@ class ParseSpec extends FunSuite with Matchers {
   def testTemplate[A: Field: Trig: NRoot: LiteralParser](lang: SpireLanguage[A, V], langName: String) = {
     test(s"$langName: parsing constants, literals and variables") {
       for((name, value) <- lang.constants)
-        lang.parse(name.name) shouldEqual Some(lang.constantNode(value))
+        lang.parse(name) shouldEqual Some(lang.constantNode(value))
       lang.parse("x") shouldEqual Some(lang.variable(X))
       lang.parse("undeclared") shouldEqual None
       lang.parse("2.5") shouldEqual Some(ConstantNode("2.5".toDouble))
