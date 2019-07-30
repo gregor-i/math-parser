@@ -2,6 +2,7 @@ package mathParser
 
 sealed trait Node[UO, BO, S, V] {
 
+  // todo: make tailrec
   def fold[A](ifConstant: S => A,
               ifUnitary: (UO, A) => A,
               ifBinary: (BO, A, A) => A,
