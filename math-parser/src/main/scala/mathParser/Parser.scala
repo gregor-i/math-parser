@@ -7,11 +7,14 @@ object Parser {
     def splitByRegardingParenthesis(input: String, splitter: Char): Option[(String, String)] = {
       var k = -1
       var c = 0
-      input.zipWithIndex.foreach {
-        case (')', _) => c -= 1
-        case ('(', _) => c += 1
-        case (`splitter`, i) if c == 0 => k = i
-        case _ =>
+      for (i <- input.indices) {
+        input.charAt(i) match {
+          case ')' => c -= 1
+          case '(' => c += 1
+          case `splitter` if c == 0 => k = i
+          case _ if c < 0 => return None
+          case _ =>
+        }
       }
       if (c != 0 || k == -1) None
       else Some((input.take(k), input.drop(k + 1)))
@@ -33,10 +36,21 @@ object Parser {
     def literal(input: String): Option[Node[UO, BO, S, V]] = literalParser.tryToParse(input).map(literal => ConstantNode[UO, BO, S, V](literal))
 
     def parenthesis(input: String): Option[Node[UO, BO, S, V]] =
-      if (input.startsWith("(") && input.endsWith(")"))
-        loop(input.tail.init)
-      else
+      if (input.startsWith("(") && input.endsWith(")")) {
+        var c = 0
+        for (i <- input.indices) {
+          input.charAt(i) match {
+            case ')' => c -= 1
+            case '(' => c += 1
+            case _ if c < 1 => return None
+            case _ =>
+          }
+        }
+        if (c != 0) None
+        else loop(input.init.tail)
+      } else {
         None
+      }
 
     def binaryInfixOperation(input: String): Option[Node[UO, BO, S, V]] = lang.binaryInfixOperators
       .flatMap(op => binaryNode(input, op._1.head, BinaryNode[UO, BO, S, V](op._2, _, _)))
@@ -57,11 +71,11 @@ object Parser {
       val trimmedInput = input.trim()
       constant(trimmedInput) orElse
         variable(trimmedInput) orElse
-        literal(trimmedInput) orElse
-        parenthesis(trimmedInput) orElse
         binaryPrefixOperation(trimmedInput) orElse
         binaryInfixOperation(trimmedInput) orElse
-        unitaryPrefixOperation(trimmedInput)
+        unitaryPrefixOperation(trimmedInput) orElse
+        parenthesis(trimmedInput) orElse
+        literal(trimmedInput)
     }
 
     loop(input)

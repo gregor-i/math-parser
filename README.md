@@ -71,6 +71,9 @@ To get started take a look into the `examples` folder.
 
 
 ### Changelog
+#### 1.5.1:
+- performance optimization
+
 #### 1.5:
 - upgrade to scala 2.13
 - replaced Symbols with String
