@@ -71,6 +71,10 @@ To get started take a look into the `examples` folder.
 
 
 ### Changelog
+#### 1.5.2:
+- dependency updates
+- jar size reduced
+
 #### 1.5.1:
 - performance optimization
 
