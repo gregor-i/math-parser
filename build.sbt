@@ -7,8 +7,8 @@ version in ThisBuild := {
     .getOrElse("SNAPSHOT")
 }
 organization in ThisBuild := "com.github.gregor-i"
-scalaVersion in ThisBuild := "2.13.0"
-crossScalaVersions in ThisBuild := Seq("2.12.8", "2.13.0")
+scalaVersion in ThisBuild := "2.13.1"
+crossScalaVersions in ThisBuild := Seq("2.12.8", "2.13.1")
 crossScalaVersions := Nil
 
 val `math-parser` =
@@ -20,8 +20,8 @@ val `math-parser` =
     )
     .settings(
       libraryDependencies ++= Seq(
-        "org.scalatest" %%% "scalatest" % "3.0.8" % Test,
-        "org.scalacheck" %%% "scalacheck" % "1.14.0" % Test,
+        "org.scalatest" %%% "scalatest" % "3.1.0" % Test,
+        "org.scalacheck" %%% "scalacheck" % "1.14.2" % Test,
       ),
       testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
     )
