@@ -1,7 +1,3 @@
 package mathParser
 
-import mathParser.algebra.SpireImplicits
-
-object implicits extends SpireImplicits {
-
-}
+object implicits extends mathParser.algebra.SpireImplicits
