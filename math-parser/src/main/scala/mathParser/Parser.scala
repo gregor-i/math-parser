@@ -36,6 +36,7 @@ object Parser {
 
     def binaryInfixOperation(input: TokenList): Option[Node[UO, BO, S, V]] =
       lang.binaryInfixOperators
+        .to(LazyList)
         .flatMap(op => binaryNode(input, op._1, BinaryNode[UO, BO, S, V](op._2, _, _)))
         .headOption
 
