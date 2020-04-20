@@ -34,6 +34,7 @@ val `math-parser-compile-jvm` = project
 val `examples` = project
   .dependsOn(`math-parser`.jvm, `math-parser-compile-jvm`)
   .settings(skip in publish := true)
+  .settings(packagedArtifacts := Map.empty)
   .settings(
     libraryDependencies += "de.sciss" %% "scala-chart" % "0.7.1",
     libraryDependencies += "com.github.scopt" %% "scopt" % "3.7.1",
