@@ -7,3 +7,4 @@ echo "releasing $VERSION"
 git commit --allow-empty -a -m "released $VERSION"
 git tag $VERSION
 sbt publish
+git push --tags
