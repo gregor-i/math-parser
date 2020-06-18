@@ -1,12 +1,11 @@
 package mathParser.algebra
 
-import mathParser.MathParser
+import mathParser.{MathParser, SpireLanguages}
 import org.scalatest.{FunSuite, Matchers}
 import spire.math.Complex
-import mathParser.implicits._
-
+import mathParser.SpireImplicits._
 class ParseComplexSpec extends FunSuite with Matchers {
-  val lang = MathParser.complexLanguage
+  val lang = SpireLanguages.complexLanguage
 
   import lang.{optimize, parse, constantNode}
 

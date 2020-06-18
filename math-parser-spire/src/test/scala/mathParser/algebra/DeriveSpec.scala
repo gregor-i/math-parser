@@ -1,7 +1,7 @@
 package mathParser.algebra
 
-import mathParser.MathParser
-import mathParser.implicits._
+import mathParser.{MathParser, SpireLanguages}
+import mathParser.SpireImplicits._
 import org.scalatest.{FunSuite, Matchers}
 import spire.algebra.{Field, NRoot, Trig}
 
@@ -9,9 +9,9 @@ class DeriveSpec extends FunSuite with Matchers {
   case object X
   type V = X.type
 
-  testTemplate(MathParser.doubleLanguage, "double language")
-  testTemplate(MathParser.realLanguage, "real language")
-  testTemplate(MathParser.complexLanguage, "complex language")
+  testTemplate(SpireLanguages.doubleLanguage, "double language")
+  testTemplate(SpireLanguages.realLanguage, "real language")
+  testTemplate(SpireLanguages.complexLanguage, "complex language")
 
   def testTemplate[A: Field: Trig: NRoot](_lang: SpireLanguage[A, Nothing], langName: String) = {
     val lang = _lang.withVariables[X.type](List("x" -> X))

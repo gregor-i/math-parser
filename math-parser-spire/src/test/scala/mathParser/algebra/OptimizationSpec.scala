@@ -1,7 +1,7 @@
 package mathParser.algebra
 
-import mathParser.implicits._
-import mathParser.{LiteralParser, MathParser}
+import mathParser.SpireImplicits._
+import mathParser.{LiteralParser, MathParser, SpireLanguages}
 import org.scalatest.{FunSuite, Matchers}
 import spire.algebra.{Field, NRoot, Trig}
 
@@ -10,9 +10,9 @@ class OptimizationSpec extends FunSuite with Matchers {
 
   case object X
 
-  testLanguage(MathParser.doubleLanguage, "double language")
-  testLanguage(MathParser.realLanguage, "real language")
-  testLanguage(MathParser.complexLanguage, "complex language")
+  testLanguage(SpireLanguages.doubleLanguage, "double language")
+  testLanguage(SpireLanguages.realLanguage, "real language")
+  testLanguage(SpireLanguages.complexLanguage, "complex language")
 
   def testLanguage[A: Field : Trig : NRoot : LiteralParser](_lang: SpireLanguage[A, Nothing], langName: String) = {
     val lang = _lang.withVariables[X.type](List("x" -> X))

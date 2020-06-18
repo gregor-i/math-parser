@@ -2,11 +2,11 @@ object Readme extends App {
   // your input, any string represesenting a function:
   val string = "2*x*x + 1"
 
-  import mathParser.implicits._
+  import mathParser.SpireImplicits._
 
   // define your language:
   object X
-  val language = mathParser.MathParser.doubleLanguage
+  val language = mathParser.SpireLanguages.doubleLanguage
     .withVariables(List("x" -> X))
 
   // parsing: string => Option[AST]

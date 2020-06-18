@@ -2,8 +2,8 @@ package mathParser.algebra.compile
 
 import mathParser.SomeFunctions.someFunctions
 import mathParser.algebra.{SpireBinaryOperator, SpireLanguage, SpireUnitaryOperator}
-import mathParser.implicits._
-import mathParser.{Compiler, LiteralParser, MathParser}
+import mathParser.SpireImplicits._
+import mathParser.{Compiler, LiteralParser, MathParser, SpireLanguages}
 import org.scalatest.{Assertion, FunSuite, Matchers}
 import spire.algebra.{Field, NRoot, Trig}
 import mathParser.algebra.compile.SpireCompiler.compilerDouble1
@@ -15,8 +15,8 @@ class CompileSpec extends FunSuite with Matchers {
   case object X
   type V = X.type
 
-  testTemplate(MathParser.doubleLanguage, "double language")
-  testTemplate(MathParser.complexLanguage, "complex language")
+  testTemplate(SpireLanguages.doubleLanguage, "double language")
+  testTemplate(SpireLanguages.complexLanguage, "complex language")
 
   def functionEquality[A: Field](f1: A => A, f2: A => A): Assertion = {
     for (x <- Seq(1.0, 2.0, 0.0, Math.PI, Math.E, -1.0, -2.0, 1000.0, -1000.0).map(Field[A].fromDouble)) {

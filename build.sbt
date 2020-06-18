@@ -15,19 +15,19 @@ val `math-parser` =
   crossProject(JSPlatform, JVMPlatform)
     .crossType(CrossType.Pure)
     .settings(BintrayRelease.settings)
+    .settings(testSettings)
+
+val `math-parser-spire` =
+  crossProject(JSPlatform, JVMPlatform)
+    .crossType(CrossType.Pure)
+    .dependsOn(`math-parser`)
     .settings(
       libraryDependencies += "org.typelevel" %%% "spire" % "0.17.0-M1"
     )
-    .settings(
-      libraryDependencies ++= Seq(
-        "org.scalatest" %%% "scalatest" % "3.1.0" % Test,
-        "org.scalacheck" %%% "scalacheck" % "1.14.2" % Test,
-      ),
-      testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
-    )
+    .settings(testSettings)
 
 val `math-parser-compile-jvm` = project
-  .dependsOn(`math-parser`.jvm % "compile -> compile; test -> test")
+  .dependsOn(`math-parser-spire`.jvm % "compile -> compile; test -> test")
   .settings(libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value)
   .settings(BintrayRelease.settings)
 
@@ -39,3 +39,10 @@ val `examples` = project
     libraryDependencies += "de.sciss" %% "scala-chart" % "0.7.1",
     libraryDependencies += "com.github.scopt" %% "scopt" % "3.7.1",
   )
+
+
+def testSettings = Seq(
+    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.0" % Test,
+    libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.14.2" % Test,
+    testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
+)

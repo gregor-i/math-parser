@@ -6,7 +6,7 @@ import mathParser.MathParser
 import org.jfree.chart.ChartPanel
 import de.sciss.chart.api._
 
-import mathParser.implicits._
+import mathParser.SpireImplicits._
 import mathParser.algebra.compile.SpireCompiler.compilerDouble1
 
 case class Config(term: String = null,
@@ -40,7 +40,7 @@ object ConfigParser extends scopt.OptionParser[Config]("function plotter cli") {
 object X
 
 object Main {
-  val lang = MathParser.doubleLanguage
+  val lang = mathParser.SpireLanguages.doubleLanguage
     .withVariables(List("x" -> X))
 
   def main(args: Array[String]): Unit = {
