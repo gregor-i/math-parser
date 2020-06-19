@@ -18,21 +18,20 @@ val `math-parser` =
     .settings(testSettings)
 
 val `math-parser-spire` =
-  crossProject(JSPlatform, JVMPlatform)
-    .crossType(CrossType.Pure)
-    .dependsOn(`math-parser`)
+  project
+    .dependsOn(`math-parser`.jvm)
     .settings(
       libraryDependencies += "org.typelevel" %%% "spire" % "0.17.0-M1"
     )
     .settings(testSettings)
 
 val `math-parser-compile-jvm` = project
-  .dependsOn(`math-parser-spire`.jvm % "compile -> compile; test -> test")
+  .dependsOn(`math-parser-spire`  % "compile -> compile; test -> test")
   .settings(libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value)
   .settings(BintrayRelease.settings)
 
 val `examples` = project
-  .dependsOn(`math-parser`.jvm, `math-parser-compile-jvm`)
+  .dependsOn(`math-parser-spire`, `math-parser-compile-jvm`)
   .settings(skip in publish := true)
   .settings(packagedArtifacts := Map.empty)
   .settings(
@@ -42,7 +41,6 @@ val `examples` = project
 
 
 def testSettings = Seq(
-    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.0" % Test,
-    libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.14.2" % Test,
+    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.2" % Test,
     testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
 )
