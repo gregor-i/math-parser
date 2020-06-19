@@ -2,11 +2,12 @@ package mathParser.complex
 
 import mathParser._
 
+
 object ComplexLanguage {
 
   import syntax._
 
-  def apply: ComplexLanguage[Nothing] =
+  def apply(): ComplexLanguage[Nothing] =
     Language.emptyLanguage
         .withConstants[Complex](List("e" -> Complex.e, "pi" -> Complex.pi, "i" -> Complex.i))
         .withBinaryOperators[ComplexBinaryOperator](
@@ -44,7 +45,7 @@ object ComplexLanguage {
     }
 
 
-  def spireDerive[V]: Derive[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] =
+  def complexDerive[V]: Derive[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] =
     new Derive[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] {
       def derive(term: ComplexNode[V])
                 (variable: V): ComplexNode[V] = {

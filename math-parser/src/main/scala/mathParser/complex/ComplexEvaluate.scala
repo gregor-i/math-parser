@@ -72,7 +72,7 @@ object ComplexEvaluate {
   }
 
   @inline private def complexNeg(a: Complex) =
-    Complex(-a.real, a.imag)
+    Complex(-a.real, -a.imag)
 
   @inline private def complexSin(a: Complex) =
     Complex(sin(a.imag) * cosh(a.imag), cos(a.real) * sinh(a.imag))
