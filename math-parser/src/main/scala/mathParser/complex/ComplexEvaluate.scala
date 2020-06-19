@@ -41,7 +41,7 @@ object ComplexEvaluate {
   @inline private final def complexSqrt(z: Complex): Complex = {
     val length_z: Double = abs(z)
     val b = sqrt((length_z + z.real) / 2.0)
-    val c = sqrt((length_z - z.imag) / 2.0)
+    val c = sqrt((length_z - z.real) / 2.0)
     if (z.imag < 0.0)
       Complex(b, -c)
     else
@@ -75,21 +75,23 @@ object ComplexEvaluate {
     Complex(-a.real, -a.imag)
 
   @inline private def complexSin(a: Complex) =
-    Complex(sin(a.imag) * cosh(a.imag), cos(a.real) * sinh(a.imag))
+    Complex(sin(a.real) * cosh(a.imag), cos(a.real) * sinh(a.imag))
 
   @inline private def complexCos(a: Complex) =
     Complex(cos(a.real) * cosh(a.imag), -sin(a.real) * sinh(a.imag));
 
   @inline private def complexTan(a: Complex) = {
-    val f = 1.0 / (cos(2.0 * a.real) + cosh(2.0 * a.imag))
-    Complex(f * sin(2.0 * a.real), f * sinh(2.0 * a.imag))
+    val r2 = a.real + a.real
+    val i2 = a.imag + a.imag
+    val d = cos(r2) + cosh(i2)
+    new Complex(sin(r2) / d, sinh(i2) / d)
   }
 
   @inline private def complexAsin(z: Complex) = {
     val z2 = complexTimes(z, z)
-    val s = complexSqrt(Complex(1.0 - z2.real, -z2.imag));
-    val l = complexLog(Complex(s.real + -z.imag, s.imag + z.real));
-    Complex(l.real, -l.imag);
+    val s = complexSqrt(Complex(1.0 - z2.real, -z2.imag))
+    val l = complexLog(Complex(s.real -z.imag, s.imag + z.real))
+    Complex(l.imag, -l.real);
   }
 
   @inline private def complexAcos(z: Complex) = {
@@ -98,6 +100,7 @@ object ComplexEvaluate {
     val l = complexLog(Complex(z.real + s.imag, z.real + s.imag))
     Complex(l.real, -l.imag)
   }
+
   @inline private def complexAtan(z: Complex) = {
     val n = Complex(z.real, z.imag + 1.0);
     val d = Complex(-z.real, 1.0 - z.imag);
@@ -124,6 +127,9 @@ object ComplexEvaluate {
   }
 
   @inline private def complexLog(a: Complex) =
-    Complex(abs(a), atan2(a.real, a.imag))
+    if(abs(a) == 0.0)
+      Complex(Double.NaN, Double.NaN)
+    else
+      Complex(log(abs(a)), atan2(a.imag, a.real))
 
 }
