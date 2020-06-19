@@ -7,9 +7,7 @@ version in ThisBuild := {
     .getOrElse("SNAPSHOT")
 }
 organization in ThisBuild := "com.github.gregor-i"
-scalaVersion in ThisBuild := "2.13.1"
-crossScalaVersions in ThisBuild := Seq("2.12.8", "2.13.1")
-crossScalaVersions := Nil
+scalaVersion in ThisBuild := "2.13.2"
 
 val `math-parser` =
   crossProject(JSPlatform, JVMPlatform)
@@ -24,6 +22,7 @@ val `math-parser-spire` =
       libraryDependencies += "org.typelevel" %%% "spire" % "0.17.0-M1"
     )
     .settings(testSettings)
+    .settings(BintrayRelease.settings)
 
 val `math-parser-compile-jvm` = project
   .dependsOn(`math-parser-spire`  % "compile -> compile; test -> test")

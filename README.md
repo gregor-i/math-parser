@@ -58,10 +58,14 @@ resolvers += Resolver.bintrayRepo("gregor-i", "maven"),
 libraryDependencies += "com.github.gregor-i" %% "math-parser" % {current-version}
 ```
 
+There is a subproject to work with `spire`. 
+```sbt
+libraryDependencies += "com.github.gregor-i" %% "math-parser-spire" % {current-version}
+```
+
 If you want to use runtime compilation (only availible on the jvm), use the following library dependency.
 Be aware that this has the scala compiler as runtime dependencies.
 ```sbt
-resolvers += Resolver.bintrayRepo("gregor-i", "maven"),
 libraryDependencies += "com.github.gregor-i" %% "math-parser-compile-jvm" % {current-version}
 ```
 
@@ -71,6 +75,12 @@ To get started take a look into the `examples` folder.
 
 
 ### Changelog
+#### 1.6:
+- updated `scalajs` to 1.1.
+- `spire` was extracted into its own submodule. This will not be build for scalajs, as `spire` is not compatible with `scalajs` 1.1.
+- Core now contains an implementation for complex numbers. Some imports have to be changed.  
+- Dropped support for `scala` 2.12.
+
 #### 1.5.3:
 - performance optimization
 - enrichments for `Node`
