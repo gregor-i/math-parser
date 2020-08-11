@@ -65,10 +65,16 @@ object ComplexEvaluate {
 
   @inline private def complexPower(a: Complex, b: Complex) = {
     val length_a = abs(a)
-    val arg_a = atan2(a.imag, a.real);
-    val magnitude = pow(length_a, b.real) / exp(arg_a * b.imag)
-    val angle = arg_a * b.real + log(length_a) * b.imag
-    Complex(magnitude * cos(angle), magnitude * sin(angle))
+    if(abs(b) == 0d){
+      Complex(1d, 0d)
+    } else if(length_a == 0d) {
+      Complex(0d, 0d)
+    } else {
+      val arg_a = atan2(a.imag, a.real);
+      val magnitude = pow(length_a, b.real) / exp(arg_a * b.imag)
+      val angle = arg_a * b.real + log(length_a) * b.imag
+      Complex(magnitude * cos(angle), magnitude * sin(angle))
+    }
   }
 
   @inline private def complexNeg(a: Complex) =

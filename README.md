@@ -75,6 +75,9 @@ To get started take a look into the `examples` folder.
 
 
 ### Changelog
+#### 1.6.1:
+- fixed issue with power of zero
+
 #### 1.6:
 - updated `scalajs` to 1.1.
 - `spire` was extracted into its own submodule. This will not be build for scalajs, as `spire` is not compatible with `scalajs` 1.1.
