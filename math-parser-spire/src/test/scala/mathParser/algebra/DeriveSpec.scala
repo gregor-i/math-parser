@@ -1,11 +1,12 @@
 package mathParser.algebra
 
-import mathParser.{MathParser, SpireLanguages}
 import mathParser.SpireImplicits._
-import org.scalatest.{FunSuite, Matchers}
+import mathParser.SpireLanguages
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 import spire.algebra.{Field, NRoot, Trig}
 
-class DeriveSpec extends FunSuite with Matchers {
+class DeriveSpec extends AnyFunSuite with Matchers {
   case object X
   type V = X.type
 

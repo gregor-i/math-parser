@@ -1,17 +1,18 @@
 package mathParser.algebra.compile
 
 import mathParser.SomeFunctions.someFunctions
-import mathParser.algebra.{SpireBinaryOperator, SpireLanguage, SpireUnitaryOperator}
 import mathParser.SpireImplicits._
-import mathParser.{Compiler, LiteralParser, MathParser, SpireLanguages}
-import org.scalatest.{Assertion, FunSuite, Matchers}
+import mathParser.algebra.compile.SpireCompiler.{compilerComplex1, compilerDouble1}
+import mathParser.algebra.{SpireBinaryOperator, SpireLanguage, SpireUnitaryOperator}
+import mathParser.{Compiler, LiteralParser, SpireLanguages}
+import org.scalatest.Assertion
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 import spire.algebra.{Field, NRoot, Trig}
-import mathParser.algebra.compile.SpireCompiler.compilerDouble1
-import mathParser.algebra.compile.SpireCompiler.compilerComplex1
 
 import scala.util.Try
 
-class CompileSpec extends FunSuite with Matchers {
+class CompileSpec extends AnyFunSuite with Matchers {
   case object X
   type V = X.type
 

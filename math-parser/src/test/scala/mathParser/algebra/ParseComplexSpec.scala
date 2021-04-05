@@ -3,8 +3,9 @@ package mathParser.algebra
 import mathParser.Implicits._
 import mathParser.MathParser
 import mathParser.complex.Complex
-import org.scalatest.Matchers
 import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
+
 class ParseComplexSpec extends AnyFunSuite with Matchers {
   val lang = MathParser.complexLanguage
 

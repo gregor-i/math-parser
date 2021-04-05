@@ -1,3 +1,6 @@
+[![Release](https://jitpack.io/v/gregor-i/math-parser.svg)](https://jitpack.io/#gregor-i/math-parser)
+
+
 # math-parser
 
 ### Introduction and Motivation
@@ -54,19 +57,19 @@ For the predefined languages it is possible to use the scala compiler at runtime
 
 To use the library extend your sbt build with:
 ```sbt
-resolvers += Resolver.bintrayRepo("gregor-i", "maven"),
-libraryDependencies += "com.github.gregor-i" %% "math-parser" % {current-version}
+resolvers += "jitpack" at "https://jitpack.io"
+libraryDependencies += "com.github.gregor-i.math-parser" %% "math-parser" % {current-version}
 ```
 
 There is a subproject to work with `spire`. 
 ```sbt
-libraryDependencies += "com.github.gregor-i" %% "math-parser-spire" % {current-version}
+libraryDependencies += "com.github.gregor-i.math-parser" %% "math-parser-spire" % {current-version}
 ```
 
 If you want to use runtime compilation (only availible on the jvm), use the following library dependency.
 Be aware that this has the scala compiler as runtime dependencies.
 ```sbt
-libraryDependencies += "com.github.gregor-i" %% "math-parser-compile-jvm" % {current-version}
+libraryDependencies += "com.github.gregor-i.math-parser" %% "math-parser-compile-jvm" % {current-version}
 ```
 
 ### Examples and Usage
@@ -75,6 +78,9 @@ To get started take a look into the `examples` folder.
 
 
 ### Changelog
+#### 1.6.2:
+- Deploy artifacts to jitpack as bintray dropped it's free service
+
 #### 1.6.1:
 - fixed issue with power of zero
 

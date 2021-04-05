@@ -1,12 +1,13 @@
 package mathParser.algebra
 
 import mathParser.SpireImplicits._
-import mathParser.{LiteralParser, MathParser, SpireLanguages}
-import org.scalatest.{FunSuite, Matchers}
+import mathParser.{LiteralParser, SpireLanguages}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 import spire.algebra.{Field, NRoot, Trig}
 
 
-class OptimizationSpec extends FunSuite with Matchers {
+class OptimizationSpec extends AnyFunSuite with Matchers {
 
   case object X
 

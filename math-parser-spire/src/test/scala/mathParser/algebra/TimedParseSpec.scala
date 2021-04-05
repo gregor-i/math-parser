@@ -1,14 +1,14 @@
 package mathParser.algebra
 
-import mathParser.{LiteralParser, MathParser, Parser, SpireLanguages}
-import org.scalatest.concurrent.TimeLimitedTests
-import org.scalatest.{FunSuite, Matchers}
-import spire.algebra.{Field, NRoot, Trig}
 import mathParser.SpireImplicits._
+import mathParser.{LiteralParser, SpireLanguages}
+import org.scalatest.concurrent.TimeLimitedTests
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.time.{Millis, Span}
+import spire.algebra.{Field, NRoot, Trig}
 
-
-class TimedParseSpec extends FunSuite with Matchers with TimeLimitedTests {
+class TimedParseSpec extends AnyFunSuite with Matchers with TimeLimitedTests {
 
   val timeLimit = Span(200, Millis)
 

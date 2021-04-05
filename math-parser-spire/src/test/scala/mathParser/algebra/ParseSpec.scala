@@ -1,12 +1,13 @@
 package mathParser.algebra
 
-import mathParser.algebra.SpireLanguage.syntax._
-import mathParser.{ConstantNode, LiteralParser, MathParser, SpireLanguages}
-import org.scalatest.{FunSuite, Matchers}
-import spire.algebra.{Field, NRoot, Trig}
 import mathParser.SpireImplicits._
+import mathParser.algebra.SpireLanguage.syntax._
+import mathParser.{ConstantNode, LiteralParser, SpireLanguages}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
+import spire.algebra.{Field, NRoot, Trig}
 
-class ParseSpec extends FunSuite with Matchers {
+class ParseSpec extends AnyFunSuite with Matchers {
 
   sealed trait V
   case object A extends V

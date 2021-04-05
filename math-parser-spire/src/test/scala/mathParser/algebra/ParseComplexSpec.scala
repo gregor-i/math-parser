@@ -1,13 +1,15 @@
 package mathParser.algebra
 
-import mathParser.{MathParser, SpireLanguages}
-import org.scalatest.{FunSuite, Matchers}
-import spire.math.Complex
 import mathParser.SpireImplicits._
-class ParseComplexSpec extends FunSuite with Matchers {
+import mathParser.SpireLanguages
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
+import spire.math.Complex
+
+class ParseComplexSpec extends AnyFunSuite with Matchers {
   val lang = SpireLanguages.complexLanguage
 
-  import lang.{optimize, parse, constantNode}
+  import lang.{constantNode, optimize, parse}
 
   test("parse complex literals") {
     parse("i").map(optimize) shouldBe Some(constantNode(Complex(0, 1)))

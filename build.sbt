@@ -7,27 +7,26 @@ version in ThisBuild := {
     .getOrElse("SNAPSHOT")
 }
 organization in ThisBuild := "com.github.gregor-i"
-scalaVersion in ThisBuild := "2.13.2"
+scalaVersion in ThisBuild := "2.13.5"
+
+skip in publish := true
 
 val `math-parser` =
   crossProject(JSPlatform, JVMPlatform)
     .crossType(CrossType.Pure)
-    .settings(BintrayRelease.settings)
     .settings(testSettings)
 
 val `math-parser-spire` =
   project
     .dependsOn(`math-parser`.jvm)
     .settings(
-      libraryDependencies += "org.typelevel" %%% "spire" % "0.17.0-M1"
+      libraryDependencies += "org.typelevel" %%% "spire" % "0.17.0"
     )
     .settings(testSettings)
-    .settings(BintrayRelease.settings)
 
 val `math-parser-compile-jvm` = project
   .dependsOn(`math-parser-spire`  % "compile -> compile; test -> test")
   .settings(libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value)
-  .settings(BintrayRelease.settings)
 
 val `examples` = project
   .dependsOn(`math-parser-spire`, `math-parser-compile-jvm`)
@@ -40,6 +39,6 @@ val `examples` = project
 
 
 def testSettings = Seq(
-    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.2" % Test,
+    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.8" % Test,
     testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
 )
