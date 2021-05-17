@@ -1,15 +1,13 @@
 import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 import scala.sys.process._
 
-version in ThisBuild := {
+ThisBuild / version := {
   Option("git tag -l --points-at HEAD".!!.trim)
     .filter(_.nonEmpty)
     .getOrElse("SNAPSHOT")
 }
-organization in ThisBuild := "com.github.gregor-i"
-scalaVersion in ThisBuild := "2.13.5"
-
-skip in publish := true
+ThisBuild / organization := "com.github.gregor-i"
+ThisBuild / scalaVersion := "2.13.5"
 
 val `math-parser` =
   crossProject(JSPlatform, JVMPlatform)
@@ -40,5 +38,5 @@ val `examples` = project
 
 def testSettings = Seq(
     libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.8" % Test,
-    testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
+    Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
 )
