@@ -31,11 +31,11 @@ val `examples` = project
   .settings(publish / skip := true)
   .settings(packagedArtifacts := Map.empty)
   .settings(
-    libraryDependencies += "de.sciss"         %% "scala-chart" % "0.7.1",
-    libraryDependencies += "com.github.scopt" %% "scopt"       % "3.7.1"
+    libraryDependencies += "de.sciss"         %% "scala-chart" % "0.8.0",
+    libraryDependencies += "com.github.scopt" %% "scopt"       % "4.0.1"
   )
 
 def testSettings = Seq(
-  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.8" % Test,
+  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.9" % Test,
   Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
 )
