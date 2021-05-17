@@ -27,6 +27,6 @@ trait Optimizer[UO, BO, S, V] {
 object Optimize {
   def replaceConstantsRule[UO, BO, S, V](implicit eval: Evaluate[UO, BO, S, V]): PartialFunction[Node[UO, BO, S, V], Node[UO, BO, S, V]] = {
     case BinaryNode(op, ConstantNode(l), ConstantNode(r)) => ConstantNode(eval.executeBinaryOperator(op, l, r))
-    case UnitaryNode(op, ConstantNode(l)) => ConstantNode(eval.executeUnitary(op, l))
+    case UnitaryNode(op, ConstantNode(l))                 => ConstantNode(eval.executeUnitary(op, l))
   }
 }

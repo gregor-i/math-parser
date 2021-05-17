@@ -9,10 +9,12 @@ import de.sciss.chart.api._
 import mathParser.SpireImplicits._
 import mathParser.algebra.compile.SpireCompiler.compilerDouble1
 
-case class Config(term: String = null,
-                  out: File = new File("chart.png"),
-                  width: Int = ChartPanel.DEFAULT_WIDTH * 2,
-                  height: Int = ChartPanel.DEFAULT_HEIGHT * 2)
+case class Config(
+    term: String = null,
+    out: File = new File("chart.png"),
+    width: Int = ChartPanel.DEFAULT_WIDTH * 2,
+    height: Int = ChartPanel.DEFAULT_HEIGHT * 2
+)
 
 object ConfigParser extends scopt.OptionParser[Config]("function plotter cli") {
   opt[File]('o', "out")
@@ -32,8 +34,13 @@ object ConfigParser extends scopt.OptionParser[Config]("function plotter cli") {
 
   arg[String]("term")
     .required()
-    .validate(term => Main.lang.parse(term)
-      .toRight("Could not parse term").map(_ => ()))
+    .validate(
+      term =>
+        Main.lang
+          .parse(term)
+          .toRight("Could not parse term")
+          .map(_ => ())
+    )
     .action((x, c) => c.copy(term = x))
 }
 
@@ -46,8 +53,8 @@ object Main {
   def main(args: Array[String]): Unit = {
     ConfigParser.parse(args, Config()).foreach { config =>
       val parsed = lang.parse(config.term).get
-      val f = lang.compile[Double => Double](parsed).get
-      val `f'` = lang.compile[Double => Double](lang.derive(parsed)(X)).get
+      val f      = lang.compile[Double => Double](parsed).get
+      val `f'`   = lang.compile[Double => Double](lang.derive(parsed)(X)).get
 
       val p1 = new XYSeries(s"f(x)": Comparable[_], false, true)
       val p2 = new XYSeries(s"f'(x)": Comparable[_], false, true)

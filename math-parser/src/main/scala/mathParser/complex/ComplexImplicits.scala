@@ -2,7 +2,6 @@ package mathParser.complex
 
 import mathParser.{Derive, Evaluate, LiteralParser, Optimizer}
 
-
 trait ComplexImplicits {
   implicit final def complexLiteralParser: LiteralParser[Complex] =
     ComplexLanguage.complexLiteralParser

@@ -6,31 +6,30 @@ object ComplexEvaluate {
 
   import Math._
 
-
   def apply[V]: Evaluate[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] =
     new Evaluate[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] {
       override def executeUnitary(uo: ComplexUnitaryOperator, a: Complex): Complex = uo match {
-        case Neg => complexNeg(a)
-        case Sin => complexSin(a)
-        case Cos => complexCos(a)
-        case Tan => complexTan(a)
+        case Neg  => complexNeg(a)
+        case Sin  => complexSin(a)
+        case Cos  => complexCos(a)
+        case Tan  => complexTan(a)
         case Asin => complexAsin(a)
         case Acos => complexAcos(a)
         case Atan => complexAtan(a)
         case Sinh => complexSinh(a)
         case Cosh => complexCosh(a)
         case Tanh => complexTanh(a)
-        case Exp => complexExp(a)
-        case Log => complexLog(a)
+        case Exp  => complexExp(a)
+        case Log  => complexLog(a)
       }
 
       override def executeBinaryOperator(bo: ComplexBinaryOperator, a: Complex, b: Complex): Complex =
         bo match {
-          case Plus => complexPlus(a, b)
-          case Minus => complexMinus(a, b)
-          case Times => complexTimes(a, b)
+          case Plus    => complexPlus(a, b)
+          case Minus   => complexMinus(a, b)
+          case Times   => complexTimes(a, b)
           case Divided => complexDivided(a, b)
-          case Power => complexPower(a, b)
+          case Power   => complexPower(a, b)
         }
     }
 
@@ -40,15 +39,13 @@ object ComplexEvaluate {
 
   @inline private final def complexSqrt(z: Complex): Complex = {
     val length_z: Double = abs(z)
-    val b = sqrt((length_z + z.real) / 2.0)
-    val c = sqrt((length_z - z.real) / 2.0)
+    val b                = sqrt((length_z + z.real) / 2.0)
+    val c                = sqrt((length_z - z.real) / 2.0)
     if (z.imag < 0.0)
       Complex(b, -c)
     else
       Complex(b, c)
   }
-
-
   @inline private def complexPlus(a: Complex, b: Complex) =
     Complex(a.real + b.real, a.imag + b.imag)
 
@@ -65,14 +62,14 @@ object ComplexEvaluate {
 
   @inline private def complexPower(a: Complex, b: Complex) = {
     val length_a = abs(a)
-    if(abs(b) == 0d){
+    if (abs(b) == 0d) {
       Complex(1d, 0d)
-    } else if(length_a == 0d) {
+    } else if (length_a == 0d) {
       Complex(0d, 0d)
     } else {
-      val arg_a = atan2(a.imag, a.real);
+      val arg_a     = atan2(a.imag, a.real);
       val magnitude = pow(length_a, b.real) / exp(arg_a * b.imag)
-      val angle = arg_a * b.real + log(length_a) * b.imag
+      val angle     = arg_a * b.real + log(length_a) * b.imag
       Complex(magnitude * cos(angle), magnitude * sin(angle))
     }
   }
@@ -89,21 +86,21 @@ object ComplexEvaluate {
   @inline private def complexTan(a: Complex) = {
     val r2 = a.real + a.real
     val i2 = a.imag + a.imag
-    val d = cos(r2) + cosh(i2)
+    val d  = cos(r2) + cosh(i2)
     new Complex(sin(r2) / d, sinh(i2) / d)
   }
 
   @inline private def complexAsin(z: Complex) = {
     val z2 = complexTimes(z, z)
-    val s = complexSqrt(Complex(1.0 - z2.real, -z2.imag))
-    val l = complexLog(Complex(s.real -z.imag, s.imag + z.real))
+    val s  = complexSqrt(Complex(1.0 - z2.real, -z2.imag))
+    val l  = complexLog(Complex(s.real - z.imag, s.imag + z.real))
     Complex(l.imag, -l.real);
   }
 
   @inline private def complexAcos(z: Complex) = {
     val z2 = complexTimes(z, z)
-    val s = complexSqrt(Complex(1.0 - z2.real, -z2.imag))
-    val l = complexLog(Complex(z.real + s.imag, z.real + s.imag))
+    val s  = complexSqrt(Complex(1.0 - z2.real, -z2.imag))
+    val l  = complexLog(Complex(z.real + s.imag, z.real + s.imag))
     Complex(l.real, -l.imag)
   }
 
@@ -123,7 +120,7 @@ object ComplexEvaluate {
   @inline private def complexTanh(z: Complex) = {
     val r2 = z.real + z.real
     val i2 = z.imag + z.imag
-    val d = cos(r2) + cosh(i2)
+    val d  = cos(r2) + cosh(i2)
     Complex(sinh(r2) / d, sin(i2) / d)
   }
 
@@ -133,7 +130,7 @@ object ComplexEvaluate {
   }
 
   @inline private def complexLog(a: Complex) =
-    if(abs(a) == 0.0)
+    if (abs(a) == 0.0)
       Complex(Double.NaN, Double.NaN)
     else
       Complex(log(abs(a)), atan2(a.imag, a.real))

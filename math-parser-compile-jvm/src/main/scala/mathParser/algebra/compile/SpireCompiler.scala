@@ -15,30 +15,30 @@ object SpireCompiler {
       currentMirror.mkToolBox().compile(currentMirror.mkToolBox().parse(scalaCode))().asInstanceOf[A]
     }
 
-  private def scalaCode[A, V](node: SpireNode[A, V])
-                             (encodeLiteral: A => String)
-                             (variableNames: V => String): String = node.fold[String](
-    encodeLiteral, {
-      case (Neg, child) => s"-($child)"
-      case (Sin, child) => s"trig.sin($child)"
-      case (Cos, child) => s"trig.cos($child)"
-      case (Tan, child) => s"trig.tan($child)"
-      case (Asin, child) => s"trig.asin($child)"
-      case (Acos, child) => s"trig.acos($child)"
-      case (Atan, child) => s"trig.atan($child)"
-      case (Sinh, child) => s"trig.sinh($child)"
-      case (Cosh, child) => s"trig.cosh($child)"
-      case (Tanh, child) => s"trig.tanh($child)"
-      case (Exp, child) => s"trig.exp($child)"
-      case (Log, child) => s"trig.log($child)"
-    }, {
-      case (Plus, left, right) => s"field.plus($left, $right)"
-      case (Minus, left, right) => s"field.minus($left, $right)"
-      case (Times, left, right) => s"field.times($left, $right)"
-      case (Divided, left, right) => s"field.div($left, $right)"
-      case (Power, left, right) => s"nroot.fpow($left, $right)"
-    },
-    variableNames)
+  private def scalaCode[A, V](node: SpireNode[A, V])(encodeLiteral: A => String)(variableNames: V => String): String =
+    node.fold[String](
+      encodeLiteral, {
+        case (Neg, child)  => s"-($child)"
+        case (Sin, child)  => s"trig.sin($child)"
+        case (Cos, child)  => s"trig.cos($child)"
+        case (Tan, child)  => s"trig.tan($child)"
+        case (Asin, child) => s"trig.asin($child)"
+        case (Acos, child) => s"trig.acos($child)"
+        case (Atan, child) => s"trig.atan($child)"
+        case (Sinh, child) => s"trig.sinh($child)"
+        case (Cosh, child) => s"trig.cosh($child)"
+        case (Tanh, child) => s"trig.tanh($child)"
+        case (Exp, child)  => s"trig.exp($child)"
+        case (Log, child)  => s"trig.log($child)"
+      }, {
+        case (Plus, left, right)    => s"field.plus($left, $right)"
+        case (Minus, left, right)   => s"field.minus($left, $right)"
+        case (Times, left, right)   => s"field.times($left, $right)"
+        case (Divided, left, right) => s"field.div($left, $right)"
+        case (Power, left, right)   => s"nroot.fpow($left, $right)"
+      },
+      variableNames
+    )
 
   implicit def compilerDouble1[V <: Singleton]: Compiler[SpireUnitaryOperator, SpireBinaryOperator, Double, V, Double => Double] =
     node =>
@@ -56,7 +56,8 @@ object SpireCompiler {
            |""".stripMargin
       )
 
-  implicit def compilerComplex1[V <: Singleton]: Compiler[SpireUnitaryOperator, SpireBinaryOperator, Complex[Double], V, Complex[Double] => Complex[Double]] =
+  implicit def compilerComplex1[V <: Singleton]
+      : Compiler[SpireUnitaryOperator, SpireBinaryOperator, Complex[Double], V, Complex[Double] => Complex[Double]] =
     node =>
       compileAndCast[Complex[Double] => Complex[Double]](
         s"""import spire.implicits._

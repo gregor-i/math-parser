@@ -14,13 +14,13 @@ object Readme extends App {
   val parsed = language.parse(string).get
 
   // evaluating:
-  language.evaluate(parsed){
+  language.evaluate(parsed) {
     case X => 5 // assign values to your variables
   } // == 5*5*2 + 1 == 51
 
   // deriving:
   val derived = language.derive(parsed)(X) // d/dx (2*x*x + 1) == 4*x
-  language.evaluate(derived){
+  language.evaluate(derived) {
     case X => 5
   } // == 4*5 == 20
 }

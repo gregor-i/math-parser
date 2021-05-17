@@ -11,8 +11,10 @@ class DeriveSpec extends AnyFunSuite {
 
   testTemplate(MathParser.complexLanguage, "complex language")
 
-  def testTemplate[UO, BO, S](_lang: Language[UO, BO, S, Nothing], langName: String)
-                             (implicit litParser: LiteralParser[S], derive: Derive[UO, BO, S, X.type]) = {
+  def testTemplate[UO, BO, S](
+      _lang: Language[UO, BO, S, Nothing],
+      langName: String
+  )(implicit litParser: LiteralParser[S], derive: Derive[UO, BO, S, X.type]) = {
     val lang = _lang.withVariables[X.type](List("x" -> X))
 
     import lang.parse

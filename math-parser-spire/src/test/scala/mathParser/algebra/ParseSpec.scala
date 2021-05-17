@@ -15,11 +15,7 @@ class ParseSpec extends AnyFunSuite with Matchers {
   case object C extends V
   case object X extends V
 
-  def vList = List(
-    "a" -> A,
-    "b" -> B,
-    "c" -> C,
-    "x" -> X)
+  def vList = List("a" -> A, "b" -> B, "c" -> C, "x" -> X)
 
   testTemplate(SpireLanguages.doubleLanguage.withVariables[V](vList), "double language")
   testTemplate(SpireLanguages.realLanguage.withVariables[V](vList), "real language")
@@ -27,7 +23,7 @@ class ParseSpec extends AnyFunSuite with Matchers {
 
   def testTemplate[A: Field: Trig: NRoot: LiteralParser](lang: SpireLanguage[A, V], langName: String) = {
     test(s"$langName: parsing constants, literals and variables") {
-      for((name, value) <- lang.constants)
+      for ((name, value) <- lang.constants)
         lang.parse(name) shouldEqual Some(lang.constantNode(value))
       lang.parse("x") shouldEqual Some(lang.variable(X))
       lang.parse("undeclared") shouldEqual None

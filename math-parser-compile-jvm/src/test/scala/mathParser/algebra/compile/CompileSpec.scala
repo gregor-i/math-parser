@@ -26,13 +26,14 @@ class CompileSpec extends AnyFunSuite with Matchers {
     succeed
   }
 
-  def testTemplate[A: Field : Trig : NRoot : LiteralParser](_lang: SpireLanguage[A, Nothing], langName: String)
-                                                           (implicit compile: Compiler[SpireUnitaryOperator, SpireBinaryOperator, A, V, A => A]) = {
+  def testTemplate[A: Field: Trig: NRoot: LiteralParser](_lang: SpireLanguage[A, Nothing], langName: String)(
+      implicit compile: Compiler[SpireUnitaryOperator, SpireBinaryOperator, A, V, A => A]
+  ) = {
     val lang = _lang.withVariables(List("x" -> X))
 
     for (term <- someFunctions)
       test(s"$langName: compile $term") {
-        val ast = lang.parse(term).get
+        val ast              = lang.parse(term).get
         val compiled: A => A = lang.compile[A => A](ast).get
         functionEquality[A](compiled, x => lang.evaluate(ast)({ case X => x }))
       }

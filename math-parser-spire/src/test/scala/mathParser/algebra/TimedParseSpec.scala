@@ -16,9 +16,7 @@ class TimedParseSpec extends AnyFunSuite with Matchers with TimeLimitedTests {
   case object A extends V
   case object X extends V
 
-  def vList = List(
-    "a" -> A,
-    "x" -> X)
+  def vList = List("a" -> A, "x" -> X)
 
   testTemplate(SpireLanguages.doubleLanguage.withVariables[V](vList), "double language")
   testTemplate(SpireLanguages.realLanguage.withVariables[V](vList), "real language")
@@ -26,12 +24,13 @@ class TimedParseSpec extends AnyFunSuite with Matchers with TimeLimitedTests {
 
   def testTemplate[A: Field: Trig: NRoot: LiteralParser](lang: SpireLanguage[A, V], langName: String) = {
     test(s"$langName: parse expressions with many parenthesis") {
-      val expr = "((((x * x + a) * (x * x + a) + a) * ((x * x + a) * (x * x + a) + a) + a) * (((x * x + a) * (x * x + a) + a) * ((x * x + a) * (x * x + a) + a) + a) + a)"
+      val expr =
+        "((((x * x + a) * (x * x + a) + a) * ((x * x + a) * (x * x + a) + a) + a) * (((x * x + a) * (x * x + a) + a) * ((x * x + a) * (x * x + a) + a) + a) + a)"
       lang.parse(expr).isDefined shouldBe true
     }
 
-    test(s"$langName: parse expressions with many operators"){
-      val expr =  "35*x*x*x*x*x*x*x*x*x-180*x*x*x*x*x*x*x+378*x*x*x*x*x-420*x*x*x+315+x + a"
+    test(s"$langName: parse expressions with many operators") {
+      val expr = "35*x*x*x*x*x*x*x*x*x-180*x*x*x*x*x*x*x+378*x*x*x*x*x-420*x*x*x+315+x + a"
       lang.parse(expr).isDefined shouldBe true
     }
   }
