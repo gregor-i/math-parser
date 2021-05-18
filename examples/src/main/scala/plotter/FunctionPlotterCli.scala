@@ -1,13 +1,10 @@
 package plotter
 
-import java.io.File
-
-import mathParser.MathParser
-import org.jfree.chart.ChartPanel
 import de.sciss.chart.api._
-
 import mathParser.SpireImplicits._
-import mathParser.algebra.compile.SpireCompiler.compilerDouble1
+import org.jfree.chart.ChartPanel
+
+import java.io.File
 
 case class Config(
     term: String = null,
@@ -53,8 +50,9 @@ object Main {
   def main(args: Array[String]): Unit = {
     ConfigParser.parse(args, Config()).foreach { config =>
       val parsed = lang.parse(config.term).get
-      val f      = lang.compile[Double => Double](parsed).get
-      val `f'`   = lang.compile[Double => Double](lang.derive(parsed)(X)).get
+      val derived = lang.derive(parsed)(X)
+      val f      = (x: Double) => lang.evaluate(parsed){ case X => x }
+      val `f'`   = (x: Double) => lang.evaluate(derived){ case X => x }
 
       val p1 = new XYSeries(s"f(x)": Comparable[_], false, true)
       val p2 = new XYSeries(s"f'(x)": Comparable[_], false, true)

@@ -6,7 +6,7 @@
 
 ### Introduction and Motivation
 
-`mathParser` is a small Library created for a single purpose: 
+`math-parser` is a small Library created for a single purpose:
 It parses strings into abstract syntax trees (AST) of math-like languages.
 The AST can be used to easily reason over it, modify it, optimize it or derive it.
 
@@ -22,8 +22,7 @@ import mathParser.SpireImplicits._
 
 // define your language:
 object X
-val language = mathParser.SpireLanguages.doubleLanguage
-.withVariables(List("x" -> X))
+val language = mathParser.SpireLanguages.doubleLanguage.withVariables(List("x" -> X))
 
 // parsing: string => Option[AST]
 // .get only to demonstrate.
@@ -31,13 +30,13 @@ val parsed = language.parse(string).get
 
 // evaluating:
 language.evaluate(parsed){
-case X => 5 // assign values to your variables
+  case X => 5 // assign values to your variables
 } // == 5*5*2 + 1 == 51
 
 // deriving:
 val derived = language.derive(parsed)(X) // d/dx (2*x*x + 1) == 4*x
 language.evaluate(derived){
-case X => 5
+  case X => 5
 } // == 4*5 == 20
 ```
 
@@ -50,10 +49,6 @@ Using a bunch of traits and the famous cake pattern, it is possible to define a 
 * Analytic Function Derivative: 
 For the predefined languages it is possible to calculate analytical derivatives for arbitrary functions.
 
-* Runtime compilation: 
-For the predefined languages it is possible to use the scala compiler at runtime to compile your AST into a high-performance function-object.
-
-
 ### Setup
 
 To use the library extend your sbt build with:
@@ -65,12 +60,6 @@ libraryDependencies += "com.github.gregor-i.math-parser" %% "math-parser" % {cur
 There is a subproject to work with `spire`. 
 ```sbt
 libraryDependencies += "com.github.gregor-i.math-parser" %% "math-parser-spire" % {current-version}
-```
-
-If you want to use runtime compilation (only availible on the jvm), use the following library dependency.
-Be aware that this has the scala compiler as runtime dependencies.
-```sbt
-libraryDependencies += "com.github.gregor-i.math-parser" %% "math-parser-compile-jvm" % {current-version}
 ```
 
 ### Examples and Usage

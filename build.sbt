@@ -7,7 +7,7 @@ ThisBuild / version := {
     .getOrElse("SNAPSHOT")
 }
 ThisBuild / organization := "com.github.gregor-i"
-ThisBuild / scalaVersion := "2.13.5"
+ThisBuild / scalaVersion := "3.0.0"
 
 val `math-parser` =
   crossProject(JSPlatform, JVMPlatform)
@@ -18,16 +18,12 @@ val `math-parser-spire` =
   project
     .dependsOn(`math-parser`.jvm)
     .settings(
-      libraryDependencies += "org.typelevel" %%% "spire" % "0.17.0"
+      libraryDependencies += "org.typelevel" % "spire_2.13" % "0.17.0"
     )
     .settings(testSettings)
 
-val `math-parser-compile-jvm` = project
-  .dependsOn(`math-parser-spire` % "compile -> compile; test -> test")
-  .settings(libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value)
-
 val `examples` = project
-  .dependsOn(`math-parser-spire`, `math-parser-compile-jvm`)
+  .dependsOn(`math-parser-spire`)
   .settings(publish / skip := true)
   .settings(packagedArtifacts := Map.empty)
   .settings(
