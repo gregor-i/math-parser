@@ -2,6 +2,9 @@ package mathParser.complex
 
 import mathParser.Evaluate
 
+import ComplexBinaryOperator.*
+import ComplexUnitaryOperator.*
+
 object ComplexEvaluate {
 
   import Math._

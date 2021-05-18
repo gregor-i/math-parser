@@ -1,9 +1,9 @@
 package mathParser
 
-trait LiteralParser[S] {
+trait LiteralParser[S]:
   def tryToParse(s: String): Option[S]
-}
 
-object NoLiterals extends LiteralParser[Nothing] {
-  def tryToParse(s: String): None.type = None
-}
+object LiteralParser:
+  given noLiterals: LiteralParser[Nothing] =
+    new LiteralParser[Nothing]:
+      def tryToParse(s: String): None.type = None

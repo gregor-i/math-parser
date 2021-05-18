@@ -2,8 +2,10 @@ package mathParser
 
 import scala.annotation.tailrec
 
+type OptimizationRule[UO, BO, S, V] = PartialFunction[Node[UO, BO, S, V], Node[UO, BO, S, V]]
+
 trait Optimizer[UO, BO, S, V] {
-  def rules: List[PartialFunction[Node[UO, BO, S, V], Node[UO, BO, S, V]]]
+  def rules: List[OptimizationRule[UO, BO, S, V]]
 
   @tailrec
   final def optimize(term: Node[UO, BO, S, V]): Node[UO, BO, S, V] = {
@@ -25,7 +27,7 @@ trait Optimizer[UO, BO, S, V] {
 }
 
 object Optimize {
-  def replaceConstantsRule[UO, BO, S, V](implicit eval: Evaluate[UO, BO, S, V]): PartialFunction[Node[UO, BO, S, V], Node[UO, BO, S, V]] = {
+  def replaceConstantsRule[UO, BO, S, V](using eval: Evaluate[UO, BO, S, V]): OptimizationRule[UO, BO, S, V] = {
     case BinaryNode(op, ConstantNode(l), ConstantNode(r)) => ConstantNode(eval.executeBinaryOperator(op, l, r))
     case UnitaryNode(op, ConstantNode(l))                 => ConstantNode(eval.executeUnitary(op, l))
   }

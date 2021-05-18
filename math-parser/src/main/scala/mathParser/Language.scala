@@ -2,7 +2,7 @@ package mathParser
 
 import scala.util.Try
 
-case class Language[UO, BO, S, V](
+final case class Language[UO, BO, S, V](
     unitaryOperators: List[(String, UO)],
     binaryPrefixOperators: List[(String, BO)],
     binaryInfixOperators: List[(String, BO)],
@@ -42,19 +42,19 @@ case class Language[UO, BO, S, V](
 
   def constantNode(value: S): ConstantNode[UO, BO, S, V] = ConstantNode(value)
 
-  def parse(term: String)(implicit literalParser: LiteralParser[S]): Option[Node[UO, BO, S, V]] =
+  def parse(term: String)(using literalParser: LiteralParser[S]): Option[Node[UO, BO, S, V]] =
     Parser.parse(this, literalParser)(term)
 
-  def evaluate(node: Node[UO, BO, S, V])(variableAssignment: V => S)(implicit evaluate: Evaluate[UO, BO, S, V]): S =
+  def evaluate(node: Node[UO, BO, S, V])(variableAssignment: V => S)(using evaluate: Evaluate[UO, BO, S, V]): S =
     evaluate.evaluate(node)(variableAssignment)
 
-  def derive(node: Node[UO, BO, S, V])(variable: V)(implicit derive: Derive[UO, BO, S, V]): Node[UO, BO, S, V] =
+  def derive(node: Node[UO, BO, S, V])(variable: V)(using derive: Derive[UO, BO, S, V]): Node[UO, BO, S, V] =
     derive.derive(node)(variable)
 
-  def optimize(node: Node[UO, BO, S, V])(implicit optimizer: Optimizer[UO, BO, S, V]): Node[UO, BO, S, V] =
+  def optimize(node: Node[UO, BO, S, V])(using optimizer: Optimizer[UO, BO, S, V]): Node[UO, BO, S, V] =
     optimizer.optimize(node)
 
-  def compile[F](node: Node[UO, BO, S, V])(implicit compiler: Compiler[UO, BO, S, V, F]): Try[F] =
+  def compile[F](node: Node[UO, BO, S, V])(using compiler: Compiler[UO, BO, S, V, F]): Try[F] =
     compiler.compile(node)
 }
 

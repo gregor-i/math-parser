@@ -1,6 +1,6 @@
 package mathParser.algebra
 
-import mathParser.Implicits._
+import mathParser.complex.ComplexLanguage.given
 import mathParser.complex.Complex
 import mathParser.complex.ComplexLanguage.syntax._
 import mathParser.{ConstantNode, MathParser}

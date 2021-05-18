@@ -2,6 +2,9 @@ package mathParser.complex
 
 import mathParser._
 
+import ComplexBinaryOperator.*
+import ComplexUnitaryOperator.*
+
 object ComplexLanguage {
 
   import syntax._
@@ -12,14 +15,14 @@ object ComplexLanguage {
       .withBinaryOperators[ComplexBinaryOperator](prefix = List.empty, infix = List(Plus, Minus, Times, Divided, Power).map(op => (op.name, op)))
       .withUnitaryOperators(List(Neg, Sin, Cos, Tan, Asin, Acos, Atan, Sinh, Cosh, Tanh, Exp, Log).map(op => (op.name, op)))
 
-  def complexLiteralParser: LiteralParser[Complex] = s => s.toDoubleOption.map(Complex(_, 0.0))
+  given  complexLiteralParser: LiteralParser[Complex] = _.toDoubleOption.map(Complex(_, 0.0))
 
-  def complexEvaluate[V]: Evaluate[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] = ComplexEvaluate[V]
+  given  complexEvaluate[V]: Evaluate[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] = ComplexEvaluate[V]
 
-  def complexOptimizer[V]: Optimizer[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] =
+  given  complexOptimizer[V]: Optimizer[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] =
     new Optimizer[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] {
       override def rules: List[PartialFunction[ComplexNode[V], ComplexNode[V]]] = List(
-        Optimize.replaceConstantsRule[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V](complexEvaluate[V]), {
+        Optimize.replaceConstantsRule(using complexEvaluate[V]), {
           case UnitaryNode(Neg, UnitaryNode(Neg, child))               => child
           case BinaryNode(Plus, left, ConstantNode(Complex(0d, 0d)))   => left
           case BinaryNode(Plus, ConstantNode(Complex(0d, 0d)), right)  => right
@@ -40,7 +43,7 @@ object ComplexLanguage {
       )
     }
 
-  def complexDerive[V]: Derive[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] =
+  given complexDerive[V]: Derive[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] =
     new Derive[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] {
       def derive(term: ComplexNode[V])(variable: V): ComplexNode[V] = {
         def derive(term: ComplexNode[V]): ComplexNode[V] = term match {
@@ -76,8 +79,6 @@ object ComplexLanguage {
     }
 
   object syntax {
-    implicit def doubleAsComplex(d: Double): Complex = Complex(d, 0.0)
-
     def neg[V](t: ComplexNode[V]): ComplexNode[V]  = UnitaryNode(Neg, t)
     def sin[V](t: ComplexNode[V]): ComplexNode[V]  = UnitaryNode(Sin, t)
     def cos[V](t: ComplexNode[V]): ComplexNode[V]  = UnitaryNode(Cos, t)
@@ -91,9 +92,9 @@ object ComplexLanguage {
     def exp[V](t: ComplexNode[V]): ComplexNode[V]  = UnitaryNode(Exp, t)
     def log[V](t: ComplexNode[V]): ComplexNode[V]  = UnitaryNode(Log, t)
 
-    def sqrt[V](t: ComplexNode[V]): ComplexNode[V] = BinaryNode(Power, t, ConstantNode(0.5))
+    def sqrt[V](t: ComplexNode[V]): ComplexNode[V] = BinaryNode(Power, t, ConstantNode(Complex(0.5, 0.0)))
 
-    implicit class EnrichNode[V](t1: ComplexNode[V]) {
+    extension [V](t1: ComplexNode[V]) {
       def +(t2: ComplexNode[V]): ComplexNode[V] = BinaryNode(Plus, t1, t2)
       def -(t2: ComplexNode[V]): ComplexNode[V] = BinaryNode(Minus, t1, t2)
       def *(t2: ComplexNode[V]): ComplexNode[V] = BinaryNode(Times, t1, t2)
@@ -101,8 +102,8 @@ object ComplexLanguage {
       def ^(t2: ComplexNode[V]): ComplexNode[V] = BinaryNode(Power, t1, t2)
     }
 
-    def zero[V]: ComplexNode[V] = ConstantNode(0.0)
-    def one[V]: ComplexNode[V]  = ConstantNode(1.0)
-    def two[V]: ComplexNode[V]  = ConstantNode(2.0)
+    def zero[V]: ComplexNode[V] = ConstantNode(Complex(0.0, 0.0))
+    def one[V]: ComplexNode[V]  = ConstantNode(Complex(1.0, 0.0))
+    def two[V]: ComplexNode[V]  = ConstantNode(Complex(2.0, 0.0))
   }
 }

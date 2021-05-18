@@ -1,6 +1,6 @@
 package mathParser.algebra
 
-import mathParser.SpireImplicits._
+import mathParser.SpireImplicits.given
 import mathParser.SpireLanguages
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers

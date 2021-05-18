@@ -1,6 +1,6 @@
 package mathParser.algebra
 
-import mathParser.SpireImplicits._
+import mathParser.SpireImplicits.given
 import mathParser.algebra.SpireLanguage.syntax._
 import mathParser.{ConstantNode, LiteralParser, SpireLanguages}
 import org.scalatest.funsuite.AnyFunSuite

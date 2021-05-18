@@ -2,6 +2,9 @@ package mathParser.boolean
 
 import mathParser.{Evaluate, Language}
 
+import BooleanBinaryOperator.*
+import BooleanUnitaryOperator.*
+
 object BooleanLanguage {
   def apply(): Language[BooleanUnitaryOperator, BooleanBinaryOperator, Boolean, Nothing] =
     Language[BooleanUnitaryOperator, BooleanBinaryOperator, Boolean, Nothing](
@@ -12,17 +15,9 @@ object BooleanLanguage {
       variables = List.empty
     )
 
-  implicit def booleanEvaluate[V]: Evaluate[BooleanUnitaryOperator, BooleanBinaryOperator, Boolean, V] =
+  given [V]: Evaluate[BooleanUnitaryOperator, BooleanBinaryOperator, Boolean, V] =
     new Evaluate[BooleanUnitaryOperator, BooleanBinaryOperator, Boolean, V] {
-      override def executeUnitary(uo: BooleanUnitaryOperator, s: Boolean): Boolean = uo match {
-        case Not => !s
-      }
-
-      override def executeBinaryOperator(bo: BooleanBinaryOperator, left: Boolean, right: Boolean): Boolean = bo match {
-        case And      => left && right
-        case Or       => left || right
-        case Equals   => left == right
-        case Unequals => left != right
-      }
+      override def executeUnitary(uo: BooleanUnitaryOperator, s: Boolean): Boolean = uo.apply(s)
+      override def executeBinaryOperator(bo: BooleanBinaryOperator, left: Boolean, right: Boolean): Boolean = bo.apply(left, right)
     }
 }

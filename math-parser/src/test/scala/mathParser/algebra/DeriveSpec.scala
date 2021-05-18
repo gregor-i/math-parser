@@ -1,6 +1,6 @@
 package mathParser.algebra
 
-import mathParser.Implicits._
+import mathParser.complex.ComplexLanguage.given
 import mathParser.Syntax._
 import mathParser.{Derive, Language, LiteralParser, MathParser}
 import org.scalatest.funsuite.AnyFunSuite

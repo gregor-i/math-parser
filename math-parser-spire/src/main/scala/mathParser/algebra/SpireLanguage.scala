@@ -46,7 +46,7 @@ object SpireLanguage {
   def spireOptimizer[A: Field: NRoot: Trig, V]: Optimizer[SpireUnitaryOperator, SpireBinaryOperator, A, V] =
     new Optimizer[SpireUnitaryOperator, SpireBinaryOperator, A, V] {
       override def rules: List[PartialFunction[SpireNode[A, V], SpireNode[A, V]]] = List(
-        Optimize.replaceConstantsRule[SpireUnitaryOperator, SpireBinaryOperator, A, V](spireEvaluate), {
+        Optimize.replaceConstantsRule(using spireEvaluate), {
           case UnitaryNode(Neg, UnitaryNode(Neg, child))         => child
           case BinaryNode(Plus, left, ConstantNode(0d))          => left
           case BinaryNode(Plus, ConstantNode(0d), right)         => right
@@ -118,7 +118,7 @@ object SpireLanguage {
 
     def sqrt[A: Field: Trig: NRoot, V](t: SpireNode[A, V]): SpireNode[A, V] = BinaryNode(Power, t, ConstantNode(Field[A].fromDouble(0.5)))
 
-    implicit class EnrichNode[A: Field: Trig: NRoot, V](t1: SpireNode[A, V]) {
+    extension [A: Field: Trig: NRoot, V](t1: SpireNode[A, V]) {
       def +(t2: SpireNode[A, V]): SpireNode[A, V] = BinaryNode(Plus, t1, t2)
       def -(t2: SpireNode[A, V]): SpireNode[A, V] = BinaryNode(Minus, t1, t2)
       def *(t2: SpireNode[A, V]): SpireNode[A, V] = BinaryNode(Times, t1, t2)

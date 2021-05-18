@@ -1,6 +1,6 @@
 package mathParser.algebra
 
-import mathParser.SpireImplicits._
+import mathParser.SpireImplicits.given
 import mathParser.{LiteralParser, SpireLanguages}
 import org.scalatest.concurrent.TimeLimitedTests
 import org.scalatest.funsuite.AnyFunSuite
