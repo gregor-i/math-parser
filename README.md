@@ -1,3 +1,4 @@
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/gregor-i/math-parser/ci)
 [![Release](https://jitpack.io/v/gregor-i/math-parser.svg)](https://jitpack.io/#gregor-i/math-parser)
 
 
