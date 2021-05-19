@@ -1,15 +1,15 @@
 package mathParser.algebra
 
-import mathParser.complex.ComplexLanguage.given
+import mathParser.number.ComplexLanguage.given
 import mathParser.Syntax._
-import mathParser.{Derive, Language, LiteralParser, MathParser}
+import mathParser.{Derive, Language, LiteralParser, BuildIn}
 import org.scalatest.funsuite.AnyFunSuite
 
 class DeriveSpec extends AnyFunSuite {
   case object X
   type V = X.type
 
-  testTemplate(MathParser.complexLanguage, "complex language")
+  testTemplate(BuildIn.complexLanguage, "complex language")
 
   def testTemplate[UO, BO, S](
       _lang: Language[UO, BO, S, Nothing],

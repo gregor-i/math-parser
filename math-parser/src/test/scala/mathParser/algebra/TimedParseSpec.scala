@@ -1,7 +1,7 @@
 package mathParser.algebra
 
-import mathParser.complex.ComplexLanguage.given
-import mathParser.MathParser
+import mathParser.number.ComplexLanguage.given
+import mathParser.BuildIn
 import org.scalatest.concurrent.TimeLimitedTests
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.time.{Millis, Span}
@@ -16,7 +16,7 @@ class TimedParseSpec extends AnyFunSuite with TimeLimitedTests {
 
   def vList = List("a" -> A, "x" -> X)
 
-  val lang = MathParser.complexLanguage.withVariables[V](vList)
+  val lang = BuildIn.complexLanguage.withVariables[V](vList)
 
   test(s"complex: parse expressions with many parenthesis") {
     val expr =

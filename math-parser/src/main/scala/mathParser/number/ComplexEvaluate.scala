@@ -1,15 +1,15 @@
-package mathParser.complex
+package mathParser.number
 
 import mathParser.Evaluate
 
-import ComplexBinaryOperator.*
-import ComplexUnitaryOperator.*
+import NumberBinaryOperator.*
+import NumberUnitaryOperator.*
 
-final class ComplexEvaluate[V] extends Evaluate[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] {
+final class ComplexEvaluate[V] extends Evaluate[NumberUnitaryOperator, NumberBinaryOperator, Complex, V] {
 
   import Math._
 
-   def executeUnitary(uo: ComplexUnitaryOperator, a: Complex): Complex = uo match {
+   def executeUnitary(uo: NumberUnitaryOperator, a: Complex): Complex = uo match {
     case Neg  => complexNeg(a)
     case Sin  => complexSin(a)
     case Cos  => complexCos(a)
@@ -24,7 +24,7 @@ final class ComplexEvaluate[V] extends Evaluate[ComplexUnitaryOperator, ComplexB
     case Log  => complexLog(a)
   }
 
-   def executeBinaryOperator(bo: ComplexBinaryOperator, a: Complex, b: Complex): Complex =
+   def executeBinaryOperator(bo: NumberBinaryOperator, a: Complex, b: Complex): Complex =
     bo match {
       case Plus    => complexPlus(a, b)
       case Minus   => complexMinus(a, b)

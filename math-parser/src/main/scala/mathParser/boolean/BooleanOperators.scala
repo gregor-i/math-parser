@@ -1,6 +1,5 @@
 package mathParser.boolean
 
-
 enum BooleanUnitaryOperator(val name: String):
   case Not extends BooleanUnitaryOperator("!")
 

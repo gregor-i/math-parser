@@ -1,14 +1,14 @@
 package mathParser.algebra
 
-import mathParser.complex.ComplexLanguage.given
-import mathParser.{Language, LiteralParser, MathParser, Optimizer}
+import mathParser.number.ComplexLanguage.given
+import mathParser.{Language, LiteralParser, BuildIn, Optimizer}
 import org.scalatest.funsuite.AnyFunSuite
 
 class OptimizationSpec extends AnyFunSuite {
 
   case object X
 
-  testTemplate(MathParser.complexLanguage, "complex language")
+  testTemplate(BuildIn.complexLanguage, "complex language")
 
   def testTemplate[UO, BO, S](
       _lang: Language[UO, BO, S, Nothing],

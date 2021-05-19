@@ -4,6 +4,7 @@ package algebra
 import spire.algebra.{Field, NRoot, Trig}
 
 import scala.util.Try
+import mathParser.AbstractSyntaxTree.*
 
 object SpireLanguage {
 

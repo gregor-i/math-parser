@@ -1,14 +1,17 @@
-package mathParser.complex
+package mathParser.number
 
-import mathParser.{Derive}
-import mathParser.complex.ComplexUnitaryOperator.*
-import mathParser.complex.ComplexBinaryOperator.*
-import mathParser.complex.Syntax.*
-import mathParser.*
+import mathParser.{AbstractSyntaxTree, Derive}
+import mathParser.AbstractSyntaxTree.*
+import mathParser.number.NumberUnitaryOperator
+import mathParser.number.NumberBinaryOperator
+import mathParser.number.NumberSyntax.*
 
-class ComplexDerive[V] extends Derive[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] {
-  def derive(term: ComplexNode[V])(variable: V): ComplexNode[V] = {
-    def derive(term: ComplexNode[V]): ComplexNode[V] = term match {
+class NumberDerive[S: Number, V] extends Derive[NumberUnitaryOperator, NumberBinaryOperator, S, V] {
+  def derive(term: AbstractSyntaxTree[NumberUnitaryOperator, NumberBinaryOperator, S, V])(variable: V): AbstractSyntaxTree[NumberUnitaryOperator, NumberBinaryOperator, S, V] = {
+    val zero = ConstantNode[NumberUnitaryOperator, NumberBinaryOperator, S, V](Number.zero[S])
+    val one = ConstantNode[NumberUnitaryOperator, NumberBinaryOperator, S, V](Number.one[S])
+
+    def derive(term: AbstractSyntaxTree[NumberUnitaryOperator, NumberBinaryOperator, S, V]): AbstractSyntaxTree[NumberUnitaryOperator, NumberBinaryOperator, S, V] = term match {
       case VariableNode(`variable`)          => one
       case VariableNode(_) | ConstantNode(_) => zero
       case UnitaryNode(op, f) =>

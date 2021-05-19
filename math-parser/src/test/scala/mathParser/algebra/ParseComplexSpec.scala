@@ -1,13 +1,13 @@
 package mathParser.algebra
 
-import mathParser.complex.ComplexLanguage.given
-import mathParser.MathParser
-import mathParser.complex.Complex
+import mathParser.number.ComplexLanguage.given
+import mathParser.BuildIn
+import mathParser.number.Complex
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
 class ParseComplexSpec extends AnyFunSuite with Matchers {
-  val lang = MathParser.complexLanguage
+  val lang = BuildIn.complexLanguage
 
   import lang.{constantNode, optimize, parse}
 

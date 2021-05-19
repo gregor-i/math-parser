@@ -1,9 +1,9 @@
 package mathParser.algebra
 
-import mathParser.complex.ComplexLanguage.given
-import mathParser.complex.Complex
-import mathParser.complex.ComplexLanguage.syntax._
-import mathParser.{ConstantNode, MathParser}
+import mathParser.number.ComplexLanguage.given
+import mathParser.number.Complex
+import mathParser.number.NumberSyntax._
+import mathParser.{ConstantNode, BuildIn}
 import org.scalatest.funsuite.AnyFunSuite
 
 class ParseSpec extends AnyFunSuite {
@@ -16,7 +16,7 @@ class ParseSpec extends AnyFunSuite {
 
   def vList = List("a" -> A, "b" -> B, "c" -> C, "x" -> X)
 
-  val lang = MathParser.complexLanguage.withVariables[V](vList)
+  val lang = BuildIn.complexLanguage.withVariables[V](vList)
 
   test(s"complex: parsing constants, literals and variables") {
     for ((name, value) <- lang.constants)
