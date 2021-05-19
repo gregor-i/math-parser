@@ -19,11 +19,11 @@ final case class Language[UO, BO, S, V](
   def withBinaryOperators[BO2](prefix: List[(String, BO2)], infix: List[(String, BO2)]): Language[UO, BO2, S, V] =
     copy(binaryPrefixOperators = prefix, binaryInfixOperators = infix)
 
+  def addConstant[S2](name: String, constant: S2): Language[UO, BO, S | S2, V] =
+    copy(constants = (name -> constant) :: constants)
+
   def withConstants[S2](constants: List[(String, S2)]): Language[UO, BO, S2, V] =
     copy(constants = constants)
-
-  def addConstant(name: String, value: S): Language[UO, BO, S, V] =
-    copy(constants = (name -> value) :: constants)
 
   def withVariables[V2](variables: List[(String, V2)]): Language[UO, BO, S, V2] =
     copy(variables = variables)
@@ -39,22 +39,21 @@ final case class Language[UO, BO, S, V](
 
   // todo: remove
   def variable(variable: V): VariableNode[UO, BO, S, V] = VariableNode(variable)
-
   def constantNode(value: S): ConstantNode[UO, BO, S, V] = ConstantNode(value)
 
-  def parse(term: String)(using literalParser: LiteralParser[S]): Option[Node[UO, BO, S, V]] =
+  def parse(term: String)(using literalParser: LiteralParser[S]): Option[AbstractSyntaxTree[UO, BO, S, V]] =
     Parser.parse(this, literalParser)(term)
 
-  def evaluate(node: Node[UO, BO, S, V])(variableAssignment: V => S)(using evaluate: Evaluate[UO, BO, S, V]): S =
+  def evaluate(node: AbstractSyntaxTree[UO, BO, S, V])(variableAssignment: V => S)(using evaluate: Evaluate[UO, BO, S, V]): S =
     evaluate.evaluate(node)(variableAssignment)
 
-  def derive(node: Node[UO, BO, S, V])(variable: V)(using derive: Derive[UO, BO, S, V]): Node[UO, BO, S, V] =
+  def derive(node: AbstractSyntaxTree[UO, BO, S, V])(variable: V)(using derive: Derive[UO, BO, S, V]): AbstractSyntaxTree[UO, BO, S, V] =
     derive.derive(node)(variable)
 
-  def optimize(node: Node[UO, BO, S, V])(using optimizer: Optimizer[UO, BO, S, V]): Node[UO, BO, S, V] =
+  def optimize(node: AbstractSyntaxTree[UO, BO, S, V])(using optimizer: Optimizer[UO, BO, S, V]): AbstractSyntaxTree[UO, BO, S, V] =
     optimizer.optimize(node)
 
-  def compile[F](node: Node[UO, BO, S, V])(using compiler: Compiler[UO, BO, S, V, F]): Try[F] =
+  def compile[F](node: AbstractSyntaxTree[UO, BO, S, V])(using compiler: Compiler[UO, BO, S, V, F]): Try[F] =
     compiler.compile(node)
 }
 

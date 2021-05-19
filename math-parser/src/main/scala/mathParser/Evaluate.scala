@@ -5,6 +5,6 @@ trait Evaluate[UO, BO, S, V] {
 
   def executeBinaryOperator(bo: BO, left: S, right: S): S
 
-  def evaluate(node: Node[UO, BO, S, V])(variableAssignment: V => S): S =
+  def evaluate(node: AbstractSyntaxTree[UO, BO, S, V])(variableAssignment: V => S): S =
     node.fold[S](identity, executeUnitary, executeBinaryOperator, variableAssignment)
 }

@@ -1,9 +1,10 @@
 package mathParser.complex
 
-import mathParser.{BinaryNode, ConstantNode, Derive, UnitaryNode, VariableNode}
+import mathParser.{Derive}
 import mathParser.complex.ComplexUnitaryOperator.*
 import mathParser.complex.ComplexBinaryOperator.*
 import mathParser.complex.Syntax.*
+import mathParser.*
 
 class ComplexDerive[V] extends Derive[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] {
   def derive(term: ComplexNode[V])(variable: V): ComplexNode[V] = {

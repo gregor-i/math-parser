@@ -1,6 +1,6 @@
 package mathParser.complex
 
-import mathParser.{BinaryNode, ConstantNode, Optimize, Optimizer, UnitaryNode}
+import mathParser.*
 import mathParser.complex.Syntax.*
 import mathParser.complex.ComplexBinaryOperator.*
 import mathParser.complex.ComplexUnitaryOperator.*

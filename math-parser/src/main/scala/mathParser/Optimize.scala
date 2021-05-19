@@ -1,18 +1,19 @@
 package mathParser
 
 import scala.annotation.tailrec
+import mathParser.AbstractSyntaxTree.*
 
-type OptimizationRule[UO, BO, S, V] = PartialFunction[Node[UO, BO, S, V], Node[UO, BO, S, V]]
+type OptimizationRule[UO, BO, S, V] = PartialFunction[AbstractSyntaxTree[UO, BO, S, V], AbstractSyntaxTree[UO, BO, S, V]]
 
 trait Optimizer[UO, BO, S, V] {
   def rules: List[OptimizationRule[UO, BO, S, V]]
 
   @tailrec
-  final def optimize(term: Node[UO, BO, S, V]): Node[UO, BO, S, V] = {
-    def applyRules(node: Node[UO, BO, S, V]): Node[UO, BO, S, V] =
+  final def optimize(term: AbstractSyntaxTree[UO, BO, S, V]): AbstractSyntaxTree[UO, BO, S, V] = {
+    def applyRules(node: AbstractSyntaxTree[UO, BO, S, V]): AbstractSyntaxTree[UO, BO, S, V] =
       rules.reduce(_ orElse _).lift(node).getOrElse(node)
 
-    val optimized = term.fold[Node[UO, BO, S, V]](
+    val optimized = term.fold[AbstractSyntaxTree[UO, BO, S, V]](
       ifConstant = ConstantNode.apply,
       ifUnitary = (op, child) => applyRules(UnitaryNode(op, child)),
       ifBinary = (op, childLeft, childRight) => applyRules(BinaryNode(op, childLeft, childRight)),
