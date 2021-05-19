@@ -1,6 +1,6 @@
 package mathParser.complex
 
-enum ComplexUnitaryOperator(val name: String) {
+enum ComplexUnitaryOperator(val name: String):
   case Neg extends ComplexUnitaryOperator("-")
   case Sin extends ComplexUnitaryOperator("sin")
   case Cos extends ComplexUnitaryOperator("cos")
@@ -13,12 +13,10 @@ enum ComplexUnitaryOperator(val name: String) {
   case Tanh extends ComplexUnitaryOperator("tanh")
   case Exp extends ComplexUnitaryOperator("exp")
   case Log extends ComplexUnitaryOperator("log")
-}
 
-enum ComplexBinaryOperator(val name: String) {
+enum ComplexBinaryOperator(val name: String):
   case Plus extends ComplexBinaryOperator("+")
   case Minus extends ComplexBinaryOperator("-")
   case Times extends ComplexBinaryOperator("*")
   case Divided extends ComplexBinaryOperator("/")
   case Power extends ComplexBinaryOperator("^")
-}
