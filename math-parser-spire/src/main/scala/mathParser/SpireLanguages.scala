@@ -2,17 +2,19 @@ package mathParser
 
 import mathParser.algebra.SpireLanguage
 import mathParser.boolean.{BooleanBinaryOperator, BooleanLanguage, BooleanUnitaryOperator}
+import mathParser.number.{NumberBinaryOperator, NumberUnitaryOperator}
 import spire.implicits._
 import spire.math.{Complex, Real}
+import spire.algebra.Field
 
 object SpireLanguages {
-  val doubleLanguage: SpireLanguage[Double, Nothing] =
+  val doubleLanguage: Language[NumberUnitaryOperator, NumberBinaryOperator, Double, Nothing] =
     SpireLanguage[Double]
 
-  val complexLanguage: SpireLanguage[Complex[Double], Nothing] =
+  val complexLanguage: Language[NumberUnitaryOperator, NumberBinaryOperator, Complex[Double], Nothing] =
     SpireLanguage[Complex[Double]]
       .addConstant("i", Complex.i[Double])
 
-  val realLanguage: SpireLanguage[Real, Nothing] =
+  val realLanguage: Language[NumberUnitaryOperator, NumberBinaryOperator, Real, Nothing] =
     SpireLanguage[Real]
 }

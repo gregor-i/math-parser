@@ -1,7 +1,10 @@
 package mathParser.algebra
 
-import mathParser.SpireImplicits.given
-import mathParser.algebra.SpireLanguage.syntax._
+import spire.implicits.given
+import mathParser.algebra.SpireLanguage.given
+import mathParser.Language
+import mathParser.number.NumberSyntax._
+import mathParser.number.{NumberBinaryOperator, NumberUnitaryOperator}
 import mathParser.{ConstantNode, LiteralParser, SpireLanguages}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
@@ -21,7 +24,7 @@ class ParseSpec extends AnyFunSuite with Matchers {
   testTemplate(SpireLanguages.realLanguage.withVariables[V](vList), "real language")
   testTemplate(SpireLanguages.complexLanguage.withVariables[V](vList), "complex language")
 
-  def testTemplate[A: Field: Trig: NRoot: LiteralParser](lang: SpireLanguage[A, V], langName: String) = {
+  def testTemplate[A: Field: Trig: NRoot: LiteralParser](lang: Language[NumberUnitaryOperator, NumberBinaryOperator,A, V], langName: String) = {
     test(s"$langName: parsing constants, literals and variables") {
       for ((name, value) <- lang.constants)
         lang.parse(name) shouldEqual Some(lang.constantNode(value))

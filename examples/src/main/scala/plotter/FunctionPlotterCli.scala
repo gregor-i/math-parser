@@ -1,7 +1,7 @@
 package plotter
 
 import de.sciss.chart.api._
-import mathParser.SpireImplicits.given
+import mathParser.number.DoubleLanguage.given
 import org.jfree.chart.ChartPanel
 
 import java.io.File

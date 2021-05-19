@@ -1,6 +1,9 @@
 package mathParser.algebra
 
-import mathParser.SpireImplicits.given
+import mathParser.Language
+import mathParser.number.{NumberBinaryOperator, NumberUnitaryOperator}
+import spire.implicits.given
+import mathParser.algebra.SpireLanguage.given
 import mathParser.{LiteralParser, SpireLanguages}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
@@ -14,7 +17,7 @@ class OptimizationSpec extends AnyFunSuite with Matchers {
   testLanguage(SpireLanguages.realLanguage, "real language")
   testLanguage(SpireLanguages.complexLanguage, "complex language")
 
-  def testLanguage[A: Field: Trig: NRoot: LiteralParser](_lang: SpireLanguage[A, Nothing], langName: String) = {
+  def testLanguage[A: Field: Trig: NRoot: LiteralParser](_lang: Language[NumberUnitaryOperator, NumberBinaryOperator, A, Nothing], langName: String) = {
     val lang = _lang.withVariables[X.type](List("x" -> X))
 
     val identities = Seq(

@@ -1,10 +1,13 @@
 package mathParser.algebra
 
-import mathParser.SpireImplicits.given
-import mathParser.SpireLanguages
+import mathParser.Language
+import mathParser.number.{NumberBinaryOperator, NumberUnitaryOperator}
+import spire.implicits.given
+import mathParser.algebra.SpireLanguage.given
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import spire.algebra.{Field, NRoot, Trig}
+import mathParser.SpireLanguages
 
 class DeriveSpec extends AnyFunSuite with Matchers {
   case object X
@@ -14,7 +17,7 @@ class DeriveSpec extends AnyFunSuite with Matchers {
   testTemplate(SpireLanguages.realLanguage, "real language")
   testTemplate(SpireLanguages.complexLanguage, "complex language")
 
-  def testTemplate[A: Field: Trig: NRoot](_lang: SpireLanguage[A, Nothing], langName: String) = {
+  def testTemplate[A: Field: Trig: NRoot](_lang: Language[NumberUnitaryOperator, NumberBinaryOperator, A, Nothing], langName: String) = {
     val lang = _lang.withVariables[X.type](List("x" -> X))
 
     import lang.{derive, parse}

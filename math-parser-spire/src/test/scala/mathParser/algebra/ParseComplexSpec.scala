@@ -1,7 +1,8 @@
 package mathParser.algebra
 
-import mathParser.SpireImplicits.given
 import mathParser.SpireLanguages
+import mathParser.algebra.SpireLanguage.given
+import spire.implicits._
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import spire.math.Complex
