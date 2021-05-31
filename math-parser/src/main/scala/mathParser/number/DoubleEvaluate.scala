@@ -1,12 +1,14 @@
 package mathParser.number
 
 import mathParser.Evaluate
+import mathParser.number.*
+import mathParser.number.NumberOperator.*
 
 final class DoubleEvaluate[V] extends Evaluate[NumberUnitaryOperator, NumberBinaryOperator, Double, V] {
 
   import Math._
 
-   def executeUnitary(uo: NumberUnitaryOperator, a: Double): Double = uo match {
+   def executeUnitary(uo: NumberUnitaryOperator, a: Double): Double = (uo: Any) match {
     case Neg  => -a
     case Sin  => sin(a)
     case Cos  => cos(a)
@@ -19,14 +21,18 @@ final class DoubleEvaluate[V] extends Evaluate[NumberUnitaryOperator, NumberBina
     case Tanh => tanh(a)
     case Exp  => exp(a)
     case Log  => log(a)
-  }
+    case _ => ???
+
+   }
 
    def executeBinaryOperator(bo: NumberBinaryOperator, a: Double, b: Double): Double =
-    bo match {
+     (bo: Any) match {
       case Plus    => a+b
       case Minus   => a - b
       case Times   => a * b
       case Divided => a / b
       case Power   => pow(a, b)
+      case _ => ???
+
     }
 }

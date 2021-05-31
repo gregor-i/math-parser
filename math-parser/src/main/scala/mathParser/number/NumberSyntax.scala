@@ -3,6 +3,7 @@ package mathParser.number
 import mathParser.AbstractSyntaxTree
 import mathParser.AbstractSyntaxTree.*
 import mathParser.number.ComplexLanguage
+import mathParser.number.NumberOperator.*
 import mathParser.number.NumberBinaryOperator
 import mathParser.number.NumberUnitaryOperator
 

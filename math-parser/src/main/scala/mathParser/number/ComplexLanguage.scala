@@ -2,9 +2,8 @@ package mathParser.number
 
 import mathParser._
 
-import NumberBinaryOperator.*
-import NumberUnitaryOperator.*
 import mathParser.number.NumberSyntax.*
+import mathParser.number.NumberOperator.*
 
 object ComplexLanguage {
   def apply(): ComplexLanguage[Nothing] =

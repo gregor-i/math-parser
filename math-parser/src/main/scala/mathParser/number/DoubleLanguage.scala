@@ -2,6 +2,7 @@ package mathParser.number
 
 import mathParser._
 import mathParser.number.NumberSyntax
+import mathParser.number.NumberOperator.*
 
 object DoubleLanguage {
   def apply(): Language[NumberUnitaryOperator, NumberBinaryOperator, Double, Nothing] =

@@ -2,14 +2,13 @@ package mathParser.number
 
 import mathParser.Evaluate
 
-import NumberBinaryOperator.*
-import NumberUnitaryOperator.*
+import mathParser.number.NumberOperator.*
 
 final class ComplexEvaluate[V] extends Evaluate[NumberUnitaryOperator, NumberBinaryOperator, Complex, V] {
 
   import Math._
 
-   def executeUnitary(uo: NumberUnitaryOperator, a: Complex): Complex = uo match {
+   def executeUnitary(uo: NumberUnitaryOperator, a: Complex): Complex = (uo: Any) match {
     case Neg  => complexNeg(a)
     case Sin  => complexSin(a)
     case Cos  => complexCos(a)
@@ -22,15 +21,18 @@ final class ComplexEvaluate[V] extends Evaluate[NumberUnitaryOperator, NumberBin
     case Tanh => complexTanh(a)
     case Exp  => complexExp(a)
     case Log  => complexLog(a)
+    case _ => ???
   }
 
    def executeBinaryOperator(bo: NumberBinaryOperator, a: Complex, b: Complex): Complex =
-    bo match {
+     (bo: Any) match {
       case Plus    => complexPlus(a, b)
       case Minus   => complexMinus(a, b)
       case Times   => complexTimes(a, b)
       case Divided => complexDivided(a, b)
       case Power   => complexPower(a, b)
+      case _ => ???
+
     }
 
   inline private final def sq(a: Double): Double = a * a

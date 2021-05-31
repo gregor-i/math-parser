@@ -2,6 +2,7 @@ package mathParser.number
 
 import mathParser.{AbstractSyntaxTree, Derive}
 import mathParser.AbstractSyntaxTree.*
+import mathParser.number.NumberOperator.*
 import mathParser.number.NumberUnitaryOperator
 import mathParser.number.NumberBinaryOperator
 import mathParser.number.NumberSyntax.*
@@ -15,7 +16,7 @@ class NumberDerive[S: Number, V] extends Derive[NumberUnitaryOperator, NumberBin
       case VariableNode(`variable`)          => one
       case VariableNode(_) | ConstantNode(_) => zero
       case UnitaryNode(op, f) =>
-        op match {
+        (op: Any) match {
           case Neg  => neg(derive(f))
           case Sin  => derive(f) * cos(f)
           case Cos  => neg(derive(f) * sin(f))
@@ -28,14 +29,16 @@ class NumberDerive[S: Number, V] extends Derive[NumberUnitaryOperator, NumberBin
           case Tanh => derive(f) / (cosh(f) * cosh(f))
           case Exp  => exp(f) * derive(f)
           case Log  => derive(f) / f
+          case _ => ???
         }
       case BinaryNode(op, f, g) =>
-        op match {
+        (op: Any) match {
           case Plus    => derive(f) + derive(g)
           case Minus   => derive(f) - derive(g)
           case Times   => (derive(f) * g) + (derive(g) * f)
           case Divided => ((f * derive(g)) - (g * derive(f))) / (g * g)
           case Power   => (f ^ (g - one)) * ((g * derive(f)) + (f * log(f) * derive(g)))
+          case _ => ???
         }
     }
 

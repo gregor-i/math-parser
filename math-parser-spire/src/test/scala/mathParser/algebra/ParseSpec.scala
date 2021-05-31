@@ -24,7 +24,7 @@ class ParseSpec extends AnyFunSuite with Matchers {
   testTemplate(SpireLanguages.realLanguage.withVariables[V](vList), "real language")
   testTemplate(SpireLanguages.complexLanguage.withVariables[V](vList), "complex language")
 
-  def testTemplate[A: Field: Trig: NRoot: LiteralParser](lang: Language[NumberUnitaryOperator, NumberBinaryOperator,A, V], langName: String) = {
+  def testTemplate[A: Field: Trig: NRoot: LiteralParser](lang: Language[NumberUnitaryOperator, NumberBinaryOperator, A, V], langName: String) = {
     test(s"$langName: parsing constants, literals and variables") {
       for ((name, value) <- lang.constants)
         lang.parse(name) shouldEqual Some(lang.constantNode(value))

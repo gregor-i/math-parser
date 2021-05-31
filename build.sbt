@@ -1,6 +1,7 @@
 import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 import scala.sys.process._
 
+
 ThisBuild / version := {
   Option("git tag -l --points-at HEAD".!!.trim)
     .filter(_.nonEmpty)

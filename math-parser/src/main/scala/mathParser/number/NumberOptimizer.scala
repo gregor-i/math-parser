@@ -5,6 +5,7 @@ import mathParser.AbstractSyntaxTree.*
 import mathParser.number.*
 import mathParser.number.NumberSyntax.*
 import mathParser.OptimizationRule
+import mathParser.number.NumberOperator.*
 
 class NumberOptimizer[S : Number, V](using evaluate: mathParser.Evaluate[NumberUnitaryOperator, NumberBinaryOperator, S, V])
   extends mathParser.Optimizer[NumberUnitaryOperator, NumberBinaryOperator, S, V] {
