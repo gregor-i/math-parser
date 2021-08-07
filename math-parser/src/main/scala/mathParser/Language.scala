@@ -13,10 +13,10 @@ final case class Language[O, S, V](
 
   def declaredNames: List[String] = constants.map(_._1) ++ variables.map(_._1) ++ unitaryOperators.map(_._1) ++ binaryPrefixOperators.map(_._1)
 
-  def withUnitaryOperators[O2](ops: List[(String, O2 & UnitaryOperator)]): Language[O | O2, S, V] =
+  def withUnitaryOperators[O2](ops: List[(String, O2 & UnitaryOperator)]): Language[(O & BinaryOperator ) | O2, S, V] =
     copy(unitaryOperators = ops)
 
-  def withBinaryOperators[O2](prefix: List[(String, O2 & BinaryOperator)], infix: List[(String, O2 & BinaryOperator)]): Language[O | O2, S, V] =
+  def withBinaryOperators[O2](prefix: List[(String, O2 & BinaryOperator)], infix: List[(String, O2 & BinaryOperator)]): Language[(O & UnitaryOperator) | O2, S, V] =
     copy(binaryPrefixOperators = prefix, binaryInfixOperators = infix)
 
   def addConstant[S2](name: String, constant: S2): Language[O, S | S2, V] =
@@ -36,6 +36,9 @@ final case class Language[O, S, V](
 
   def withBinaryPrefixOperator[O2](name: String, op: O2 & BinaryOperator): Language[O | O2, S, V] =
     copy(binaryPrefixOperators = (name -> op) :: binaryPrefixOperators)
+
+  def mapScalar[S2](f: S => S2): Language[O, S2, V] =
+    copy(constants = constants.map((name, s) => (name, f(s))))
 
   // todo: remove
   def variable(variable: V): VariableNode[O, S, V] = VariableNode(variable)

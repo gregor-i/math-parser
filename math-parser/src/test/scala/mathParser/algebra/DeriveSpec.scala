@@ -1,7 +1,6 @@
 package mathParser.algebra
 
 import mathParser.number.ComplexLanguage.given
-import mathParser.Syntax._
 import mathParser.{Derive, Language, LiteralParser, BuildIn}
 import org.scalatest.funsuite.AnyFunSuite
 

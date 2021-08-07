@@ -7,10 +7,9 @@ import mathParser.number.NumberOperator.*
 
 object ComplexLanguage {
   def apply(): ComplexLanguage[Nothing] =
-    Language.emptyLanguage
-      .withConstants[Complex](List("e" -> Complex.e, "pi" -> Complex.pi, "i" -> Complex.i))
-      .withBinaryOperators[NumberBinaryOperator](prefix = List.empty, infix = List(Plus, Minus, Times, Divided, Power).map(op => (op.name, op)))
-      .withUnitaryOperators(List(Neg, Sin, Cos, Tan, Asin, Acos, Atan, Sinh, Cosh, Tanh, Exp, Log).map(op => (op.name, op)))
+    DoubleLanguage()
+      .mapScalar(Complex(_, 0.0))
+      .addConstant("i", Complex.i)
 
   given LiteralParser[Complex] = _.toDoubleOption.map(Complex(_, 0.0))
 
