@@ -1,15 +1,17 @@
 package mathParser
 
-import mathParser.boolean.{BooleanBinaryOperator, BooleanLanguage, BooleanUnitaryOperator}
-import mathParser.number.{Complex, ComplexLanguage, DoubleLanguage, NumberBinaryOperator, NumberUnitaryOperator}
+import mathParser.boolean.{BooleanLanguage}
+import mathParser.number.{Complex, ComplexLanguage, DoubleLanguage}
+import mathParser.number.NumberOperator
+import mathParser.boolean.BooleanOperator
 
 object BuildIn {
-  val booleanLanguage: Language[BooleanUnitaryOperator, BooleanBinaryOperator, Boolean, Nothing] =
+  val booleanLanguage: Language[BooleanOperator, Boolean, Nothing] =
     BooleanLanguage()
 
-  val doubleLanguage: Language[NumberUnitaryOperator, NumberBinaryOperator, Double, Nothing] =
+  val doubleLanguage: Language[NumberOperator, Double, Nothing] =
     DoubleLanguage()
 
-  val complexLanguage: Language[NumberUnitaryOperator, NumberBinaryOperator, Complex, Nothing] =
+  val complexLanguage: Language[NumberOperator, Complex, Nothing] =
     ComplexLanguage()
 }

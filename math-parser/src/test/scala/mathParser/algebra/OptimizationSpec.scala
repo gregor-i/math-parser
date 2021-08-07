@@ -10,10 +10,10 @@ class OptimizationSpec extends AnyFunSuite {
 
   testTemplate(BuildIn.complexLanguage, "complex language")
 
-  def testTemplate[UO, BO, S](
-      _lang: Language[UO, BO, S, Nothing],
+  def testTemplate[O, S](
+      _lang: Language[O, S, Nothing],
       langName: String
-  )(implicit litParser: LiteralParser[S], optimizier: Optimizer[UO, BO, S, X.type]) = {
+  )(implicit litParser: LiteralParser[S], optimizier: Optimizer[O, S, X.type]) = {
     val lang = _lang.withVariables[X.type](List("x" -> X))
 
     val identities = Seq(

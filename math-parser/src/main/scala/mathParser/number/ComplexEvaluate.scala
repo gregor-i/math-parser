@@ -2,10 +2,9 @@ package mathParser.number
 
 import mathParser.Evaluate
 
-import NumberBinaryOperator.*
-import NumberUnitaryOperator.*
+import mathParser.number.NumberOperator.*
 
-final class ComplexEvaluate[V] extends Evaluate[NumberUnitaryOperator, NumberBinaryOperator, Complex, V] {
+final class ComplexEvaluate[V] extends Evaluate[NumberOperator, Complex, V] {
 
   import Math._
 
@@ -25,7 +24,7 @@ final class ComplexEvaluate[V] extends Evaluate[NumberUnitaryOperator, NumberBin
   }
 
    def executeBinaryOperator(bo: NumberBinaryOperator, a: Complex, b: Complex): Complex =
-    bo match {
+     bo match {
       case Plus    => complexPlus(a, b)
       case Minus   => complexMinus(a, b)
       case Times   => complexTimes(a, b)

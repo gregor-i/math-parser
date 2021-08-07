@@ -1,10 +1,10 @@
 package mathParser
 
-trait Evaluate[UO, BO, S, V] {
-  def executeUnitary(uo: UO, s: S): S
+trait Evaluate[O, S, V] {
+  def executeUnitary(uo: O & UnitaryOperator, s: S): S
 
-  def executeBinaryOperator(bo: BO, left: S, right: S): S
+  def executeBinaryOperator(bo: O & BinaryOperator, left: S, right: S): S
 
-  def evaluate(node: AbstractSyntaxTree[UO, BO, S, V])(variableAssignment: V => S): S =
+  def evaluate(node: AbstractSyntaxTree[O, S, V])(variableAssignment: V => S): S =
     node.fold[S](identity, executeUnitary, executeBinaryOperator, variableAssignment)
 }

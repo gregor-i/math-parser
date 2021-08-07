@@ -1,12 +1,11 @@
 package mathParser.algebra
 
 import mathParser.Evaluate
-import mathParser.number.{NumberBinaryOperator, NumberUnitaryOperator}
-import mathParser.number.NumberBinaryOperator.*
-import mathParser.number.NumberUnitaryOperator.*
+import mathParser.number.{NumberBinaryOperator, NumberOperator, NumberUnitaryOperator}
 import spire.algebra.{Field, NRoot, Trig}
+import mathParser.number.NumberOperator.*
 
-class SpireEvaluate[A: Field: NRoot: Trig, V] extends Evaluate[NumberUnitaryOperator, NumberBinaryOperator, A, V] {
+class SpireEvaluate[A: Field: NRoot: Trig, V] extends Evaluate[NumberOperator, A, V] {
   def executeUnitary(uo: NumberUnitaryOperator, s: A): A = uo match {
     case Neg => Field[A].negate(s)
     case Sin => Trig[A].sin(s)

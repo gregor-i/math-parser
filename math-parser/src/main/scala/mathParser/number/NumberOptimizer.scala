@@ -5,15 +5,16 @@ import mathParser.AbstractSyntaxTree.*
 import mathParser.number.*
 import mathParser.number.NumberSyntax.*
 import mathParser.OptimizationRule
+import mathParser.number.NumberOperator.*
 
-class NumberOptimizer[S : Number, V](using evaluate: mathParser.Evaluate[NumberUnitaryOperator, NumberBinaryOperator, S, V])
-  extends mathParser.Optimizer[NumberUnitaryOperator, NumberBinaryOperator, S, V] {
- def rules: List[OptimizationRule[NumberUnitaryOperator, NumberBinaryOperator, S, V]] =
+class NumberOptimizer[S : Number, V](using evaluate: mathParser.Evaluate[NumberOperator, S, V])
+  extends mathParser.Optimizer[NumberOperator, S, V] {
+ def rules: List[OptimizationRule[NumberOperator, S, V]] =
    List(mathParser.Optimize.replaceConstantsRule(using evaluate), identities)
 
- private def identities: OptimizationRule[NumberUnitaryOperator, NumberBinaryOperator, S, V] = {
-   val zero = ConstantNode[NumberUnitaryOperator, NumberBinaryOperator, S, V](Number.zero[S])
-   val one = ConstantNode[NumberUnitaryOperator, NumberBinaryOperator, S, V](Number.one[S])
+ private def identities: OptimizationRule[NumberOperator, S, V] = {
+   val zero = ConstantNode[NumberOperator, S, V](Number.zero[S])
+   val one = ConstantNode[NumberOperator, S, V](Number.one[S])
 
    {
      case UnitaryNode(Neg, UnitaryNode(Neg, child))               => child

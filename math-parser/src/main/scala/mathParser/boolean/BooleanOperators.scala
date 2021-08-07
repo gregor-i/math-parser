@@ -1,10 +1,10 @@
 package mathParser.boolean
 
-enum BooleanUnitaryOperator(val name: String):
-  case Not extends BooleanUnitaryOperator("!")
+import mathParser.{BinaryOperator, UnitaryOperator}
 
-enum BooleanBinaryOperator(val name: String):
-  case And extends BooleanBinaryOperator("&")
-  case Or extends BooleanBinaryOperator("|")
-  case Equals extends BooleanBinaryOperator("=")
-  case Unequals extends BooleanBinaryOperator("!=")
+enum BooleanOperator(val name: String):
+  case Not extends BooleanOperator("!") with UnitaryOperator
+  case And extends BooleanOperator("&") with BinaryOperator
+  case Or extends BooleanOperator("|") with BinaryOperator
+  case Equals extends BooleanOperator("=") with BinaryOperator
+  case Unequals extends BooleanOperator("!=") with BinaryOperator

@@ -2,16 +2,15 @@ package mathParser.number
 
 import mathParser.{AbstractSyntaxTree, Derive}
 import mathParser.AbstractSyntaxTree.*
-import mathParser.number.NumberUnitaryOperator
-import mathParser.number.NumberBinaryOperator
+import mathParser.number.NumberOperator.*
 import mathParser.number.NumberSyntax.*
 
-class NumberDerive[S: Number, V] extends Derive[NumberUnitaryOperator, NumberBinaryOperator, S, V] {
-  def derive(term: AbstractSyntaxTree[NumberUnitaryOperator, NumberBinaryOperator, S, V])(variable: V): AbstractSyntaxTree[NumberUnitaryOperator, NumberBinaryOperator, S, V] = {
-    val zero = ConstantNode[NumberUnitaryOperator, NumberBinaryOperator, S, V](Number.zero[S])
-    val one = ConstantNode[NumberUnitaryOperator, NumberBinaryOperator, S, V](Number.one[S])
+class NumberDerive[S: Number, V] extends Derive[NumberOperator, S, V] {
+  def derive(term: AbstractSyntaxTree[NumberOperator, S, V])(variable: V): AbstractSyntaxTree[NumberOperator, S, V] = {
+    val zero = ConstantNode[NumberOperator, S, V](Number.zero[S])
+    val one = ConstantNode[NumberOperator, S, V](Number.one[S])
 
-    def derive(term: AbstractSyntaxTree[NumberUnitaryOperator, NumberBinaryOperator, S, V]): AbstractSyntaxTree[NumberUnitaryOperator, NumberBinaryOperator, S, V] = term match {
+    def derive(term: AbstractSyntaxTree[NumberOperator, S, V]): AbstractSyntaxTree[NumberOperator, S, V] = term match {
       case VariableNode(`variable`)          => one
       case VariableNode(_) | ConstantNode(_) => zero
       case UnitaryNode(op, f) =>

@@ -68,6 +68,9 @@ To get started take a look into the `examples` folder.
 
 
 ### Changelog
+#### 1.7:
+- removed second type parameter for operators. the operators are now distinguished with the marker traits `UnitaryOperator` and `BinaryOperator`.
+
 #### 1.6.2:
 - Deploy artifacts to jitpack as bintray dropped it's free service
 

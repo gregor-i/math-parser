@@ -2,9 +2,8 @@ package mathParser.number
 
 import mathParser._
 
-import NumberBinaryOperator.*
-import NumberUnitaryOperator.*
 import mathParser.number.NumberSyntax.*
+import mathParser.number.NumberOperator.*
 
 object ComplexLanguage {
   def apply(): ComplexLanguage[Nothing] =
@@ -15,9 +14,9 @@ object ComplexLanguage {
 
   given LiteralParser[Complex] = _.toDoubleOption.map(Complex(_, 0.0))
 
-  given [V]: Evaluate[NumberUnitaryOperator, NumberBinaryOperator, Complex, V] = ComplexEvaluate[V]
+  given [V]: Evaluate[NumberOperator, Complex, V] = ComplexEvaluate[V]
 
-  given [V]: Optimizer[NumberUnitaryOperator, NumberBinaryOperator, Complex, V] = NumberOptimizer[Complex, V]
+  given [V]: Optimizer[NumberOperator, Complex, V] = NumberOptimizer[Complex, V]
 
-  given [V]: Derive[NumberUnitaryOperator, NumberBinaryOperator, Complex, V] = NumberDerive[Complex, V]
+  given [V]: Derive[NumberOperator, Complex, V] = NumberDerive[Complex, V]
 }

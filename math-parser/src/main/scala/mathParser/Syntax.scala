@@ -3,17 +3,17 @@ package mathParser
 import scala.util.Try
 
 object Syntax {
-  extension [UO, BO, S, V](node: AbstractSyntaxTree[UO, BO, S, V]) {
-    def evaluate(variableAssignment: V => S)(using evaluate: Evaluate[UO, BO, S, V]): S =
+  extension [O, S, V](node: AbstractSyntaxTree[O, S, V]) {
+    def evaluate(variableAssignment: V => S)(using evaluate: Evaluate[O, S, V]): S =
       evaluate.evaluate(node)(variableAssignment)
 
-    def optimize(using optimizer: Optimizer[UO, BO, S, V]): AbstractSyntaxTree[UO, BO, S, V] =
+    def optimize(using optimizer: Optimizer[O, S, V]): AbstractSyntaxTree[O, S, V] =
       optimizer.optimize(node)
 
-    def derive(variable: V)(using derive: Derive[UO, BO, S, V]): AbstractSyntaxTree[UO, BO, S, V] =
+    def derive(variable: V)(using derive: Derive[O, S, V]): AbstractSyntaxTree[O, S, V] =
       derive.derive(node)(variable)
 
-    def compile[F](using compiler: Compiler[UO, BO, S, V, F]): Try[F] =
+    def compile[F](using compiler: Compiler[O, S, V, F]): Try[F] =
       compiler.compile(node)
   }
 }

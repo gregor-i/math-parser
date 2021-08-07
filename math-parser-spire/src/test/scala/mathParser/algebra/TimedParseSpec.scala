@@ -10,6 +10,7 @@ import org.scalatest.time.{Millis, Span}
 import spire.algebra.{Field, NRoot, Trig}
 import mathParser.Language
 import mathParser.number.{NumberBinaryOperator, NumberUnitaryOperator}
+import mathParser.number.NumberOperator
 
 class TimedParseSpec extends AnyFunSuite with Matchers with TimeLimitedTests {
 
@@ -25,7 +26,7 @@ class TimedParseSpec extends AnyFunSuite with Matchers with TimeLimitedTests {
   testTemplate(SpireLanguages.realLanguage.withVariables[V](vList), "real language")
   testTemplate(SpireLanguages.complexLanguage.withVariables[V](vList), "complex language")
 
-  def testTemplate[A: Field: Trig: NRoot: LiteralParser](lang: Language[NumberUnitaryOperator, NumberBinaryOperator, A, V], langName: String) = {
+  def testTemplate[A: Field: Trig: NRoot: LiteralParser](lang: Language[NumberOperator, A, V], langName: String) = {
     test(s"$langName: parse expressions with many parenthesis") {
       val expr =
         "((((x * x + a) * (x * x + a) + a) * ((x * x + a) * (x * x + a) + a) + a) * (((x * x + a) * (x * x + a) + a) * ((x * x + a) * (x * x + a) + a) + a) + a)"

@@ -1,25 +1,26 @@
 package mathParser.number
 
-enum NumberUnitaryOperator(val name: String):
-  case Neg extends NumberUnitaryOperator("-")
-  case Sin extends NumberUnitaryOperator("sin")
-  case Cos extends NumberUnitaryOperator("cos")
-  case Tan extends NumberUnitaryOperator("tan")
-  case Asin extends NumberUnitaryOperator("asin")
-  case Acos extends NumberUnitaryOperator("acos")
-  case Atan extends NumberUnitaryOperator("atan")
-  case Sinh extends NumberUnitaryOperator("sinh")
-  case Cosh extends NumberUnitaryOperator("cosh")
-  case Tanh extends NumberUnitaryOperator("tanh")
-  case Exp extends NumberUnitaryOperator("exp")
-  case Log extends NumberUnitaryOperator("log")
+import mathParser.BinaryOperator
+import mathParser.UnitaryOperator
 
-enum NumberBinaryOperator(val name: String):
-  case Plus extends NumberBinaryOperator("+")
-  case Minus extends NumberBinaryOperator("-")
-  case Times extends NumberBinaryOperator("*")
-  case Divided extends NumberBinaryOperator("/")
-  case Power extends NumberBinaryOperator("^")
+enum NumberOperator(val name: String):
+  case Neg extends NumberOperator("-") with UnitaryOperator
+  case Sin extends NumberOperator("sin") with UnitaryOperator
+  case Cos extends NumberOperator("cos") with UnitaryOperator
+  case Tan extends NumberOperator("tan") with UnitaryOperator
+  case Asin extends NumberOperator("asin") with UnitaryOperator
+  case Acos extends NumberOperator("acos") with UnitaryOperator
+  case Atan extends NumberOperator("atan") with UnitaryOperator
+  case Sinh extends NumberOperator("sinh") with UnitaryOperator
+  case Cosh extends NumberOperator("cosh") with UnitaryOperator
+  case Tanh extends NumberOperator("tanh") with UnitaryOperator
+  case Exp extends NumberOperator("exp") with UnitaryOperator
+  case Log extends NumberOperator("log") with UnitaryOperator
+  case Plus extends NumberOperator("+") with BinaryOperator
+  case Minus extends NumberOperator("-") with BinaryOperator
+  case Times extends NumberOperator("*") with BinaryOperator
+  case Divided extends NumberOperator("/") with BinaryOperator
+  case Power extends NumberOperator("^") with BinaryOperator
 
-export NumberBinaryOperator.*
-export NumberUnitaryOperator.*
+type NumberBinaryOperator = NumberOperator & BinaryOperator
+type NumberUnitaryOperator = NumberOperator & UnitaryOperator

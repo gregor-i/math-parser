@@ -6,63 +6,63 @@ object Parser {
 
   private type TokenList = List[String]
 
-  def parse[UO, BO, S, V](lang: Language[UO, BO, S, V], literalParser: LiteralParser[S])(input: String): Option[AbstractSyntaxTree[UO, BO, S, V]] = {
+  def parse[O, S, V](lang: Language[O, S, V], literalParser: LiteralParser[S])(input: String): Option[AbstractSyntaxTree[O, S, V]] = {
 
     def binaryNode(
         input: TokenList,
         splitter: String,
-        f: (AbstractSyntaxTree[UO, BO, S, V], AbstractSyntaxTree[UO, BO, S, V]) => AbstractSyntaxTree[UO, BO, S, V]
-    ): Option[AbstractSyntaxTree[UO, BO, S, V]] =
+        f: (AbstractSyntaxTree[O, S, V], AbstractSyntaxTree[O, S, V]) => AbstractSyntaxTree[O, S, V]
+    ): Option[AbstractSyntaxTree[O, S, V]] =
       for {
         (sub1, sub2) <- splitByRegardingParenthesis(input, splitter)
         p1           <- loop(sub1)
         p2           <- loop(sub2)
       } yield f(p1, p2)
 
-    def constant(input: String): Option[AbstractSyntaxTree[UO, BO, S, V]] =
+    def constant(input: String): Option[AbstractSyntaxTree[O, S, V]] =
       lang.constants
         .find(_._1 == input)
-        .map(c => ConstantNode[UO, BO, S, V](c._2))
+        .map(c => ConstantNode[O, S, V](c._2))
 
-    def variable(input: String): Option[AbstractSyntaxTree[UO, BO, S, V]] =
+    def variable(input: String): Option[AbstractSyntaxTree[O, S, V]] =
       lang.variables
         .find(_._1 == input)
         .map(v => VariableNode(v._2))
 
-    def literal(input: String): Option[AbstractSyntaxTree[UO, BO, S, V]] =
+    def literal(input: String): Option[AbstractSyntaxTree[O, S, V]] =
       literalParser
         .tryToParse(input)
-        .map(literal => ConstantNode[UO, BO, S, V](literal))
+        .map(literal => ConstantNode[O, S, V](literal))
 
-    def parenthesis(input: TokenList): Option[AbstractSyntaxTree[UO, BO, S, V]] =
+    def parenthesis(input: TokenList): Option[AbstractSyntaxTree[O, S, V]] =
       input match {
         case "(" +: remaining :+ ")" => loop(remaining)
         case _                       => None
       }
 
-    def binaryInfixOperation(input: TokenList): Option[AbstractSyntaxTree[UO, BO, S, V]] =
+    def binaryInfixOperation(input: TokenList): Option[AbstractSyntaxTree[O, S, V]] =
       lang.binaryInfixOperators
         .to(LazyList)
-        .flatMap(op => binaryNode(input, op._1, BinaryNode[UO, BO, S, V](op._2, _, _)))
+        .flatMap(op => binaryNode(input, op._1, BinaryNode[O, S, V](op._2, _, _)))
         .headOption
 
-    def binaryPrefixOperation(input: TokenList): Option[AbstractSyntaxTree[UO, BO, S, V]] =
+    def binaryPrefixOperation(input: TokenList): Option[AbstractSyntaxTree[O, S, V]] =
       input match {
         case head :: ("(" +: remaining :+ ")") =>
           for {
             operator <- lang.binaryPrefixOperators.find(_._1 == head)
-            parsed   <- binaryNode(remaining, ",", BinaryNode[UO, BO, S, V](operator._2, _, _))
+            parsed   <- binaryNode(remaining, ",", BinaryNode[O, S, V](operator._2, _, _))
           } yield parsed
         case _ => None
       }
 
-    def unitaryPrefixOperation(input: TokenList): Option[AbstractSyntaxTree[UO, BO, S, V]] =
+    def unitaryPrefixOperation(input: TokenList): Option[AbstractSyntaxTree[O, S, V]] =
       for {
         operator <- lang.unitaryOperators.find(_._1 == input.head)
         looped   <- loop(input.tail)
-      } yield UnitaryNode[UO, BO, S, V](operator._2, looped)
+      } yield UnitaryNode[O, S, V](operator._2, looped)
 
-    def loop(input: TokenList): Option[AbstractSyntaxTree[UO, BO, S, V]] =
+    def loop(input: TokenList): Option[AbstractSyntaxTree[O, S, V]] =
       input match {
         case Nil =>
           None
@@ -105,7 +105,7 @@ object Parser {
     else Some((input.take(k), input.drop(k + 1)))
   }
 
-  private def tokenize(s: String, lang: Language[_, _, _, _]): TokenList = {
+  private def tokenize(s: String, lang: Language[_, _, _]): TokenList = {
     val splitter = Set('(', ')', ',', ' ') ++ lang.binaryInfixOperators.collect {
       case (name, _) if name.length == 1 && !name.head.isLetterOrDigit => name.head
     }.toSet

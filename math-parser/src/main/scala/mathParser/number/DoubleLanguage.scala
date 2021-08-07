@@ -2,9 +2,10 @@ package mathParser.number
 
 import mathParser._
 import mathParser.number.NumberSyntax
+import mathParser.number.NumberOperator.*
 
 object DoubleLanguage {
-  def apply(): Language[NumberUnitaryOperator, NumberBinaryOperator, Double, Nothing] =
+  def apply(): Language[NumberOperator, Double, Nothing] =
     Language.emptyLanguage
       .withConstants[Double](List("e" -> Math.E, "pi" -> Math.PI))
       .withBinaryOperators[NumberBinaryOperator](prefix = List.empty, infix = List(Plus, Minus, Times, Divided, Power).map(op => (op.name, op)))
@@ -12,9 +13,9 @@ object DoubleLanguage {
 
   given LiteralParser[Double] = _.toDoubleOption
 
-  given [V]: Evaluate[NumberUnitaryOperator, NumberBinaryOperator, Double, V] = DoubleEvaluate[V]
+  given [V]: Evaluate[NumberOperator, Double, V] = DoubleEvaluate[V]
 
-  given [V]: Optimizer[NumberUnitaryOperator, NumberBinaryOperator, Double, V] = NumberOptimizer[Double, V]
+  given [V]: Optimizer[NumberOperator, Double, V] = NumberOptimizer[Double, V]
 
-  given [V]: Derive[NumberUnitaryOperator, NumberBinaryOperator, Double, V] = NumberDerive[Double, V]
+  given [V]: Derive[NumberOperator, Double, V] = NumberDerive[Double, V]
 }
