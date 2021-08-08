@@ -11,7 +11,7 @@ object ComplexLanguage {
       .mapScalar(Complex(_, 0.0))
       .addConstant("i", Complex.i)
 
-  given LiteralParser[Complex] = _.toDoubleOption.map(Complex(_, 0.0))
+  given LiteralParser[Complex] = atto.Atto.double.map(Complex(_, 0.0))
 
   given [V]: Evaluate[NumberOperator, Complex, V] = ComplexEvaluate[V]
 

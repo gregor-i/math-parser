@@ -1,9 +1,7 @@
 package mathParser
 
-trait LiteralParser[S]:
-  def tryToParse(s: String): Option[S]
+type LiteralParser[S] = atto.Parser[S]
 
 object LiteralParser:
   given noLiterals: LiteralParser[Nothing] =
-    new LiteralParser[Nothing]:
-      def tryToParse(s: String): None.type = None
+    atto.Atto.err("no literals")

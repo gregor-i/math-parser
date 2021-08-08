@@ -12,6 +12,8 @@ ThisBuild / scalaVersion := "3.0.2-RC1"
 val `math-parser` =
   crossProject(JSPlatform, JVMPlatform)
     .crossType(CrossType.Pure)
+//    .jsSettings(libraryDependencies += "com.lihaoyi" %%% "fastparse" % "2.2.2")
+    .jvmSettings(libraryDependencies += "org.tpolecat" %% "atto-core" % "0.9.5")
     .settings(testSettings)
 
 val `math-parser-spire` =
