@@ -110,15 +110,15 @@ object Parser {
       case (name, _) if name.length == 1 && !name.head.isLetterOrDigit => name.head
     }.toSet
 
-    //      @tailrec
-    def loop(s: List[Char], currentWord: List[Char]): List[List[Char]] =
+    @tailrec
+    def loop(s: List[Char], currentWord: List[Char], words: List[List[Char]]): List[List[Char]] =
       s match {
-        case Nil                            => List(currentWord)
-        case head :: tail if splitter(head) => currentWord :: List(head) :: loop(tail, Nil)
-        case head :: tail                   => loop(tail, currentWord ++ List(head))
+        case Nil                            => (currentWord.reverse :: words).reverse
+        case head :: tail if splitter(head) => loop(tail, Nil, List(head) :: currentWord.reverse :: words)
+        case head :: tail                   => loop(tail, head :: currentWord, words)
       }
 
-    loop(s.toList, Nil)
+    loop(s.toList, Nil, Nil)
       .map(_.mkString("").trim)
       .filter(_.nonEmpty)
   }

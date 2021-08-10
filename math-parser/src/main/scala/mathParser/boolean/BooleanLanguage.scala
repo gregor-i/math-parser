@@ -5,16 +5,17 @@ import mathParser.boolean.BooleanOperator.*
 
 object BooleanLanguage {
   def apply(): Language[BooleanOperator, Boolean, Nothing] =
-    Language[BooleanOperator, Boolean, Nothing](
-      unitaryOperators = List(Not).map(op => (op.name, op)),
-      binaryPrefixOperators = List.empty,
-      binaryInfixOperators = List(And, Or, Equals, Unequals).map(op => (op.name, op)),
-      constants = List("true" -> true, "false" -> false),
-      variables = List.empty
-    )
+    Language.emptyLanguage
+      .addUnitaryOperator(Not.name, Not)
+      .addBinaryInfixOperator(And.name, And)
+      .addBinaryInfixOperator(Or.name, Or)
+      .addBinaryInfixOperator(Equals.name, Equals)
+      .addBinaryInfixOperator(Unequals.name, Unequals)
+      .addConstant("true", true)
+      .addConstant("false", false)
 
-  given [V]: Evaluate[BooleanOperator, Boolean, V] =
-    new Evaluate[BooleanOperator, Boolean, V] {
+  given Evaluate[BooleanOperator, Boolean] =
+    new Evaluate[BooleanOperator, Boolean] {
       override def executeUnitary(uo: BooleanOperator & UnitaryOperator, s: Boolean): Boolean = uo match {
         case Not => !s
       }

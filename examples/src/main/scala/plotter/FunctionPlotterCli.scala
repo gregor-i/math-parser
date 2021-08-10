@@ -44,15 +44,15 @@ object ConfigParser extends scopt.OptionParser[Config]("function plotter cli") {
 object X
 
 object Main {
-  val lang = mathParser.SpireLanguages.doubleLanguage
-    .withVariables(List("x" -> X))
+  val lang = mathParser.BuildIn.doubleLanguage
+    .addVariable("x", X)
 
   def main(args: Array[String]): Unit = {
     ConfigParser.parse(args, Config()).foreach { config =>
-      val parsed  = lang.parse(config.term).get
-      val derived = lang.derive(parsed)(X)
-      val f       = (x: Double) => lang.evaluate(parsed) { case X => x }
-      val `f'`    = (x: Double) => lang.evaluate(derived) { case X => x }
+      val parsed  = lang.parse(config.term).get.optimize
+      val derived = parsed.derive(X).optimize
+      val f       = (x: Double) => parsed.evaluate { case X => x }
+      val `f'`    = (x: Double) => derived.evaluate { case X => x }
 
       val p1 = new XYSeries(s"f(x)": Comparable[_], false, true)
       val p2 = new XYSeries(s"f'(x)": Comparable[_], false, true)

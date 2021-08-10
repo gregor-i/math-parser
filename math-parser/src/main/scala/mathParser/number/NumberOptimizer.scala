@@ -7,12 +7,12 @@ import mathParser.number.NumberSyntax.*
 import mathParser.OptimizationRule
 import mathParser.number.NumberOperator.*
 
-class NumberOptimizer[S : Number, V](using evaluate: mathParser.Evaluate[NumberOperator, S, V])
-  extends mathParser.Optimizer[NumberOperator, S, V] {
- def rules: List[OptimizationRule[NumberOperator, S, V]] =
-   List(mathParser.Optimize.replaceConstantsRule(using evaluate), identities)
+class NumberOptimizer[S : Number](using evaluate: mathParser.Evaluate[NumberOperator, S])
+  extends mathParser.Optimizer[NumberOperator, S] {
+ def rules[V]: List[OptimizationRule[NumberOperator, S, V]] =
+   List(mathParser.Optimize.replaceConstantsRule(using evaluate), identities[V])
 
- private def identities: OptimizationRule[NumberOperator, S, V] = {
+ private def identities[V]: OptimizationRule[NumberOperator, S, V] = {
    val zero = ConstantNode[NumberOperator, S, V](Number.zero[S])
    val one = ConstantNode[NumberOperator, S, V](Number.one[S])
 

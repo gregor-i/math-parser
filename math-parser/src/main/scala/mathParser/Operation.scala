@@ -1,4 +1,5 @@
 package mathParser
 
-trait BinaryOperator
-trait UnitaryOperator
+trait Operator
+trait BinaryOperator extends Operator
+trait UnitaryOperator extends Operator

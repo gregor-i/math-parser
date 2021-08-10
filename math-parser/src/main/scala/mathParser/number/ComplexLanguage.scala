@@ -13,9 +13,9 @@ object ComplexLanguage {
 
   given LiteralParser[Complex] = _.toDoubleOption.map(Complex(_, 0.0))
 
-  given [V]: Evaluate[NumberOperator, Complex, V] = ComplexEvaluate[V]
+  given Evaluate[NumberOperator, Complex] = ComplexEvaluate()
 
-  given [V]: Optimizer[NumberOperator, Complex, V] = NumberOptimizer[Complex, V]
+  given Optimizer[NumberOperator, Complex] = NumberOptimizer[Complex]
 
-  given [V]: Derive[NumberOperator, Complex, V] = NumberDerive[Complex, V]
+  given Derive[NumberOperator, Complex] = NumberDerive[Complex]
 }

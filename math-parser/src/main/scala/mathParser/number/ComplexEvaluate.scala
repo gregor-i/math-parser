@@ -4,7 +4,7 @@ import mathParser.Evaluate
 
 import mathParser.number.NumberOperator.*
 
-final class ComplexEvaluate[V] extends Evaluate[NumberOperator, Complex, V] {
+final class ComplexEvaluate extends Evaluate[NumberOperator, Complex] {
 
   import Math._
 

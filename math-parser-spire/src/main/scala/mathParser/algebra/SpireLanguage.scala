@@ -18,12 +18,11 @@ object SpireLanguage {
 
   given spireLiteralParser[A: Field]: LiteralParser[A] = s => s.toDoubleOption.map(Field[A].fromDouble)
 
-  given [A: Field: NRoot: Trig, V]: Evaluate[NumberOperator, A, V] = SpireEvaluate()
+  given [A: Field: NRoot: Trig]: Evaluate[NumberOperator, A] = SpireEvaluate()
 
-  given [A: Field: NRoot: Trig, V]: Optimizer[NumberOperator, A, V] =
+  given [A: Field: NRoot: Trig]: Optimizer[NumberOperator, A] =
     mathParser.number.NumberOptimizer()
 
-  given [A:Field:NRoot:Trig, V]: Derive[NumberOperator, A, V] =
+  given [A:Field:NRoot:Trig]: Derive[NumberOperator, A] =
     mathParser.number.NumberDerive()
-
 }

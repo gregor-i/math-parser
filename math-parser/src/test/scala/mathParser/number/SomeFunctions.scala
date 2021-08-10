@@ -1,4 +1,4 @@
-package mathParser
+package mathParser.number
 
 object SomeFunctions {
   val someFunctions: Seq[String] = Seq(
@@ -43,4 +43,9 @@ object SomeFunctions {
     "35*x^9-180*x^7+378*x^5-420*x^3+315*x",
     "35*x^9-180*x^7+3798*x^5-420*x^3+315+x"
   )
+
+  def manyParenthesis =
+    "((((x * x + a) * (x * x + a) + a) * ((x * x + a) * (x * x + a) + a) + a) * (((x * x + a) * (x * x + a) + a) * ((x * x + a) * (x * x + a) + a) + a) + a)"
+
+  def manyOperators = "35*x*x*x*x*x*x*x*x*x-180*x*x*x*x*x*x*x+378*x*x*x*x*x-420*x*x*x+315+x + a"
 }

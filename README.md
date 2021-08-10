@@ -18,24 +18,24 @@ There are some predefined example languages, but the library is intended to be e
 // your input, any string represesenting a function:
 val string = "2*x*x + 1"
 
-import mathParser.SpireImplicits._
+import mathParser.number.DoubleLanguage.given
 
 // define your language:
 object X
-val language = mathParser.SpireLanguages.doubleLanguage.withVariables(List("x" -> X))
+val language = mathParser.BuildIn.doubleLanguage.addVariable("x", X)
 
 // parsing: string => Option[AST]
-// .get only to demonstrate.
+// Option.get only to demonstrate.
 val parsed = language.parse(string).get
 
 // evaluating:
-language.evaluate(parsed){
+parsed.evaluate {
   case X => 5 // assign values to your variables
-} // == 5*5*2 + 1 == 51
+} // == 2*5*5 + 1 == 51
 
 // deriving:
-val derived = language.derive(parsed)(X) // d/dx (2*x*x + 1) == 4*x
-language.evaluate(derived){
+val derived = parsed.derive(X) // d/dx (2*x*x + 1) == 4*x
+derived.evaluate {
   case X => 5
 } // == 4*5 == 20
 ```

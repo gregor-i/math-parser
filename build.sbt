@@ -16,10 +16,8 @@ val `math-parser` =
 
 val `math-parser-spire` =
   project
-    .dependsOn(`math-parser`.jvm)
-    .settings(
-      libraryDependencies += "org.typelevel" % "spire_2.13" % "0.17.0"
-    )
+    .dependsOn(`math-parser`.jvm % "compile->compile;test->test")
+    .settings(libraryDependencies += "org.typelevel" % "spire_2.13" % "0.17.0")
     .settings(testSettings)
 
 val `examples` = project

@@ -5,7 +5,7 @@ import mathParser.number.{NumberBinaryOperator, NumberOperator, NumberUnitaryOpe
 import spire.algebra.{Field, NRoot, Trig}
 import mathParser.number.NumberOperator.*
 
-class SpireEvaluate[A: Field: NRoot: Trig, V] extends Evaluate[NumberOperator, A, V] {
+class SpireEvaluate[A: Field: NRoot: Trig] extends Evaluate[NumberOperator, A] {
   def executeUnitary(uo: NumberUnitaryOperator, s: A): A = uo match {
     case Neg => Field[A].negate(s)
     case Sin => Trig[A].sin(s)

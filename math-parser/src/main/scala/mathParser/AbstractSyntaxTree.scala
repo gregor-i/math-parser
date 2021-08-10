@@ -23,13 +23,13 @@ enum AbstractSyntaxTree[O, S, V]:
     rec(this)
   }
 
-  def evaluate(variableAssignment: V => S)(using evaluate: Evaluate[O, S, V]): S =
+  def evaluate(variableAssignment: V => S)(using evaluate: Evaluate[O, S]): S =
     evaluate.evaluate(this)(variableAssignment)
 
-  def optimize(using optimizer: Optimizer[O, S, V]): AbstractSyntaxTree[O, S, V] =
+  def optimize(using optimizer: Optimizer[O, S]): AbstractSyntaxTree[O, S, V] =
     optimizer.optimize(this)
 
-  def derive(variable: V)(using derive: Derive[O, S, V]): AbstractSyntaxTree[O, S, V] =
+  def derive(variable: V)(using derive: Derive[O, S]): AbstractSyntaxTree[O, S, V] =
     derive.derive(this)(variable)
 
   def compile[F](using compiler: Compiler[O, S, V, F]): Try[F] =

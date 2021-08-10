@@ -5,8 +5,8 @@ import mathParser.AbstractSyntaxTree.*
 import mathParser.number.NumberOperator.*
 import mathParser.number.NumberSyntax.*
 
-class NumberDerive[S: Number, V] extends Derive[NumberOperator, S, V] {
-  def derive(term: AbstractSyntaxTree[NumberOperator, S, V])(variable: V): AbstractSyntaxTree[NumberOperator, S, V] = {
+class NumberDerive[S: Number] extends Derive[NumberOperator, S] {
+  def derive[V](term: AbstractSyntaxTree[NumberOperator, S, V])(variable: V): AbstractSyntaxTree[NumberOperator, S, V] = {
     val zero = ConstantNode[NumberOperator, S, V](Number.zero[S])
     val one = ConstantNode[NumberOperator, S, V](Number.one[S])
 

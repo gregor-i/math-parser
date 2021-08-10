@@ -1,8 +1,8 @@
 package mathParser
 
 import mathParser.algebra.SpireLanguage
-import mathParser.boolean.{BooleanLanguage}
-import mathParser.number.{NumberOperator}
+import mathParser.boolean.BooleanLanguage
+import mathParser.number.NumberOperator
 import spire.implicits.*
 import spire.math.{Complex, Real}
 import spire.algebra.Field

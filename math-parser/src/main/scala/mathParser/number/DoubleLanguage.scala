@@ -13,9 +13,9 @@ object DoubleLanguage {
 
   given LiteralParser[Double] = _.toDoubleOption
 
-  given [V]: Evaluate[NumberOperator, Double, V] = DoubleEvaluate[V]
+  given Evaluate[NumberOperator, Double] = DoubleEvaluate()
 
-  given [V]: Optimizer[NumberOperator, Double, V] = NumberOptimizer[Double, V]
+  given Optimizer[NumberOperator, Double] = NumberOptimizer[Double]
 
-  given [V]: Derive[NumberOperator, Double, V] = NumberDerive[Double, V]
+  given Derive[NumberOperator, Double] = NumberDerive[Double]
 }

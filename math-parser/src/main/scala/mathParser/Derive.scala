@@ -1,5 +1,5 @@
 package mathParser
 
-trait Derive[O, S, V] {
-  def derive(node: AbstractSyntaxTree[O, S, V])(variable: V): AbstractSyntaxTree[O, S, V]
+trait Derive[O, S] {
+  def derive[V](node: AbstractSyntaxTree[O, S, V])(variable: V): AbstractSyntaxTree[O, S, V]
 }
