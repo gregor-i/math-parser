@@ -3,11 +3,9 @@ package mathParser
 import scala.annotation.tailrec
 
 object Parser {
-
   private type TokenList = List[String]
 
   def parse[O, S, V](lang: Language[O, S, V], literalParser: LiteralParser[S])(input: String): Option[AbstractSyntaxTree[O, S, V]] = {
-
     def binaryNode(
         input: TokenList,
         splitter: String,
@@ -124,7 +122,6 @@ object Parser {
   }
 
   private def checkParenthesis(tokenList: TokenList): Boolean = {
-
     @tailrec
     def loop(list: TokenList, depth: Int): Boolean =
       list match {
