@@ -7,7 +7,7 @@ import org.scalatest.compatible.Assertion
 import org.scalatest.funsuite.AnyFunSuite
 
 trait DeriveProps { self: AnyFunSuite =>
-  def testDerive[S : LiteralParser](rawLang: Language[NumberOperator, S, Nothing])(implicit derive: Derive[NumberOperator, S]) = {
+  def testDerive[S: LiteralParser](rawLang: Language[NumberOperator, S, Nothing])(implicit derive: Derive[NumberOperator, S]) = {
     case object X
     val lang = rawLang.addVariable("x", X)
     import lang.parse
@@ -18,8 +18,8 @@ trait DeriveProps { self: AnyFunSuite =>
       assert(parse("x*x + x").get.derive(X) === parse("(1*x+1*x) + 1").get)
     }
 
-    test("all the sample functions are derivable"){
-      for(function <- SomeFunctions.someFunctions)
+    test("all the sample functions are derivable") {
+      for (function <- SomeFunctions.someFunctions)
         parse(function).get.derive(X)
     }
   }

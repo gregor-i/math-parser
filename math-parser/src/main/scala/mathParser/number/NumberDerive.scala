@@ -8,7 +8,7 @@ import mathParser.number.NumberSyntax.*
 class NumberDerive[S: Number] extends Derive[NumberOperator, S] {
   def derive[V](term: AbstractSyntaxTree[NumberOperator, S, V])(variable: V): AbstractSyntaxTree[NumberOperator, S, V] = {
     val zero = ConstantNode[NumberOperator, S, V](Number.zero[S])
-    val one = ConstantNode[NumberOperator, S, V](Number.one[S])
+    val one  = ConstantNode[NumberOperator, S, V](Number.one[S])
 
     def derive(term: AbstractSyntaxTree[NumberOperator, S, V]): AbstractSyntaxTree[NumberOperator, S, V] = term match {
       case VariableNode(`variable`)          => one
