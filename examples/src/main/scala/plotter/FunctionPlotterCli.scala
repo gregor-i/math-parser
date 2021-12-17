@@ -31,12 +31,11 @@ object ConfigParser extends scopt.OptionParser[Config]("function plotter cli") {
 
   arg[String]("term")
     .required()
-    .validate(
-      term =>
-        Main.lang
-          .parse(term)
-          .toRight("Could not parse term")
-          .map(_ => ())
+    .validate(term =>
+      Main.lang
+        .parse(term)
+        .toRight("Could not parse term")
+        .map(_ => ())
     )
     .action((x, c) => c.copy(term = x))
 }
