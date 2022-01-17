@@ -1,14 +1,20 @@
 package mathParser
 
+import cats.parse.Parser
+import mathParser.Token
+import mathParser.Token._
+
 import scala.annotation.tailrec
 
 object Parser {
-  private type TokenList = List[String]
+  def parse[O, S, V](lang: Language[O, S, V], literalParser: LiteralParser[S])(
+      input: String
+  ): Option[AbstractSyntaxTree[O, S, V]] = {
+    type TokenList = List[Token[O, S, V]]
 
-  def parse[O, S, V](lang: Language[O, S, V], literalParser: LiteralParser[S])(input: String): Option[AbstractSyntaxTree[O, S, V]] = {
     def binaryNode(
         input: TokenList,
-        splitter: String,
+        splitter: Token[O, S, V],
         f: (AbstractSyntaxTree[O, S, V], AbstractSyntaxTree[O, S, V]) => AbstractSyntaxTree[O, S, V]
     ): Option[AbstractSyntaxTree[O, S, V]] =
       for {
@@ -17,48 +23,41 @@ object Parser {
         p2           <- loop(sub2)
       } yield f(p1, p2)
 
-    def constant(input: String): Option[AbstractSyntaxTree[O, S, V]] =
-      lang.constants
-        .find(_._1 == input)
-        .map(c => ConstantNode[O, S, V](c._2))
+    def constant(input: Token[O, S, V]): Option[AbstractSyntaxTree[O, S, V]] =
+      input match {
+        case Scalar(s) => Some(AbstractSyntaxTree.ConstantNode(s))
+        case _         => None
+      }
 
-    def variable(input: String): Option[AbstractSyntaxTree[O, S, V]] =
+    def variable(input: Token[O, S, V]): Option[AbstractSyntaxTree[O, S, V]] =
       lang.variables
-        .find(_._1 == input)
+        .find((_, vari) => Variable(vari) == input)
         .map(v => VariableNode(v._2))
-
-    def literal(input: String): Option[AbstractSyntaxTree[O, S, V]] =
-      literalParser
-        .tryToParse(input)
-        .map(literal => ConstantNode[O, S, V](literal))
 
     def parenthesis(input: TokenList): Option[AbstractSyntaxTree[O, S, V]] =
       input match {
-        case "(" +: remaining :+ ")" => loop(remaining)
-        case _                       => None
+        case OpenParens +: remaining :+ CloseParens => loop(remaining)
+        case _                                      => None
       }
 
     def binaryInfixOperation(input: TokenList): Option[AbstractSyntaxTree[O, S, V]] =
-      lang.binaryInfixOperators
-        .to(LazyList)
-        .flatMap(op => binaryNode(input, op._1, BinaryNode[O, S, V](op._2, _, _)))
+      lang.binaryInfixOperators.view
+        .flatMap((_, op) => binaryNode(input, Operator(op), BinaryNode[O, S, V](op, _, _)))
         .headOption
 
     def binaryPrefixOperation(input: TokenList): Option[AbstractSyntaxTree[O, S, V]] =
       input match {
-        case head :: ("(" +: remaining :+ ")") =>
-          for {
-            operator <- lang.binaryPrefixOperators.find(_._1 == head)
-            parsed   <- binaryNode(remaining, ",", BinaryNode[O, S, V](operator._2, _, _))
-          } yield parsed
+        case Operator(head: BinaryOperator) :: (OpenParens +: remaining :+ CloseParens) =>
+          binaryNode(remaining, Comma, BinaryNode[O, S, V](head, _, _))
         case _ => None
       }
 
     def unitaryPrefixOperation(input: TokenList): Option[AbstractSyntaxTree[O, S, V]] =
-      for {
-        operator <- lang.unitaryOperators.find(_._1 == input.head)
-        looped   <- loop(input.tail)
-      } yield UnitaryNode[O, S, V](operator._2, looped)
+      input match {
+        case Operator(head: UnitaryOperator) :: tail =>
+          loop(tail).map(UnitaryNode(head, _))
+        case _ => None
+      }
 
     def loop(input: TokenList): Option[AbstractSyntaxTree[O, S, V]] =
       input match {
@@ -66,8 +65,7 @@ object Parser {
           None
         case head :: Nil =>
           constant(head) orElse
-            variable(head) orElse
-            literal(head)
+            variable(head)
         case _ =>
           binaryPrefixOperation(input) orElse
             binaryInfixOperation(input) orElse
@@ -75,23 +73,27 @@ object Parser {
             parenthesis(input)
       }
 
-    val tokenized = tokenize(input, lang)
+    val tokenized = Tokeninizer[O, S, V](input, lang)(using literalParser)
 
-    if (checkParenthesis(tokenized)) {
-      loop(tokenized)
-    } else {
-      None
+    tokenized.toOption.flatMap { tokens =>
+      if (checkParenthesis(tokens))
+        loop(tokens)
+      else
+        None
     }
   }
 
-  private def splitByRegardingParenthesis(input: TokenList, splitter: String): Option[(TokenList, TokenList)] = {
+  private def splitByRegardingParenthesis[O, S, V](
+      input: List[Token[O, S, V]],
+      splitter: Token[O, S, V]
+  ): Option[(List[Token[O, S, V]], List[Token[O, S, V]])] = {
     var k = -1
     var c = 0
     var i = 0
     while (i < input.length) {
       input(i) match {
-        case ")" => c -= 1
-        case "(" => c += 1
+        case CloseParens => c -= 1
+        case OpenParens  => c += 1
         case `splitter` if c == 0 =>
           k = i;
           i = input.length
@@ -103,33 +105,15 @@ object Parser {
     else Some((input.take(k), input.drop(k + 1)))
   }
 
-  private def tokenize(s: String, lang: Language[_, _, _]): TokenList = {
-    val splitter = Set('(', ')', ',', ' ') ++ lang.binaryInfixOperators.collect {
-      case (name, _) if name.length == 1 && !name.head.isLetterOrDigit => name.head
-    }.toSet
-
+  private def checkParenthesis[O, S, V](tokenList: List[Token[O, S, V]]): Boolean = {
     @tailrec
-    def loop(s: List[Char], currentWord: List[Char], words: List[List[Char]]): List[List[Char]] =
-      s match {
-        case Nil                            => (currentWord.reverse :: words).reverse
-        case head :: tail if splitter(head) => loop(tail, Nil, List(head) :: currentWord.reverse :: words)
-        case head :: tail                   => loop(tail, head :: currentWord, words)
-      }
-
-    loop(s.toList, Nil, Nil)
-      .map(_.mkString("").trim)
-      .filter(_.nonEmpty)
-  }
-
-  private def checkParenthesis(tokenList: TokenList): Boolean = {
-    @tailrec
-    def loop(list: TokenList, depth: Int): Boolean =
+    def loop(list: List[Token[O, S, V]], depth: Int): Boolean =
       list match {
-        case "(" :: tail            => loop(tail, depth + 1)
-        case ")" :: _ if depth == 0 => false
-        case ")" :: tail            => loop(tail, depth - 1)
-        case _ :: tail              => loop(tail, depth)
-        case Nil                    => depth == 0
+        case OpenParens :: tail             => loop(tail, depth + 1)
+        case CloseParens :: _ if depth == 0 => false
+        case CloseParens :: tail            => loop(tail, depth - 1)
+        case _ :: tail                      => loop(tail, depth)
+        case Nil                            => depth == 0
       }
 
     loop(tokenList, 0)

@@ -11,7 +11,8 @@ final case class Language[O, S, V](
 ) {
   require(declaredNames.distinct == declaredNames)
 
-  def declaredNames: List[String] = constants.map(_._1) ++ variables.map(_._1) ++ unitaryOperators.map(_._1) ++ binaryPrefixOperators.map(_._1)
+  def declaredNames: List[String] =
+    constants.map(_._1) ++ variables.map(_._1) ++ unitaryOperators.map(_._1) ++ binaryPrefixOperators.map(_._1)
 
   def addConstant[S2](name: String, constant: S2): Language[O, S | S2, V] =
     copy(constants = (name -> constant) :: constants)
@@ -28,10 +29,13 @@ final case class Language[O, S, V](
   def addBinaryPrefixOperator[O2](name: String, op: O2 & BinaryOperator): Language[O | O2, S, V] =
     copy(binaryPrefixOperators = (name -> op) :: binaryPrefixOperators)
 
-  def withUnitaryOperators[O2](ops: List[(String, O2 & UnitaryOperator)]): Language[(O & BinaryOperator ) | O2, S, V] =
+  def withUnitaryOperators[O2](ops: List[(String, O2 & UnitaryOperator)]): Language[(O & BinaryOperator) | O2, S, V] =
     copy(unitaryOperators = ops)
 
-  def withBinaryOperators[O2](prefix: List[(String, O2 & BinaryOperator)], infix: List[(String, O2 & BinaryOperator)]): Language[(O & UnitaryOperator) | O2, S, V] =
+  def withBinaryOperators[O2](
+      prefix: List[(String, O2 & BinaryOperator)],
+      infix: List[(String, O2 & BinaryOperator)]
+  ): Language[(O & UnitaryOperator) | O2, S, V] =
     copy(binaryPrefixOperators = prefix, binaryInfixOperators = infix)
 
   def withConstants[S2](constants: List[(String, S2)]): Language[O, S2, V] =

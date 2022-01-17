@@ -8,23 +8,23 @@ final class ComplexEvaluate extends Evaluate[NumberOperator, Complex] {
 
   import Math._
 
-   def executeUnitary(uo: NumberUnitaryOperator, a: Complex): Complex = uo match {
-    case Neg  => complexNeg(a)
-    case Sin  => complexSin(a)
-    case Cos  => complexCos(a)
-    case Tan  => complexTan(a)
-    case Asin => complexAsin(a)
-    case Acos => complexAcos(a)
-    case Atan => complexAtan(a)
-    case Sinh => complexSinh(a)
-    case Cosh => complexCosh(a)
-    case Tanh => complexTanh(a)
-    case Exp  => complexExp(a)
-    case Log  => complexLog(a)
+  def executeUnitary(uo: NumberUnitaryOperator, a: Complex): Complex = uo match {
+    case Minus => complexNeg(a)
+    case Sin   => complexSin(a)
+    case Cos   => complexCos(a)
+    case Tan   => complexTan(a)
+    case Asin  => complexAsin(a)
+    case Acos  => complexAcos(a)
+    case Atan  => complexAtan(a)
+    case Sinh  => complexSinh(a)
+    case Cosh  => complexCosh(a)
+    case Tanh  => complexTanh(a)
+    case Exp   => complexExp(a)
+    case Log   => complexLog(a)
   }
 
-   def executeBinaryOperator(bo: NumberBinaryOperator, a: Complex, b: Complex): Complex =
-     bo match {
+  def executeBinaryOperator(bo: NumberBinaryOperator, a: Complex, b: Complex): Complex =
+    bo match {
       case Plus    => complexPlus(a, b)
       case Minus   => complexMinus(a, b)
       case Times   => complexTimes(a, b)

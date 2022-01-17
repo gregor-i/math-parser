@@ -12,12 +12,15 @@ ThisBuild / scalaVersion := "3.1.0"
 val `math-parser` =
   crossProject(JSPlatform, JVMPlatform)
     .crossType(CrossType.Pure)
+    .settings(
+      libraryDependencies += "org.typelevel" %%% "cats-parse" % "0.3.6"
+    )
     .settings(testSettings)
 
 val `math-parser-spire` =
   project
     .dependsOn(`math-parser`.jvm % "compile->compile;test->test")
-    .settings(libraryDependencies += "org.typelevel" % "spire_2.13" % "0.17.0")
+    .settings(libraryDependencies += "org.typelevel" %%% "spire" % "0.18.0-M2")
     .settings(testSettings)
 
 val `examples` = project

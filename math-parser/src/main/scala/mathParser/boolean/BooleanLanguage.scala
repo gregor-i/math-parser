@@ -19,11 +19,12 @@ object BooleanLanguage {
       override def executeUnitary(uo: BooleanOperator & UnitaryOperator, s: Boolean): Boolean = uo match {
         case Not => !s
       }
-      override def executeBinaryOperator(bo: BooleanOperator & BinaryOperator, left: Boolean, right: Boolean): Boolean = bo match {
-        case And => left && right
-        case Or => left || right
-        case Equals => left == right
-        case Unequals =>  left != right
-      }
+      override def executeBinaryOperator(bo: BooleanOperator & BinaryOperator, left: Boolean, right: Boolean): Boolean =
+        bo match {
+          case And      => left && right
+          case Or       => left || right
+          case Equals   => left == right
+          case Unequals => left != right
+        }
     }
 }

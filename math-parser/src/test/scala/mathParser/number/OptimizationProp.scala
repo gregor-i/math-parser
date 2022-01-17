@@ -25,11 +25,12 @@ trait OptimizationProp { self: AnyFunSuite =>
     "2*x - 2*x"           -> "0",
     "x / x"               -> "1",
     "(x+1) / (x+1)"       -> "1",
-    "sin(x) * 0 + x + -x" -> "0",
+    "sin(x) * 0 + x + -x" -> "0"
   )
 
-  def testOptimization[S : LiteralParser](rawLang: Language[NumberOperator, S, Nothing])
-                                         (using optimizier: Optimizer[NumberOperator, S]) = {
+  def testOptimization[S: LiteralParser](
+      rawLang: Language[NumberOperator, S, Nothing]
+  )(using optimizier: Optimizer[NumberOperator, S]) = {
     case object X
     val lang = rawLang.addVariable("x", X)
     for (id <- identities)

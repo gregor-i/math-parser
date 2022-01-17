@@ -12,7 +12,7 @@ import spire.implicits.*
 
 class ComplexLangSpec extends AnyFunSuite with NumberProps {
   val lang = SpireLanguages.complexLanguage
-  testNumerLanguage(lang)
+  testNumberLanguage(lang)
 
   test("parse complex literals") {
     import lang.parse

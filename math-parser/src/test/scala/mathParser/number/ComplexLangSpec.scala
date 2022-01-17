@@ -9,7 +9,7 @@ import mathParser.number.NumberSyntax.constant
 
 class ComplexLangSpec extends AnyFunSuite with NumberProps {
   val lang = BuildIn.complexLanguage
-  testNumerLanguage(lang)
+  testNumberLanguage(lang)
 
   test("parse complex literals") {
     import lang.parse

@@ -5,5 +5,5 @@ import mathParser.BuildIn
 import mathParser.number.DoubleLanguage.given
 
 class DoubleLangSpec extends AnyFunSuite with NumberProps {
-  testNumerLanguage(BuildIn.doubleLanguage)
+  testNumberLanguage(BuildIn.doubleLanguage)
 }

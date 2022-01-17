@@ -10,5 +10,5 @@ import mathParser.algebra.SpireLanguage.spireLiteralParser
 import mathParser.algebra.SpireLanguage.given
 
 class RealLangSpec extends AnyFunSuite with NumberProps {
-  testNumerLanguage(SpireLanguages.realLanguage)
+  testNumberLanguage(SpireLanguages.realLanguage)
 }
