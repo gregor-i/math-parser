@@ -26,7 +26,7 @@ val `examples` = project
   .settings(packagedArtifacts := Map.empty)
   .settings(
     libraryDependencies += "de.sciss"         %% "scala-chart" % "0.8.0",
-    libraryDependencies += "com.github.scopt" %% "scopt"       % "4.0.1"
+    libraryDependencies += "com.github.scopt" %% "scopt"       % "4.1.0"
   )
 
 def testSettings = Seq(
