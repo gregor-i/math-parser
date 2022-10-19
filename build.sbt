@@ -7,7 +7,7 @@ ThisBuild / version := {
     .getOrElse("SNAPSHOT")
 }
 ThisBuild / organization := "com.github.gregor-i"
-ThisBuild / scalaVersion := "3.1.3"
+ThisBuild / scalaVersion := "3.2.0"
 
 val `math-parser` =
   crossProject(JSPlatform, JVMPlatform)
