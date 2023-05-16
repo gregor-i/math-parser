@@ -30,6 +30,6 @@ val `examples` = project
   )
 
 def testSettings = Seq(
-  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.14" % Test,
+  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.16" % Test,
   Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
 )
