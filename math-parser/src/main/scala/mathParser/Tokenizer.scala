@@ -13,7 +13,7 @@ object Token {
   case class Variable[V](v: V) extends Token[Nothing, Nothing, V]
 }
 
-object Tokeninizer {
+object Tokenizer {
   import Token._
 
   private def parseParens[O, S, V]: Parser[Token[Nothing, Nothing, Nothing]] =
@@ -21,17 +21,11 @@ object Tokeninizer {
       Parser.char(')').as(CloseParens) |
       Parser.char(',').as(Comma)
 
-  private def isSymbolic(char: Char): Boolean = !char.isLetterOrDigit
-
-  private def parseString(string: String): Parser[Unit] =
-    if (isSymbolic(string.last))
-      Parser.string(string)
-    else
-      Parser.string(string) <* (Parser.end | Parser.peek(Parser.anyChar.filter(isSymbolic)))
-
   private def parseOperators[O, S, V](lang: Language[O, S, V]): Parser[Operator[O]] =
     ((lang.binaryPrefixOperators ++ lang.binaryInfixOperators ++ lang.unitaryOperators): List[(String, O)])
-      .map((name, op) => parseString(name).backtrack.as(Operator(op)))
+      .sortBy(_.size)
+      .reverse
+      .map((name, op) => Parser.string(name).as(Operator(op)))
       .pipe(Parser.oneOf)
 
   private def parseVars[O, S, V](lang: Language[O, S, V]): Parser[Variable[V]] =

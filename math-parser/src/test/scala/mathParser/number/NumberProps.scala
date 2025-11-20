@@ -6,7 +6,7 @@ import org.scalatest.funsuite.AnyFunSuite
 trait NumberProps extends ParseProp with DeriveProps with OptimizationProp { self: AnyFunSuite =>
   def testNumberLanguage[S](
       lang: Language[NumberOperator, S, Nothing]
-  )(implicit litParser: LiteralParser[S], derive: Derive[NumberOperator, S], optimizier: Optimizer[NumberOperator, S]) = {
+  )(implicit litParser: LiteralParser[S], derive: Derive[NumberOperator, S], optimizier: Optimizer[NumberOperator, S]): Unit = {
     testParsing(lang)
     testDerive(lang)
     testOptimization(lang)

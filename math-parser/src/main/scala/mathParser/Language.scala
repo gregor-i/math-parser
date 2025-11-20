@@ -9,9 +9,20 @@ final case class Language[O, S, V](
     constants: List[(String, S)],
     variables: List[(String, V)]
 ) {
-  require(declaredNames.distinct == declaredNames)
+  {
+    require(declaredNames.distinct == declaredNames, "All operator, variable and constant names must be unique")
+    for {
+      name         <- declaredNames
+      reservedChar <- Seq(',', '(', ')')
+    } {
+      require(
+        !name.contains(reservedChar),
+        s"Declared names can't use any of the reserved chars. ${name} contains ${reservedChar}"
+      )
+    }
+  }
 
-  def declaredNames: List[String] =
+  lazy val declaredNames: List[String] =
     constants.map(_._1) ++ variables.map(_._1) ++ unitaryOperators.map(_._1) ++ binaryPrefixOperators.map(_._1)
 
   def addConstant[S2](name: String, constant: S2): Language[O, S | S2, V] =

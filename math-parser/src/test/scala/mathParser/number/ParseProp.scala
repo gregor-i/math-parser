@@ -68,7 +68,7 @@ trait ParseProp { self: AnyFunSuite =>
 
     test("parse prefix operators") {
       assert(lang.parse("-x") == Some(neg(X.variable[S])))
-      assert(lang.parse("sinx") == None)
+      assert(lang.parse("sinx") == Some(sin(X.variable[S])))
       assert(lang.parse("sinh") == None)
       assert(lang.parse("sinh(x)") == Some(sinh(X.variable[S])))
       assert(lang.parse("sinh x") == Some(sinh(X.variable[S])))

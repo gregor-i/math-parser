@@ -73,7 +73,7 @@ object Parser {
             parenthesis(input)
       }
 
-    val tokenized = Tokeninizer[O, S, V](input, lang)(using literalParser)
+    val tokenized = Tokenizer[O, S, V](input, lang)(using literalParser)
 
     tokenized.toOption.flatMap { tokens =>
       if (checkParenthesis(tokens))
